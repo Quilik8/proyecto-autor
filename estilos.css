@@ -1,0 +1,23 @@
+/* --- ESTILOS GENERALES --- */
+/* Afecta a toda la página */
+body {
+    background-color: #1a1a1a; /* Un color de fondo oscuro */
+    color: #f0f0f0; /* Un color de texto casi blanco */
+    font-family: sans-serif; /* Una fuente genérica, fácil de leer, como respaldo */
+    text-align: center; /* Centra todo el texto de la página */
+    margin: 50px; /* Añade un poco de espacio en los bordes para que no se pegue */
+}
+
+/* --- ESTILOS PARA LOS TÍTULOS --- */
+/* Afecta a la etiqueta <h1> */
+h1 {
+    font-size: 48px; /* Un tamaño de letra grande para el título principal */
+    color: #4CAF50; /* Un color verde vibrante para destacar. ¡Cámbialo por tu color de marca! */
+}
+
+/* --- ESTILOS PARA LOS PÁRRAFOS --- */
+/* Afecta a la etiqueta <p> */
+p {
+    font-size: 20px; /* Un tamaño de letra cómodo para la lectura */
+    line-height: 1.6; /* Aumenta el espacio entre líneas para que sea más fácil de leer */
+}
