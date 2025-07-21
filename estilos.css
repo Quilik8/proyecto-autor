@@ -267,4 +267,82 @@ footer {
 /* Ajuste para la lista de historias en esta página */
 .stories-list {
     padding: 0 50px; /* Añade un poco de espacio lateral a la cuadrícula */
+}/* --- ESTILOS PÁGINA DETALLE DE HISTORIA --- */
+.story-detail-container {
+    display: flex;
+    gap: 40px;
+    padding: 60px 50px;
+    align-items: flex-start; /* Alinea los items al principio del contenedor */
+}
+
+.story-cover {
+    flex-basis: 300px; /* Ancho base de la columna de la portada */
+    flex-shrink: 0; /* Evita que la columna se encoja */
+    height: 450px;
+    background-color: #555; /* Placeholder para la imagen */
+    border-radius: 8px;
+}
+
+.story-info h1 {
+    font-size: 42px;
+    color: #f0f0f0;
+    margin: 0;
+}
+
+.story-info h2 {
+    font-size: 24px;
+    color: #ccc;
+    font-weight: normal;
+    font-style: italic;
+    margin: 10px 0 20px 0;
+}
+
+.story-meta {
+    margin-bottom: 20px;
+    color: #888;
+}
+
+.story-synopsis {
+    font-size: 18px;
+    line-height: 1.7;
+    margin-bottom: 30px;
+}
+
+.chapter-list {
+    padding: 0 50px 60px 50px;
+}
+
+.chapter-list h3 {
+    font-size: 28px;
+    border-bottom: 2px solid #333;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.chapter-list ul {
+    list-style: none;
+    padding: 0;
+}
+
+.chapter-list li {
+    background-color: #2a2a2a;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.chapter-list li a {
+    display: block;
+    padding: 15px 20px;
+    text-decoration: none;
+    color: #f0f0f0;
+    font-size: 18px;
+    transition: background-color 0.3s ease;
+}
+
+.chapter-list li a:hover {
+    background-color: #4CAF50;
+    color: #ffffff;
+}/* Quita el subrayado feo de la tarjeta-enlace */
+.story-card-link {
+    text-decoration: none;
 }
