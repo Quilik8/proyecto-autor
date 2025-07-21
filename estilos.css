@@ -84,4 +84,100 @@ footer {
     border-top: 1px solid #333;
     font-size: 14px;
     color: #888; /* Un color gris para que no sea tan prominente */
+}/* --- SECCIÓN HERO --- */
+.hero {
+    background-color: #222; /* Un fondo ligeramente más claro que el body */
+    text-align: center;
+    padding: 80px 20px;
+    border-radius: 10px;
+    margin-bottom: 60px; /* Espacio antes de la siguiente sección */
+}
+
+.hero h1 {
+    color: #ffffff; /* El título principal del hero lo queremos en blanco puro */
+    font-size: 52px;
+}
+
+.hero p {
+    max-width: 600px; /* Evita que el texto sea demasiado ancho en pantallas grandes */
+    margin: 20px auto; /* Centra el párrafo horizontalmente */
+}
+
+.cta-button {
+    display: inline-block; /* Permite aplicar padding y margin */
+    background-color: #5cb85c; /* Un verde un poco más claro para el botón principal */
+    color: #ffffff;
+    padding: 15px 30px;
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-top: 20px;
+    transition: transform 0.3s ease;
+}
+
+.cta-button:hover {
+    transform: scale(1.05); /* Agranda ligeramente el botón al pasar el ratón */
+}
+
+/* --- CUADRÍCULA DE HISTORIAS --- */
+.featured-stories h2 {
+    text-align: center;
+    font-size: 36px;
+    margin-bottom: 40px;
+    color: #f0f0f0;
+}
+
+.featured-stories-grid {
+    display: grid;
+    /* Crea columnas automáticas: cada una de 300px como mínimo,
+       y crecerán para ocupar el espacio. Si no caben, se pasan a la siguiente fila.
+       Esto es la clave de la magia responsive. */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px; /* El espacio entre las tarjetas */
+}
+
+/* --- TARJETA DE HISTORIA INDIVIDUAL --- */
+.story-card {
+    background-color: #2a2a2a;
+    border: 1px solid #444;
+    border-radius: 8px;
+    overflow: hidden; /* Importante para que la imagen no se salga de los bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.story-card:hover {
+    transform: translateY(-10px); /* Eleva la tarjeta al pasar el ratón */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.card-image {
+    height: 200px;
+    background-color: #555; /* Placeholder para la imagen de portada */
+    /* Más adelante aquí pondremos una imagen real: 
+       background-image: url('URL_DE_LA_IMAGEN.jpg'); */
+}
+
+.card-content {
+    padding: 20px;
+}
+
+.card-title {
+    font-size: 22px;
+    color: #4CAF50; /* El color de la marca para el título */
+    margin: 0 0 10px 0;
+}
+
+.card-author {
+    font-size: 16px;
+    color: #ccc;
+    margin: 0 0 15px 0;
+    font-style: italic;
+}
+
+.card-description {
+    font-size: 15px;
+    line-height: 1.5;
+    color: #f0f0f0;
 }
