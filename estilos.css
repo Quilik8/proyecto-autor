@@ -20,4 +20,68 @@ h1 {
 p {
     font-size: 20px; /* Un tamaño de letra cómodo para la lectura */
     line-height: 1.6; /* Aumenta el espacio entre líneas para que sea más fácil de leer */
+}/* --- ESTRUCTURA Y ENCABEZADO --- */
+
+header {
+    display: flex; /* Activa Flexbox, un sistema moderno de alineación */
+    justify-content: space-between; /* Pone el máximo espacio entre el logo y la nav */
+    align-items: center; /* Centra los elementos verticalmente */
+    padding: 20px 50px; /* Añade espacio arriba/abajo y a los lados */
+    border-bottom: 1px solid #333; /* Una línea sutil para separar el header */
+}
+
+.logo {
+    font-size: 28px;
+    font-weight: bold; /* Pone el texto en negrita */
+    color: #4CAF50; /* Usando el mismo color de marca para el logo */
+}
+
+/* --- ESTILOS DE NAVEGACIÓN --- */
+
+nav ul {
+    list-style: none; /* Quita los puntos de la lista */
+    display: flex; /* Pone los elementos de la lista en una fila */
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    margin-left: 30px; /* Espacio entre los elementos del menú */
+}
+
+nav ul li a {
+    text-decoration: none; /* Quita el subrayado de los enlaces */
+    color: #f0f0f0; /* Color de texto normal */
+    font-size: 18px;
+    transition: color 0.3s ease; /* Una pequeña animación suave para el cambio de color */
+}
+
+nav ul li a:hover {
+    color: #4CAF50; /* Cambia al color de la marca cuando pasas el ratón por encima */
+}
+
+/* Estilo especial para el botón de registro */
+.boton-registro {
+    background-color: #4CAF50;
+    color: #ffffff;
+    padding: 10px 20px;
+    border-radius: 5px; /* Bordes redondeados */
+    transition: background-color 0.3s ease;
+}
+
+.boton-registro:hover {
+    background-color: #5cb85c; /* Un verde un poco más claro al pasar el ratón */
+    color: #ffffff; /* Aseguramos que el texto siga siendo blanco */
+}
+
+
+/* --- PIE DE PÁGINA --- */
+
+footer {
+    text-align: center;
+    padding: 20px;
+    margin-top: 50px; /* Espacio para separarlo del contenido principal */
+    border-top: 1px solid #333;
+    font-size: 14px;
+    color: #888; /* Un color gris para que no sea tan prominente */
 }
