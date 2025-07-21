@@ -345,4 +345,47 @@ footer {
 }/* Quita el subrayado feo de la tarjeta-enlace */
 .story-card-link {
     text-decoration: none;
+}/* --- ESTILOS PÁGINA DE LECTURA --- */
+.reading-container {
+    max-width: 800px; /* Ancho máximo para el contenido, ideal para leer */
+    margin: 40px auto; /* Centra el contenedor */
+    padding: 20px;
+}
+
+.chapter-title {
+    text-align: center;
+    font-size: 36px;
+    margin-bottom: 40px;
+}
+
+.chapter-navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 40px;
+}
+
+.nav-button {
+    text-decoration: none;
+    color: #4CAF50;
+    font-size: 18px;
+    padding: 10px 15px;
+    border: 1px solid #4CAF50;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.nav-button:hover {
+    background-color: #4CAF50;
+    color: #ffffff;
+}
+
+.reading-content {
+    font-family: 'Georgia', serif; /* Usamos una fuente con serif, es más cómoda para lecturas largas */
+    font-size: 21px; /* Un tamaño de letra generoso */
+    line-height: 1.8; /* Espacio entre líneas muy amplio */
+    color: #e0e0e0; /* Un blanco no tan brillante para reducir el contraste */
+}
+
+.reading-content p {
+    margin-bottom: 2em; /* Un espacio generoso entre párrafos */
 }
