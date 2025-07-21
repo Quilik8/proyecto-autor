@@ -180,4 +180,51 @@ footer {
     font-size: 15px;
     line-height: 1.5;
     color: #f0f0f0;
+}/* --- ESTILOS DE FORMULARIO --- */
+.form-container {
+    max-width: 500px;
+    margin: 60px auto; /* Centra el contenedor en la página */
+    padding: 40px;
+    background-color: #2a2a2a;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.form-container h2 {
+    text-align: center;
+    color: #f0f0f0;
+    margin-bottom: 10px;
+}
+
+.form-container p {
+    text-align: center;
+    color: #ccc;
+    margin-bottom: 30px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block; /* Hace que la etiqueta ocupe su propia línea */
+    font-size: 16px;
+    color: #f0f0f0;
+    margin-bottom: 8px;
+}
+
+.form-group input {
+    width: 100%; /* El campo ocupa todo el ancho del contenedor */
+    padding: 12px;
+    font-size: 16px;
+    background-color: #1a1a1a;
+    border: 1px solid #444;
+    border-radius: 5px;
+    color: #f0f0f0;
+}
+
+/* Estilo para que el botón del formulario ocupe todo el ancho */
+.form-container button {
+    width: 100%;
+    margin-top: 10px;
 }
