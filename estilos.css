@@ -388,4 +388,64 @@ footer {
 
 .reading-content p {
     margin-bottom: 2em; /* Un espacio generoso entre párrafos */
+}/* --- ESTILOS RESPONSIVOS --- */
+
+/* Por defecto, el icono de la hamburguesa no se muestra en pantallas grandes */
+.hamburger {
+    display: none;
+    cursor: pointer;
+}
+
+.bar {
+    display: block;
+    width: 25px;
+    height: 3px;
+    margin: 5px auto;
+    background-color: #f0f0f0;
+    transition: all 0.3s ease-in-out;
+}
+
+/* @media query: Estas reglas solo se aplican si el ancho de la pantalla
+   es de 768px o menos (el tamaño típico de una tablet o móvil) */
+@media (max-width: 768px) {
+    /* Ocultamos el menú de navegación tradicional */
+    header nav {
+        display: none;
+    }
+
+    /* Mostramos el icono de la hamburguesa */
+    .hamburger {
+        display: block;
+    }
+
+    /* Cuando la hamburguesa está activa (por JS), la transformamos en una 'X' */
+    .hamburger.active .bar:nth-child(2) {
+        opacity: 0;
+    }
+    .hamburger.active .bar:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+    }
+    .hamburger.active .bar:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
+    }
+
+    /* Hacemos que el menú de navegación (que estaba oculto) ocupe toda
+       la pantalla cuando se active */
+    nav.active {
+        display: block;
+        position: fixed;
+        left: 0;
+        top: 80px; /* Justo debajo del header */
+        width: 100%;
+        background-color: #1a1a1a;
+        text-align: center;
+    }
+    
+    nav.active ul {
+        flex-direction: column; /* Apila los enlaces verticalmente */
+    }
+
+    nav.active ul li {
+        margin: 20px 0; /* Espacio vertical entre enlaces */
+    }
 }
