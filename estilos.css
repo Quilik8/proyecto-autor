@@ -451,7 +451,7 @@ footer {
         margin: 20px 0;
     }
 
-    /* --- AJUSTES DE CONTENIDO PARA MÓVIL (Sugerencia de Copilot) --- */
+    /* --- AJUSTES DE CONTENIDO PARA MÓVIL --- */
 
     /* Ajuste de la barra de búsqueda en la página Explorar */
     .search-bar {
@@ -480,4 +480,10 @@ footer {
         align-items: center;
         padding: 30px 20px;
     }
+}/* --- ESTILOS DE MENSAJES DE ERROR --- */
+.error-message {
+    color: #e74c3c; /* Un color rojo para las alertas */
+    font-size: 14px;
+    margin-top: 5px;
+    height: 16px; /* Le damos una altura fija para que el layout no "salte" */
 }
