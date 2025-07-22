@@ -408,6 +408,8 @@ footer {
 /* @media query: Estas reglas solo se aplican si el ancho de la pantalla
    es de 768px o menos (el tamaño típico de una tablet o móvil) */
 @media (max-width: 768px) {
+    /* --- MENÚ HAMBURGUESA --- */
+    
     /* Ocultamos el menú de navegación tradicional */
     header nav {
         display: none;
@@ -418,7 +420,7 @@ footer {
         display: block;
     }
 
-    /* Cuando la hamburguesa está activa (por JS), la transformamos en una 'X' */
+    /* Transformación de la hamburguesa a 'X' */
     .hamburger.active .bar:nth-child(2) {
         opacity: 0;
     }
@@ -429,8 +431,7 @@ footer {
         transform: translateY(-8px) rotate(-45deg);
     }
 
-    /* Hacemos que el menú de navegación (que estaba oculto) ocupe toda
-       la pantalla cuando se active */
+    /* Estilos del menú desplegable activo */
     nav.active {
         display: block;
         position: fixed;
@@ -439,13 +440,44 @@ footer {
         width: 100%;
         background-color: #1a1a1a;
         text-align: center;
+        z-index: 100; /* Asegura que el menú esté por encima de todo */
     }
     
     nav.active ul {
-        flex-direction: column; /* Apila los enlaces verticalmente */
+        flex-direction: column;
     }
 
     nav.active ul li {
-        margin: 20px 0; /* Espacio vertical entre enlaces */
+        margin: 20px 0;
+    }
+
+    /* --- AJUSTES DE CONTENIDO PARA MÓVIL (Sugerencia de Copilot) --- */
+
+    /* Ajuste de la barra de búsqueda en la página Explorar */
+    .search-bar {
+        flex-direction: column;
+    }
+
+    .search-bar input {
+        border-radius: 5px;
+        border-right: 1px solid #444;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    .search-bar button {
+        border-radius: 5px;
+    }
+    
+    /* Ajuste de padding en la cuadrícula de historias */
+    .stories-list {
+        padding: 0 20px;
+    }
+
+    /* Ajuste de la página de detalle de historia */
+    .story-detail-container {
+        flex-direction: column;
+        align-items: center;
+        padding: 30px 20px;
     }
 }
