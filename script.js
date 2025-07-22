@@ -57,4 +57,44 @@ if (registroForm) { // Solo ejecuta este código si estamos en la página de reg
             registroForm.submit(); // Por ahora, lo enviamos para que veas la acción
         }
     });
+}// --- VALIDACIÓN DEL FORMULARIO DE LOGIN ---
+
+// 1. Seleccionar los elementos del DOM para el login
+const loginForm = document.querySelector("#login-form");
+
+if (loginForm) { // Este código solo se ejecutará si estamos en la página de login
+    // Seleccionamos los inputs dentro del 'if' para asegurar que existen
+    const emailInputLogin = document.querySelector("#login-email");
+    const passwordInputLogin = document.querySelector("#login-password");
+    const emailErrorLogin = document.querySelector("#login-email-error");
+    const passwordErrorLogin = document.querySelector("#login-password-error");
+
+    loginForm.addEventListener("submit", (event) => {
+        event.preventDefault(); // Prevenimos el envío automático
+
+        let esValido = true;
+
+        // Limpiar errores previos
+        emailErrorLogin.textContent = "";
+        passwordErrorLogin.textContent = "";
+
+        // Validación del email
+        if (emailInputLogin.value.trim() === "") {
+            emailErrorLogin.textContent = "El correo electrónico es obligatorio.";
+            esValido = false;
+        }
+
+        // Validación de la contraseña
+        if (passwordInputLogin.value.trim() === "") {
+            passwordErrorLogin.textContent = "La contraseña es obligatoria.";
+            esValido = false;
+        }
+
+        // Si todo es válido...
+        if (esValido) {
+            alert("¡Login exitoso! (Simulación)");
+            // En el futuro, aquí se comprobarían los datos contra la base de datos.
+            loginForm.submit();
+        }
+    });
 }
