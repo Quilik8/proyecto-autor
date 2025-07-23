@@ -486,4 +486,7 @@ footer {
     font-size: 14px;
     margin-top: 5px;
     height: 16px; /* Le damos una altura fija para que el layout no "salte" */
+}/* --- CLASE DE UTILIDAD --- */
+.hidden {
+    display: none !important;
 }
