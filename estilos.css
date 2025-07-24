@@ -1,492 +1,161 @@
-/* --- ESTILOS GENERALES --- */
-/* Afecta a toda la página */
-body {
-    background-color: #1a1a1a; /* Un color de fondo oscuro */
-    color: #f0f0f0; /* Un color de texto casi blanco */
-    font-family: sans-serif; /* Una fuente genérica, fácil de leer, como respaldo */
-    text-align: center; /* Centra todo el texto de la página */
-    margin: 50px; /* Añade un poco de espacio en los bordes para que no se pegue */
-}
+/* =================================================================
+   ARCHIVOS DE ESTILO DE A.U.T.O.R. - VERSIÓN MAESTRA
+   ================================================================= */
 
-/* --- ESTILOS PARA LOS TÍTULOS --- */
-/* Afecta a la etiqueta <h1> */
-h1 {
-    font-size: 48px; /* Un tamaño de letra grande para el título principal */
-    color: #4CAF50; /* Un color verde vibrante para destacar. ¡Cámbialo por tu color de marca! */
-}
-
-/* --- ESTILOS PARA LOS PÁRRAFOS --- */
-/* Afecta a la etiqueta <p> */
-p {
-    font-size: 20px; /* Un tamaño de letra cómodo para la lectura */
-    line-height: 1.6; /* Aumenta el espacio entre líneas para que sea más fácil de leer */
-}/* --- ESTRUCTURA Y ENCABEZADO --- */
-
-header {
-    display: flex; /* Activa Flexbox, un sistema moderno de alineación */
-    justify-content: space-between; /* Pone el máximo espacio entre el logo y la nav */
-    align-items: center; /* Centra los elementos verticalmente */
-    padding: 20px 50px; /* Añade espacio arriba/abajo y a los lados */
-    border-bottom: 1px solid #333; /* Una línea sutil para separar el header */
-}
-
-.logo {
-    font-size: 28px;
-    font-weight: bold; /* Pone el texto en negrita */
-    color: #4CAF50; /* Usando el mismo color de marca para el logo */
-}
-
-/* --- ESTILOS DE NAVEGACIÓN --- */
-
-nav ul {
-    list-style: none; /* Quita los puntos de la lista */
-    display: flex; /* Pone los elementos de la lista en una fila */
+/* --- 1. RESET Y CONFIGURACIÓN GLOBAL --- */
+* {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
-nav ul li {
-    margin-left: 30px; /* Espacio entre los elementos del menú */
+body {
+    background-color: #1a1a1a;
+    color: #f0f0f0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
-nav ul li a {
-    text-decoration: none; /* Quita el subrayado de los enlaces */
-    color: #f0f0f0; /* Color de texto normal */
-    font-size: 18px;
-    transition: color 0.3s ease; /* Una pequeña animación suave para el cambio de color */
+p {
+    line-height: 1.6;
 }
 
-nav ul li a:hover {
-    color: #4CAF50; /* Cambia al color de la marca cuando pasas el ratón por encima */
+/* --- 2. ESTRUCTURA PRINCIPAL (HEADER, FOOTER) --- */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #333;
+    flex-shrink: 0;
 }
 
-/* Estilo especial para el botón de registro */
-.boton-registro {
-    background-color: #4CAF50;
-    color: #ffffff;
-    padding: 10px 20px;
-    border-radius: 5px; /* Bordes redondeados */
-    transition: background-color 0.3s ease;
+main {
+    flex-grow: 1;
 }
-
-.boton-registro:hover {
-    background-color: #5cb85c; /* Un verde un poco más claro al pasar el ratón */
-    color: #ffffff; /* Aseguramos que el texto siga siendo blanco */
-}
-
-
-/* --- PIE DE PÁGINA --- */
 
 footer {
     text-align: center;
     padding: 20px;
-    margin-top: 50px; /* Espacio para separarlo del contenido principal */
+    margin-top: auto;
     border-top: 1px solid #333;
     font-size: 14px;
-    color: #888; /* Un color gris para que no sea tan prominente */
-}/* --- SECCIÓN HERO --- */
-.hero {
-    background-color: #222; /* Un fondo ligeramente más claro que el body */
-    text-align: center;
-    padding: 80px 20px;
-    border-radius: 10px;
-    margin-bottom: 60px; /* Espacio antes de la siguiente sección */
+    color: #888;
 }
 
-.hero h1 {
-    color: #ffffff; /* El título principal del hero lo queremos en blanco puro */
-    font-size: 52px;
-}
-
-.hero p {
-    max-width: 600px; /* Evita que el texto sea demasiado ancho en pantallas grandes */
-    margin: 20px auto; /* Centra el párrafo horizontalmente */
+/* --- 3. COMPONENTES REUTILIZABLES --- */
+.logo {
+    font-size: 28px;
+    font-weight: bold;
+    color: #4CAF50;
+    flex-shrink: 0;
 }
 
 .cta-button {
-    display: inline-block; /* Permite aplicar padding y margin */
-    background-color: #5cb85c; /* Un verde un poco más claro para el botón principal */
+    display: inline-block;
+    background-color: #5cb85c;
     color: #ffffff;
     padding: 15px 30px;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
     text-decoration: none;
     border-radius: 5px;
     margin-top: 20px;
     transition: transform 0.3s ease;
 }
-
 .cta-button:hover {
-    transform: scale(1.05); /* Agranda ligeramente el botón al pasar el ratón */
+    transform: scale(1.05);
 }
 
-/* --- CUADRÍCULA DE HISTORIAS --- */
-.featured-stories h2 {
-    text-align: center;
-    font-size: 36px;
-    margin-bottom: 40px;
-    color: #f0f0f0;
-}
-
-.featured-stories-grid {
-    display: grid;
-    /* Crea columnas automáticas: cada una de 300px como mínimo,
-       y crecerán para ocupar el espacio. Si no caben, se pasan a la siguiente fila.
-       Esto es la clave de la magia responsive. */
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px; /* El espacio entre las tarjetas */
-}
-
-/* --- TARJETA DE HISTORIA INDIVIDUAL --- */
 .story-card {
     background-color: #2a2a2a;
     border: 1px solid #444;
     border-radius: 8px;
-    overflow: hidden; /* Importante para que la imagen no se salga de los bordes redondeados */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+    transition: transform 0.3s ease;
 }
+.story-card:hover { transform: translateY(-10px); }
+.card-image { height: 200px; background-color: #555; }
+.card-content { padding: 20px; text-align: left; }
+.card-title { font-size: 22px; color: #4CAF50; margin-bottom: 10px; }
+.card-author { font-size: 16px; color: #ccc; margin-bottom: 15px; font-style: italic; }
+.card-description { font-size: 15px; color: #f0f0f0; line-height: 1.5; }
+.story-card-link { text-decoration: none; }
 
-.story-card:hover {
-    transform: translateY(-10px); /* Eleva la tarjeta al pasar el ratón */
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-}
+/* --- 4. ESTILOS DE PÁGINAS ESPECÍFICAS --- */
 
-.card-image {
-    height: 200px;
-    background-color: #555; /* Placeholder para la imagen de portada */
-    /* Más adelante aquí pondremos una imagen real: 
-       background-image: url('URL_DE_LA_IMAGEN.jpg'); */
-}
+/* 4.1 NAVEGACIÓN */
+nav ul { display: flex; list-style: none; align-items: center; }
+nav ul li { margin-left: 30px; }
+nav ul li a { text-decoration: none; color: #f0f0f0; font-size: 18px; transition: color 0.3s ease; }
+nav ul li a:hover { color: #4CAF50; }
+.boton-registro { background-color: #4CAF50; color: #ffffff; padding: 10px 20px; border-radius: 5px; transition: background-color 0.3s ease; }
+.boton-registro:hover { background-color: #5cb85c; }
 
-.card-content {
-    padding: 20px;
-}
+/* 4.2 PÁGINA INICIO (HERO) */
+.hero { text-align: center; padding: 80px 40px; }
+.hero h1 { color: #ffffff; font-size: clamp(32px, 6vw, 52px); line-height: 1.2; }
+.hero p { max-width: 600px; margin: 20px auto; font-size: 20px; }
+.featured-stories { padding: 60px 20px; }
+.featured-stories h2 { text-align: center; font-size: 32px; margin-bottom: 40px; color: #f0f0f0; }
+.featured-stories-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto; }
 
-.card-title {
-    font-size: 22px;
-    color: #4CAF50; /* El color de la marca para el título */
-    margin: 0 0 10px 0;
-}
+/* 4.3 PÁGINA EXPLORAR */
+.search-section { text-align: center; padding: 60px 20px; }
+.search-section h1 { font-size: clamp(32px, 5vw, 42px); margin-bottom: 30px; }
+.search-bar { display: flex; max-width: 700px; margin: 0 auto; border-radius: 8px; background-color: #2a2a2a; border: 1px solid #444; overflow: hidden; transition: border-color 0.3s ease; }
+.search-bar:focus-within { border-color: #4CAF50; }
+.search-bar input { width: 100%; flex: 1; min-width: 0; padding: 15px; font-size: 16px; background: transparent; color: #f0f0f0; border: none; outline: none; }
+.search-bar button { display: grid; place-items: center; padding: 0 25px; font-size: 16px; font-weight: bold; border: none; background-color: #4CAF50; color: #ffffff; cursor: pointer; transition: background-color 0.3s ease; }
+.search-bar button:hover { background-color: #5cb85c; }
+.stories-list { padding: 0 20px 60px 20px; }
 
-.card-author {
-    font-size: 16px;
-    color: #ccc;
-    margin: 0 0 15px 0;
-    font-style: italic;
-}
+/* 4.4 FORMULARIOS */
+.form-container { max-width: 500px; margin: 60px auto; padding: 40px; background-color: #2a2a2a; border-radius: 8px; text-align: left; }
+.form-container h2, .form-container p { text-align: center; }
+.form-container p { color: #ccc; margin-bottom: 30px; }
+.form-group { margin-bottom: 20px; }
+.form-group label { display: block; margin-bottom: 8px; }
+.form-group input { width: 100%; padding: 12px; font-size: 16px; background-color: #1a1a1a; border: 1px solid #444; border-radius: 5px; color: #f0f0f0; }
+.form-container button { width: 100%; margin-top: 10px; }
+.error-message { color: #e74c3c; font-size: 14px; margin-top: 5px; height: 16px; }
 
-.card-description {
-    font-size: 15px;
-    line-height: 1.5;
-    color: #f0f0f0;
-}/* --- ESTILOS DE FORMULARIO --- */
-.form-container {
-    max-width: 500px;
-    margin: 60px auto; /* Centra el contenedor en la página */
-    padding: 40px;
-    background-color: #2a2a2a;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
+/* 4.5 PÁGINA DETALLE DE HISTORIA */
+.story-detail-container { display: flex; gap: 40px; padding: 60px 20px; max-width: 1000px; margin: 0 auto; text-align: left; }
+.story-cover { flex-basis: 300px; flex-shrink: 0; height: 450px; background-color: #555; border-radius: 8px; }
+.story-info h1 { font-size: 38px; color: #f0f0f0; margin: 0; text-align: left; }
+.story-info h2 { font-size: 24px; color: #ccc; font-weight: normal; font-style: italic; margin: 10px 0 20px 0; }
+.chapter-list { padding: 0 20px 60px 20px; max-width: 1000px; margin: 0 auto; text-align: left; }
+.chapter-list h3 { font-size: 28px; border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px; }
+.chapter-list ul { list-style: none; }
+.chapter-list li { background-color: #2a2a2a; margin-bottom: 10px; border-radius: 5px; }
+.chapter-list li a { display: block; padding: 15px 20px; text-decoration: none; color: #f0f0f0; font-size: 18px; transition: background-color 0.3s ease; }
+.chapter-list li a:hover { background-color: #4CAF50; color: #ffffff; }
 
-.form-container h2 {
-    text-align: center;
-    color: #f0f0f0;
-    margin-bottom: 10px;
-}
+/* 4.6 PÁGINA DE LECTURA (VERSIÓN CORREGIDA) */
+.reading-container { max-width: 750px; margin: 60px auto; padding: 0 20px; }
+.chapter-title { text-align: center; font-size: 36px; margin-bottom: 40px; }
+.chapter-navigation { display: flex; justify-content: space-between; margin: 40px 0; }
+.nav-button { text-decoration: none; color: #4CAF50; font-size: 18px; padding: 10px 15px; border: 1px solid #4CAF50; border-radius: 5px; transition: background-color 0.3s, color 0.3s; }
+.nav-button:hover { background-color: #4CAF50; color: #ffffff; }
+/* Añade esta nueva regla para los enlaces ya visitados */
+.nav-button:visited { color: #4CAF50; }
+.reading-content { text-align: left; font-family: 'Georgia', serif; font-size: 20px; line-height: 1.8; color: #e0e0e0; }
+.reading-content p { margin-bottom: 2em; }
 
-.form-container p {
-    text-align: center;
-    color: #ccc;
-    margin-bottom: 30px;
-}
+/* --- 5. CLASES DE UTILIDAD Y RESPONSIVAS --- */
+.hidden { display: none !important; }
+.hamburger { display: none; cursor: pointer; }
+.bar { display: block; width: 25px; height: 3px; margin: 5px auto; background-color: #f0f0f0; transition: all 0.3s ease-in-out; }
 
-.form-group {
-    margin-bottom: 20px;
-}
-
-.form-group label {
-    display: block; /* Hace que la etiqueta ocupe su propia línea */
-    font-size: 16px;
-    color: #f0f0f0;
-    margin-bottom: 8px;
-}
-
-.form-group input {
-    width: 100%; /* El campo ocupa todo el ancho del contenedor */
-    padding: 12px;
-    font-size: 16px;
-    background-color: #1a1a1a;
-    border: 1px solid #444;
-    border-radius: 5px;
-    color: #f0f0f0;
-}
-
-/* Estilo para que el botón del formulario ocupe todo el ancho */
-.form-container button {
-    width: 100%;
-    margin-top: 10px;
-}/* --- ESTILOS PÁGINA EXPLORAR --- */
-.search-section {
-    text-align: center;
-    padding: 60px 20px;
-}
-
-.search-section h1 {
-    font-size: 42px;
-    margin-bottom: 30px;
-}
-
-.search-bar {
-    display: flex;
-    justify-content: center;
-    max-width: 700px;
-    margin: 0 auto;
-}
-
-.search-bar input {
-    width: 100%;
-    padding: 15px;
-    font-size: 18px;
-    border: 1px solid #444;
-    border-radius: 5px 0 0 5px; /* Redondea solo las esquinas izquierdas */
-    background-color: #1a1a1a;
-    color: #f0f0f0;
-    border-right: none; /* Quitamos el borde derecho para unirlo al botón */
-}
-
-.search-bar button {
-    padding: 15px 30px;
-    font-size: 18px;
-    border-radius: 0 5px 5px 0; /* Redondea solo las esquinas derechas */
-    border: none;
-    cursor: pointer;
-}
-
-/* Ajuste para la lista de historias en esta página */
-.stories-list {
-    padding: 0 50px; /* Añade un poco de espacio lateral a la cuadrícula */
-}/* --- ESTILOS PÁGINA DETALLE DE HISTORIA --- */
-.story-detail-container {
-    display: flex;
-    gap: 40px;
-    padding: 60px 50px;
-    align-items: flex-start; /* Alinea los items al principio del contenedor */
-}
-
-.story-cover {
-    flex-basis: 300px; /* Ancho base de la columna de la portada */
-    flex-shrink: 0; /* Evita que la columna se encoja */
-    height: 450px;
-    background-color: #555; /* Placeholder para la imagen */
-    border-radius: 8px;
-}
-
-.story-info h1 {
-    font-size: 42px;
-    color: #f0f0f0;
-    margin: 0;
-}
-
-.story-info h2 {
-    font-size: 24px;
-    color: #ccc;
-    font-weight: normal;
-    font-style: italic;
-    margin: 10px 0 20px 0;
-}
-
-.story-meta {
-    margin-bottom: 20px;
-    color: #888;
-}
-
-.story-synopsis {
-    font-size: 18px;
-    line-height: 1.7;
-    margin-bottom: 30px;
-}
-
-.chapter-list {
-    padding: 0 50px 60px 50px;
-}
-
-.chapter-list h3 {
-    font-size: 28px;
-    border-bottom: 2px solid #333;
-    padding-bottom: 10px;
-    margin-bottom: 20px;
-}
-
-.chapter-list ul {
-    list-style: none;
-    padding: 0;
-}
-
-.chapter-list li {
-    background-color: #2a2a2a;
-    margin-bottom: 10px;
-    border-radius: 5px;
-}
-
-.chapter-list li a {
-    display: block;
-    padding: 15px 20px;
-    text-decoration: none;
-    color: #f0f0f0;
-    font-size: 18px;
-    transition: background-color 0.3s ease;
-}
-
-.chapter-list li a:hover {
-    background-color: #4CAF50;
-    color: #ffffff;
-}/* Quita el subrayado feo de la tarjeta-enlace */
-.story-card-link {
-    text-decoration: none;
-}/* --- ESTILOS PÁGINA DE LECTURA --- */
-.reading-container {
-    max-width: 800px; /* Ancho máximo para el contenido, ideal para leer */
-    margin: 40px auto; /* Centra el contenedor */
-    padding: 20px;
-}
-
-.chapter-title {
-    text-align: center;
-    font-size: 36px;
-    margin-bottom: 40px;
-}
-
-.chapter-navigation {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 40px;
-}
-
-.nav-button {
-    text-decoration: none;
-    color: #4CAF50;
-    font-size: 18px;
-    padding: 10px 15px;
-    border: 1px solid #4CAF50;
-    border-radius: 5px;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.nav-button:hover {
-    background-color: #4CAF50;
-    color: #ffffff;
-}
-
-.reading-content {
-    font-family: 'Georgia', serif; /* Usamos una fuente con serif, es más cómoda para lecturas largas */
-    font-size: 21px; /* Un tamaño de letra generoso */
-    line-height: 1.8; /* Espacio entre líneas muy amplio */
-    color: #e0e0e0; /* Un blanco no tan brillante para reducir el contraste */
-}
-
-.reading-content p {
-    margin-bottom: 2em; /* Un espacio generoso entre párrafos */
-}/* --- ESTILOS RESPONSIVOS --- */
-
-/* Por defecto, el icono de la hamburguesa no se muestra en pantallas grandes */
-.hamburger {
-    display: none;
-    cursor: pointer;
-}
-
-.bar {
-    display: block;
-    width: 25px;
-    height: 3px;
-    margin: 5px auto;
-    background-color: #f0f0f0;
-    transition: all 0.3s ease-in-out;
-}
-
-/* @media query: Estas reglas solo se aplican si el ancho de la pantalla
-   es de 768px o menos (el tamaño típico de una tablet o móvil) */
 @media (max-width: 768px) {
-    /* --- MENÚ HAMBURGUESA --- */
-    
-    /* Ocultamos el menú de navegación tradicional */
-    header nav {
-        display: none;
-    }
-
-    /* Mostramos el icono de la hamburguesa */
-    .hamburger {
-        display: block;
-    }
-
-    /* Transformación de la hamburguesa a 'X' */
-    .hamburger.active .bar:nth-child(2) {
-        opacity: 0;
-    }
-    .hamburger.active .bar:nth-child(1) {
-        transform: translateY(8px) rotate(45deg);
-    }
-    .hamburger.active .bar:nth-child(3) {
-        transform: translateY(-8px) rotate(-45deg);
-    }
-
-    /* Estilos del menú desplegable activo */
-    nav.active {
-        display: block;
-        position: fixed;
-        left: 0;
-        top: 80px; /* Justo debajo del header */
-        width: 100%;
-        background-color: #1a1a1a;
-        text-align: center;
-        z-index: 100; /* Asegura que el menú esté por encima de todo */
-    }
-    
-    nav.active ul {
-        flex-direction: column;
-    }
-
-    nav.active ul li {
-        margin: 20px 0;
-    }
-
-    /* --- AJUSTES DE CONTENIDO PARA MÓVIL --- */
-
-    /* Ajuste de la barra de búsqueda en la página Explorar */
-    .search-bar {
-        flex-direction: column;
-    }
-
-    .search-bar input {
-        border-radius: 5px;
-        border-right: 1px solid #444;
-        margin-bottom: 10px;
-        text-align: center;
-    }
-
-    .search-bar button {
-        border-radius: 5px;
-    }
-    
-    /* Ajuste de padding en la cuadrícula de historias */
-    .stories-list {
-        padding: 0 20px;
-    }
-
-    /* Ajuste de la página de detalle de historia */
-    .story-detail-container {
-        flex-direction: column;
-        align-items: center;
-        padding: 30px 20px;
-    }
-}/* --- ESTILOS DE MENSAJES DE ERROR --- */
-.error-message {
-    color: #e74c3c; /* Un color rojo para las alertas */
-    font-size: 14px;
-    margin-top: 5px;
-    height: 16px; /* Le damos una altura fija para que el layout no "salte" */
-}/* --- CLASE DE UTILIDAD --- */
-.hidden {
-    display: none !important;
+    header { padding: 20px; }
+    header nav { display: none; }
+    .hamburger { display: block; }
+    .hamburger.active .bar:nth-child(2) { opacity: 0; }
+    .hamburger.active .bar:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+    .hamburger.active .bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+    nav.active { display: block; position: fixed; left: 0; top: 75px; width: 100%; background-color: #1a1a1a; text-align: center; z-index: 100; }
+    nav.active ul { flex-direction: column; }
+    nav.active ul li { margin: 20px 0; }
+    .story-detail-container { flex-direction: column; align-items: center; }
 }
