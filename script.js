@@ -5,7 +5,7 @@
 const SUPABASE_URL = "https://dyjuvsqghhjtgzbspglz.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5anV2c3FnaGhqdGd6YnNwZ2x6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMzMzQwNjksImV4cCI6MjA2ODkxMDA2OX0.FmhuMYeYf4wuJtuwz6XX_ZI3_AORepwp3_bTXRM5c2Y";
 
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const clienteSupabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // =================================================================
 // SECCIÓN 1: GESTIÓN DE LA SESIÓN DE USUARIO REAL
@@ -20,7 +20,7 @@ const navLogout = document.querySelector("#nav-logout");
 // Función para actualizar la UI basada en el estado de la sesión de supabase
 const actualizarUINavegacion = async () => {
     // Le preguntamos a supabase por la sesión actual
-    const { data: { session } } = await supabase.auth.getSession();
+    const { data: { session } } = await clienteSupabase.auth.getSession();
 
     if (session) {
         // Si hay una sesión activa (el usuario está logueado)
@@ -42,7 +42,7 @@ if (navLogout) {
     navLogout.addEventListener('click', async (event) => {
         event.preventDefault();
         // Le pedimos a supabase que cierre la sesión
-        const { error } = await supabase.auth.signOut();
+        const { error } = await clienteSupabase.auth.signOut();
         if (!error) {
             // Si el cierre de sesión es exitoso, actualizamos la UI y redirigimos
             actualizarUINavegacion();
@@ -107,7 +107,7 @@ if (loginForm) {
 
         // --- Autenticación con supabase ---
         try {
-            const { data, error } = await supabase.auth.signInWithPassword({
+            const { data, error } = await clienteSupabase.auth.signInWithPassword({
                 email: emailInputLogin.value,
                 password: passwordInputLogin.value,
             });
@@ -180,7 +180,7 @@ if (registroForm) {
         // --- Envío a supabase (si todo es válido) ---
         try {
             // Usamos el cliente de supabase que creamos en config.js
-            const { data, error } = await supabase.auth.signUp({
+            const { data, error } = await clienteSupabase.auth.signUp({
                 email: emailInput.value,
                 password: passwordInput.value,
                 options: {
