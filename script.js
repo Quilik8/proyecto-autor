@@ -1,39 +1,44 @@
 // =================================================================
-// SECCIÓN 1: LÓGICA DE SESIÓN Y NAVEGACIÓN
-// Esta sección se encarga de todo lo relacionado con el estado de la sesión.
-// La ponemos al principio porque debe ejecutarse en cada carga de página.
+// SECCIÓN 1: GESTIÓN DE LA SESIÓN DE USUARIO REAL
 // =================================================================
 
-// Seleccionamos los elementos del menú que vamos to a mostrar/ocultar
+// Seleccionamos los elementos del menú
 const navLogin = document.querySelector("#nav-login");
 const navRegistro = document.querySelector("#nav-registro");
 const navProfile = document.querySelector("#nav-profile");
 const navLogout = document.querySelector("#nav-logout");
 
-// Esta función revisa el 'localStorage' y actualiza el menú
-function actualizarUINavegacion() {
-    if (localStorage.getItem('isLoggedIn') === 'true') {
-        // Si el usuario SÍ está logueado
+// Función para actualizar la UI basada en el estado de la sesión de Supabase
+const actualizarUINavegacion = async () => {
+    // Le preguntamos a Supabase por la sesión actual
+    const { data: { session } } = await supabase.auth.getSession();
+
+    if (session) {
+        // Si hay una sesión activa (el usuario está logueado)
         navLogin.classList.add('hidden');
         navRegistro.classList.add('hidden');
         navProfile.classList.remove('hidden');
         navLogout.classList.remove('hidden');
     } else {
-        // Si el usuario NO está logueado
+        // Si no hay sesión
         navLogin.classList.remove('hidden');
         navRegistro.classList.remove('hidden');
         navProfile.classList.add('hidden');
         navLogout.classList.add('hidden');
     }
-}
+};
 
 // Añadimos un "escuchador" al botón de "Cerrar Sesión"
 if (navLogout) {
-    navLogout.addEventListener('click', (event) => {
-        event.preventDefault(); // Prevenimos que el enlace haga algo raro
-        localStorage.removeItem('isLoggedIn'); // Borramos la "llave" de la sesión
-        actualizarUINavegacion(); // Actualizamos el menú inmediatamente
-        window.location.href = 'index.html'; // Mandamos al usuario a la página de inicio
+    navLogout.addEventListener('click', async (event) => {
+        event.preventDefault();
+        // Le pedimos a Supabase que cierre la sesión
+        const { error } = await supabase.auth.signOut();
+        if (!error) {
+            // Si el cierre de sesión es exitoso, actualizamos la UI y redirigimos
+            actualizarUINavegacion();
+            window.location.href = 'index.html';
+        }
     });
 }
 
@@ -55,25 +60,31 @@ hamburger.addEventListener("click", () => {
 
 
 // =================================================================
-// SECCIÓN 3: VALIDACIÓN DEL FORMULARIO DE LOGIN (MODIFICADO)
-// Aquí es donde ocurre la magia de iniciar la sesión.
+// SECCIÓN 3: INICIO DE SESIÓN REAL CON SUPABASE
 // =================================================================
 const loginForm = document.querySelector("#login-form");
 
 if (loginForm) {
+    // Seleccionamos todos los elementos necesarios
     const emailInputLogin = document.querySelector("#login-email");
     const passwordInputLogin = document.querySelector("#login-password");
     const emailErrorLogin = document.querySelector("#login-email-error");
     const passwordErrorLogin = document.querySelector("#login-password-error");
+    const generalErrorLogin = document.querySelector("#login-general-error");
 
-    loginForm.addEventListener("submit", (event) => {
+    // Hacemos la función del evento "async" para poder usar "await"
+    loginForm.addEventListener("submit", async (event) => {
         event.preventDefault();
-        let esValido = true;
+
+        // Limpiar errores previos
         emailErrorLogin.textContent = "";
         passwordErrorLogin.textContent = "";
+        generalErrorLogin.textContent = "";
 
-        if (emailInputLogin.value.trim() === "") {
-            emailErrorLogin.textContent = "El correo electrónico es obligatorio.";
+        // --- Validación del lado del cliente (rápida) ---
+        let esValido = true;
+        if (emailInputLogin.value.trim() === "" || !emailInputLogin.value.includes('@')) {
+            emailErrorLogin.textContent = "Por favor, introduce un correo válido.";
             esValido = false;
         }
         if (passwordInputLogin.value.trim() === "") {
@@ -81,12 +92,33 @@ if (loginForm) {
             esValido = false;
         }
 
-        if (esValido) {
-            // ¡ESTA ES LA MODIFICACIÓN CLAVE!
-            // En lugar de una alerta, ahora guardamos el estado en el navegador
-            localStorage.setItem('isLoggedIn', 'true'); 
-            // Y redirigimos al usuario a la página de inicio
-            window.location.href = 'index.html'; 
+        if (!esValido) {
+            return;
+        }
+
+        // --- Autenticación con Supabase ---
+        try {
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email: emailInputLogin.value,
+                password: passwordInputLogin.value,
+            });
+
+            if (error) {
+                // Si Supabase devuelve un error (ej. credenciales inválidas)
+                console.error("Error de Supabase:", error.message);
+                generalErrorLogin.textContent = "Correo o contraseña incorrectos.";
+                return;
+            }
+
+            // ¡ÉXITO! El usuario ha iniciado sesión.
+            // No necesitamos guardar en localStorage. Supabase lo hace automáticamente
+            // en una cookie segura. Redirigimos al inicio.
+            window.location.href = 'index.html';
+
+        } catch (catchError) {
+            // Por si hay un error de red o algo inesperado
+            generalErrorLogin.textContent = "Ocurrió un error inesperado. Inténtalo de nuevo.";
+            console.error("Error en el inicio de sesión: ", catchError);
         }
     });
 }
@@ -94,7 +126,6 @@ if (loginForm) {
 
 // =================================================================
 // SECCIÓN 4: VALIDACIÓN DEL FORMULARIO DE REGISTRO
-// Esta es la lógica que ya teníamos, sin cambios.
 // =================================================================
 const registroForm = document.querySelector("#registro-form");
 
