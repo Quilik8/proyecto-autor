@@ -125,31 +125,39 @@ if (loginForm) {
 
 
 // =================================================================
-// SECCIÓN 4: VALIDACIÓN DEL FORMULARIO DE REGISTRO
+// SECCIÓN 4: VALIDACIÓN DEL FORMULARIO DE REGISTRO (CON SUPABASE)
 // =================================================================
 const registroForm = document.querySelector("#registro-form");
 
 if (registroForm) {
+    // Seleccionamos todos los elementos necesarios del formulario
     const usernameInput = document.querySelector("#username");
     const emailInput = document.querySelector("#email");
     const passwordInput = document.querySelector("#password");
+
     const usernameError = document.querySelector("#username-error");
     const emailError = document.querySelector("#email-error");
     const passwordError = document.querySelector("#password-error");
-    
-    registroForm.addEventListener("submit", (event) => {
+    const generalError = document.querySelector("#general-error");
+
+    // Hacemos la función del evento "async" para poder usar "await"
+    registroForm.addEventListener("submit", async (event) => { 
         event.preventDefault(); 
-        let esValido = true;
+        
+        // Limpiar errores previos
         usernameError.textContent = "";
         emailError.textContent = "";
         passwordError.textContent = "";
+        if (generalError) generalError.textContent = "";
 
+        // --- Validación del lado del cliente (rápida) ---
+        let esValido = true;
         if (usernameInput.value.trim() === "") {
             usernameError.textContent = "El nombre de usuario es obligatorio.";
             esValido = false;
         }
-        if (emailInput.value.trim() === "") {
-            emailError.textContent = "El correo electrónico es obligatorio.";
+        if (emailInput.value.trim() === "" || !emailInput.value.includes('@')) {
+            emailError.textContent = "Por favor, introduce un correo válido.";
             esValido = false;
         }
         if (passwordInput.value.length < 8) {
@@ -157,9 +165,34 @@ if (registroForm) {
             esValido = false;
         }
 
-        if (esValido) {
-            alert("¡Formulario enviado con éxito! (Simulación)");
-            registroForm.submit();
+        // Si la validación rápida falla, no continuamos.
+        if (!esValido) return; 
+
+        // --- Envío a Supabase (si todo es válido) ---
+        try {
+            // Usamos el cliente de Supabase que creamos en config.js
+            const { data, error } = await supabase.auth.signUp({
+                email: emailInput.value,
+                password: passwordInput.value,
+                options: {
+                    data: {
+                        username: usernameInput.value
+                    }
+                }
+            });
+
+            if (error) {
+                // Si Supabase devuelve un error (ej. usuario ya existe)
+                if (generalError) generalError.textContent = "Error: " + error.message;
+            } else {
+                // Si el registro es exitoso
+                window.location.href = 'confirmacion.html'; // Redirigimos a la página de confirmación
+            }
+
+        } catch (catchError) {
+            // Por si hay un error de red o algo inesperado
+            if (generalError) generalError.textContent = "Ocurrió un error inesperado. Inténtalo de nuevo.";
+            console.error("Error en el registro: ", catchError);
         }
     });
 }
