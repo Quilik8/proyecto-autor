@@ -8,7 +8,7 @@ const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 const clienteSupabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // =================================================================
-// SECCIÓN 1: GESTIÓN DE LA SESIÓN DE USUARIO REAL
+// SECCIÓN 1: GESTIÓN DE LA SESIÓN Y RENDERIZADO INICIAL
 // =================================================================
 
 // Seleccionamos los elementos del menú
@@ -17,11 +17,12 @@ const navRegistro = document.querySelector("#nav-registro");
 const navProfile = document.querySelector("#nav-profile");
 const navLogout = document.querySelector("#nav-logout");
 
-// Función para actualizar la UI basada en el estado de la sesión de supabase
-const actualizarUINavegacion = async () => {
-    // Le preguntamos a supabase por la sesión actual
+// Esta función es ahora la responsable de inicializar toda la aplicación
+const inicializarApp = async () => {
+    // 1. Le preguntamos a Supabase por la sesión actual
     const { data: { session } } = await clienteSupabase.auth.getSession();
 
+    // 2. Actualizamos la UI del menú basándonos en la respuesta
     if (session) {
         // Si hay una sesión activa (el usuario está logueado)
         navLogin.classList.add('hidden');
@@ -35,24 +36,27 @@ const actualizarUINavegacion = async () => {
         navProfile.classList.add('hidden');
         navLogout.classList.add('hidden');
     }
+
+    // 3. ¡EL PASO CLAVE! Una vez todo está listo, mostramos la página.
+    document.body.classList.remove('body-loading');
 };
 
 // Añadimos un "escuchador" al botón de "Cerrar Sesión"
 if (navLogout) {
     navLogout.addEventListener('click', async (event) => {
         event.preventDefault();
-        // Le pedimos a supabase que cierre la sesión
+        // Le pedimos a Supabase que cierre la sesión
         const { error } = await clienteSupabase.auth.signOut();
         if (!error) {
-            // Si el cierre de sesión es exitoso, actualizamos la UI y redirigimos
-            actualizarUINavegacion();
+            // Si el cierre de sesión es exitoso, redirigimos al inicio
             window.location.href = 'index.html';
         }
     });
 }
 
-// Le decimos al navegador que ejecute nuestra función tan pronto como el HTML esté listo
-document.addEventListener('DOMContentLoaded', actualizarUINavegacion);
+// Le decimos al navegador que ejecute nuestra función de inicialización
+// tan pronto como el HTML esté listo.
+document.addEventListener('DOMContentLoaded', inicializarApp);
 
 
 // =================================================================

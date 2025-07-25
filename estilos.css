@@ -156,6 +156,9 @@ nav ul li a:hover { color: #26DDC6; }
 
 /* --- 5. CLASES DE UTILIDAD Y RESPONSIVAS --- */
 .hidden { display: none !important; }
+.body-loading {
+    visibility: hidden;
+}
 .hamburger { display: none; cursor: pointer; }
 .bar { display: block; width: 25px; height: 3px; margin: 5px auto; background-color: #333; transition: all 0.3s ease-in-out; }
 
