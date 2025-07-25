@@ -1,4 +1,13 @@
 // =================================================================
+// SECCIÓN 0: INICIALIZACIÓN Y CONFIGURACIÓN DE SUPABASE
+// =================================================================
+
+const SUPABASE_URL = "https://dyjuvsqghhjtgzbspglz.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5anV2c3FnaGhqdGd6YnNwZ2x6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMzMzQwNjksImV4cCI6MjA2ODkxMDA2OX0.FmhuMYeYf4wuJtuwz6XX_ZI3_AORepwp3_bTXRM5c2Y";
+
+const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// =================================================================
 // SECCIÓN 1: GESTIÓN DE LA SESIÓN DE USUARIO REAL
 // =================================================================
 
@@ -8,9 +17,9 @@ const navRegistro = document.querySelector("#nav-registro");
 const navProfile = document.querySelector("#nav-profile");
 const navLogout = document.querySelector("#nav-logout");
 
-// Función para actualizar la UI basada en el estado de la sesión de Supabase
+// Función para actualizar la UI basada en el estado de la sesión de supabase
 const actualizarUINavegacion = async () => {
-    // Le preguntamos a Supabase por la sesión actual
+    // Le preguntamos a supabase por la sesión actual
     const { data: { session } } = await supabase.auth.getSession();
 
     if (session) {
@@ -32,7 +41,7 @@ const actualizarUINavegacion = async () => {
 if (navLogout) {
     navLogout.addEventListener('click', async (event) => {
         event.preventDefault();
-        // Le pedimos a Supabase que cierre la sesión
+        // Le pedimos a supabase que cierre la sesión
         const { error } = await supabase.auth.signOut();
         if (!error) {
             // Si el cierre de sesión es exitoso, actualizamos la UI y redirigimos
@@ -60,7 +69,7 @@ hamburger.addEventListener("click", () => {
 
 
 // =================================================================
-// SECCIÓN 3: INICIO DE SESIÓN REAL CON SUPABASE
+// SECCIÓN 3: INICIO DE SESIÓN REAL CON supabase
 // =================================================================
 const loginForm = document.querySelector("#login-form");
 
@@ -96,7 +105,7 @@ if (loginForm) {
             return;
         }
 
-        // --- Autenticación con Supabase ---
+        // --- Autenticación con supabase ---
         try {
             const { data, error } = await supabase.auth.signInWithPassword({
                 email: emailInputLogin.value,
@@ -104,14 +113,14 @@ if (loginForm) {
             });
 
             if (error) {
-                // Si Supabase devuelve un error (ej. credenciales inválidas)
-                console.error("Error de Supabase:", error.message);
+                // Si supabase devuelve un error (ej. credenciales inválidas)
+                console.error("Error de supabase:", error.message);
                 generalErrorLogin.textContent = "Correo o contraseña incorrectos.";
                 return;
             }
 
             // ¡ÉXITO! El usuario ha iniciado sesión.
-            // No necesitamos guardar en localStorage. Supabase lo hace automáticamente
+            // No necesitamos guardar en localStorage. supabase lo hace automáticamente
             // en una cookie segura. Redirigimos al inicio.
             window.location.href = 'index.html';
 
@@ -125,7 +134,7 @@ if (loginForm) {
 
 
 // =================================================================
-// SECCIÓN 4: VALIDACIÓN DEL FORMULARIO DE REGISTRO (CON SUPABASE)
+// SECCIÓN 4: VALIDACIÓN DEL FORMULARIO DE REGISTRO (CON supabase)
 // =================================================================
 const registroForm = document.querySelector("#registro-form");
 
@@ -168,9 +177,9 @@ if (registroForm) {
         // Si la validación rápida falla, no continuamos.
         if (!esValido) return; 
 
-        // --- Envío a Supabase (si todo es válido) ---
+        // --- Envío a supabase (si todo es válido) ---
         try {
-            // Usamos el cliente de Supabase que creamos en config.js
+            // Usamos el cliente de supabase que creamos en config.js
             const { data, error } = await supabase.auth.signUp({
                 email: emailInput.value,
                 password: passwordInput.value,
@@ -182,7 +191,7 @@ if (registroForm) {
             });
 
             if (error) {
-                // Si Supabase devuelve un error (ej. usuario ya existe)
+                // Si supabase devuelve un error (ej. usuario ya existe)
                 if (generalError) generalError.textContent = "Error: " + error.message;
             } else {
                 // Si el registro es exitoso
