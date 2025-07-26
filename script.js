@@ -140,10 +140,10 @@ if (loginForm) {
 // =================================================================
 // SECCIÓN 4: VALIDACIÓN DEL FORMULARIO DE REGISTRO (CON supabase)
 // =================================================================
+
 const registroForm = document.querySelector("#registro-form");
 
 if (registroForm) {
-    // Seleccionamos todos los elementos necesarios del formulario
     const usernameInput = document.querySelector("#username");
     const emailInput = document.querySelector("#email");
     const passwordInput = document.querySelector("#password");
@@ -151,9 +151,9 @@ if (registroForm) {
     const usernameError = document.querySelector("#username-error");
     const emailError = document.querySelector("#email-error");
     const passwordError = document.querySelector("#password-error");
-    const generalError = document.querySelector("#general-error");
+    const generalError = document.querySelector("#general-error"); // Nuevo
 
-    // Hacemos la función del evento "async" para poder usar "await"
+    // ¡CLAVE! Hacemos la función del evento "async" para poder usar "await"
     registroForm.addEventListener("submit", async (event) => { 
         event.preventDefault(); 
         
@@ -161,7 +161,7 @@ if (registroForm) {
         usernameError.textContent = "";
         emailError.textContent = "";
         passwordError.textContent = "";
-        if (generalError) generalError.textContent = "";
+        generalError.textContent = ""; // Nuevo
 
         // --- Validación del lado del cliente (rápida) ---
         let esValido = true;
@@ -179,15 +179,18 @@ if (registroForm) {
         }
 
         // Si la validación rápida falla, no continuamos.
-        if (!esValido) return; 
+        if (!esValido) {
+            return; 
+        }
 
-        // --- Envío a supabase (si todo es válido) ---
+        // --- Envío a Supabase (si todo es válido) ---
         try {
-            // Usamos el cliente de supabase que creamos en config.js
-            const { data, error } = await clienteSupabase.auth.signUp({
+            // Usamos el cliente de Supabase que creamos en config.js
+            const { data, error } = await supabase.auth.signUp({
                 email: emailInput.value,
                 password: passwordInput.value,
                 options: {
+                    // Podemos añadir datos adicionales al perfil del usuario
                     data: {
                         username: usernameInput.value
                     }
@@ -195,8 +198,8 @@ if (registroForm) {
             });
 
             if (error) {
-                // Si supabase devuelve un error (ej. usuario ya existe)
-                if (generalError) generalError.textContent = "Error: " + error.message;
+                // Si Supabase devuelve un error (ej. usuario ya existe)
+                generalError.textContent = "Error en el registro: " + error.message;
             } else {
                 // Si el registro es exitoso
                 window.location.href = 'confirmacion.html'; // Redirigimos a la página de confirmación
@@ -204,7 +207,7 @@ if (registroForm) {
 
         } catch (catchError) {
             // Por si hay un error de red o algo inesperado
-            if (generalError) generalError.textContent = "Ocurrió un error inesperado. Inténtalo de nuevo.";
+            generalError.textContent = "Ocurrió un error inesperado. Inténtalo de nuevo.";
             console.error("Error en el registro: ", catchError);
         }
     });
