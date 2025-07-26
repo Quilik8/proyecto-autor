@@ -212,3 +212,50 @@ if (registroForm) {
         }
     });
 }
+// =================================================================
+// SECCIÓN 5: LÓGICA DE LA PÁGINA DE PERFIL
+// =================================================================
+
+// Verificamos si estamos en la página de perfil buscando un elemento único
+const profileContainer = document.querySelector(".profile-container");
+
+if (profileContainer) {
+    const cargarDatosDePerfil = async () => {
+        // Obtenemos la sesión del usuario actual
+        const { data: { session }, error: sessionError } = await clienteSupabase.auth.getSession();
+        
+        if (sessionError) {
+            console.error("Error al obtener la sesión:", sessionError);
+            return;
+        }
+
+        if (session) {
+            const user = session.user;
+            
+            // Buscamos los elementos donde mostraremos la información
+            const usernameEl = document.querySelector("#profile-username");
+            const emailEl = document.querySelector("#profile-email");
+            const joinedEl = document.querySelector("#profile-joined");
+
+            // Rellenamos los elementos con la información del usuario
+            usernameEl.textContent = user.user_metadata.username || 'No definido';
+            emailEl.textContent = user.email;
+            
+            // Formateamos la fecha para que sea más legible
+            const fechaRegistro = new Date(user.created_at);
+            joinedEl.textContent = fechaRegistro.toLocaleDateString('es-ES', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            
+        } else {
+            // Si por alguna razón el usuario llega a esta página sin sesión,
+            // lo redirigimos a la página de login.
+            window.location.href = 'login.html';
+        }
+    };
+    
+    // Llamamos a la función cuando el HTML esté listo
+    document.addEventListener('DOMContentLoaded', cargarDatosDePerfil);
+}

@@ -52,6 +52,49 @@ Para hacer la plataforma más atractiva y fomentar la participación:
 -   **Para Lectores:** Ganar una "moneda virtual" por leer, entrar diariamente o ver anuncios, que luego pueden usar para donar o desbloquear contenido. Insignias por logros (terminar una saga, ser el primer donante, etc.).
 -   **Para Autores:** "Misiones" para guiar su crecimiento ("Publica tu primera historia", "Consigue 10 seguidores") y recompensas por hitos de ingresos o publicación. El reparto de ganancias podría mejorar a medida que el autor crece en la plataforma.
 
+### Flujos de Usuario Clave
+
+**1. Flujo de Nuevo Usuario (Registro y Primera Lectura):**
+   - Un usuario llega a `index.html`.
+   - Hace clic en "Registrarse" y va a `registro.html`.
+   - Rellena el formulario, se crea la cuenta en Supabase y es redirigido a `confirmacion.html`.
+   - El usuario va a su email, confirma su cuenta y vuelve a la web.
+   - Ahora hace clic en "Iniciar Sesión" y va a `login.html`.
+   - Introduce sus credenciales, se valida con Supabase y es redirigido a `index.html` con la sesión iniciada.
+   - Navega a `explorar.html`, hace clic en una historia y llega a `historia.html`.
+   - Hace clic en un capítulo y finalmente llega a `capitulo.html` para leer.
+
+**2. Flujo de Creación de Contenido (Futuro - para el Autor):**
+   - El autor inicia sesión.
+   - Va a su `perfil.html` (que se convertirá en un panel de control).
+   - Hace clic en "Crear Nueva Historia".
+   - Rellena un formulario con el título, sinopsis y sube una portada.
+   - Es redirigido a la página de gestión de esa historia, donde puede añadir y publicar nuevos capítulos.
+
+**3. Flujo de Colaboración (Futuro - para el Gremio):**
+   - Un autor busca un "Editor" en la sección del Gremio.
+   - Contacta a un editor a través de la mensajería interna.
+   - Le envía una propuesta de colaboración (ej. pago fijo o % de regalías).
+   - El editor acepta. Ahora ambos ven la obra en sus paneles de control.
+
+   ### Decisiones Arquitectónicas Clave
+
+- **Stack Tecnológico Inicial (Front-End Estático):** Se eligió empezar con HTML, CSS y JavaScript puros (sin frameworks como React o Vue) para construir una base sólida, ligera y fácil de entender, manteniendo los costos en cero.
+- **Backend-as-a-Service (BaaS):** Se eligió **Supabase** por las siguientes razones:
+    - **Plan Gratuito Generoso:** Cubre todas las necesidades del MVP sin costo alguno.
+    - **Base de Datos PostgreSQL:** Es una base de datos relacional estándar y potente, ideal para la estructura de usuarios, historias, capítulos y futuras transacciones.
+    - **Autenticación Integrada:** Proporciona un sistema de registro, login y gestión de usuarios seguro y listo para usar, incluyendo la confirmación por email.
+    - **Alternativa Open Source:** Ofrece más control y transparencia que otras opciones propietarias.
+- **Alojamiento y Despliegue (Futuro):** La estrategia es usar **Netlify** o **Vercel** para el despliegue del front-end, por su integración perfecta con GitHub y sus generosos planes gratuitos.
+
+### "Conocimiento Tribal" y Desafíos Inmediatos
+
+- **Problemas de CSS y Caché:** Se experimentaron dificultades significativas con la memoria caché del navegador, que impedían ver los cambios de estilo. La solución estándar es siempre realizar una **Recarga Forzada (`Ctrl+F5` o `Cmd+Shift+R`)** antes de asumir un error en el código.
+- **Evolución del Diseño:** El proyecto migró de un tema oscuro inicial a una identidad de marca de tema claro, más elegante y profesional. Los archivos actuales reflejan este nuevo diseño.
+- **Próximo Gran Desafío (Backend):** La transición actual de una maqueta a una aplicación real. El siguiente paso crucial es dejar de usar datos de ejemplo (como las tarjetas de historias en el HTML) y empezar a leer y escribir desde la base de datos de Supabase. Esto implica:
+    1.  Crear las tablas (`historias`, `capitulos`) en Supabase.
+    2.  Modificar la página `explorar.html` para que obtenga la lista de historias desde la base de datos.
+    3.  Construir los formularios que permitirán a los autores (una vez logueados) crear estas historias.
 
 ---
 
@@ -77,10 +120,14 @@ Para hacer la plataforma más atractiva y fomentar la participación:
 - [X] Misión 13: Simulación de Sesión de Usuario con `localStorage`.
 
 **FASE 3: Pulido del Front-End**
-- [ ] Misión 14: (Por definir: Mejorar diseño, añadir micro-interacciones, etc.)
+- [x] Misión 14: (Por definir: Mejorar diseño, añadir micro-interacciones, etc.)
 
 **FASE 4: Backend y Base de Datos**
-- [ ] (Aún no iniciada)
+- [X] Misión 16: Elegir y configurar la tecnología Backend (Supabase).
+- [X] Misión 17: Conectar el Front-End con Supabase (Instalar cliente y configurar claves API).
+- [X] Misión 18: Implementar el registro de usuarios reales con Supabase Auth.
+- [X] Misión 19: Implementar el inicio de sesión real y la gestión de sesión con Supabase.
+- [ ] Misión 20: Crear la página de Perfil de Usuario y mostrar datos.
 
 **FASE 5: El Gremio (Funcionalidad Central de Colaboración)**
 - [ ]Misión 18: Ampliar los perfiles de usuario para incluir roles (Autor, Editor, Diseñador).
@@ -107,13 +154,19 @@ Para hacer la plataforma más atractiva y fomentar la participación:
   ├── explorar.html
   ├── historia.html
   ├── capitulo.html
+  ├── confirmacion.html
+  ├── perfil.html
   ├── estilos.css
   ├── script.js
   └── Manual_AUTOR.md (Este mismo archivo)
 
-- **Guía de Marca (Resumen):**
-  - **Color Principal (Verde A.U.T.O.R.):** #4CAF50
-  - **Fondo Principal:** #1a1a1a
-  - **Texto Principal:** #f0f0f0
-  - **Fuente para Lectura:** 'Georgia', serif
-  - **Fuente General:** sans-serif
+- **Guía de Marca (Identidad Visual v2.0):**
+  - **Paleta de Colores:**
+    - **Fondo Principal:** Blanco Grisáceo (#DDDDDD)
+    - **Texto Principal:** Negro Suave (#1a1a1a)
+    - **Color de Acento:** Verde Esmeralda (#26DDC6)
+    - **Color de Apoyo (Links, etc.):** Gris Oscuro (#333)
+  - **Tipografía:**
+    - **Títulos y Logo:** 'Playfair Display', serif
+    - **Cuerpo de Texto y UI:** 'Roboto', sans-serif
+    - **Texto de Lectura Larga:** 'Georgia', serif
