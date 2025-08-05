@@ -1,211 +1,323 @@
 /* =================================================================
-   ARCHIVOS DE ESTILO DE A.U.T.O.R. - VERSIÓN 3.0 (IDENTIDAD DE MARCA)
+   ARCHIVOS DE ESTILO DE A.U.T.O.R. - VERSIÓN 4.4 (CORRECCIONES FINALES)
    ================================================================= */
 
-/* --- 1. IMPORTACIÓN DE FUENTES Y RESET GLOBAL --- */
+/* --- 1. IDENTIDAD DE MARCA Y RESET GLOBAL --- */
 
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@400;700&display=swap');
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+:root {
+    --color-accent: #26DDC6;
+    --color-accent-light: #80E9D9;
+    --color-text-primary: #1a1a1a;
+    --color-text-secondary: #333;
+    --color-background: #f7f7ff; /* Un gris azulado muy sutil */
+    --color-background-white: #ffffff;
+    --font-serif: 'Playfair Display', serif;
+    --font-sans-serif: 'Roboto', sans-serif;
 }
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-    background-color: #DDDDDD; /* Blanco grisáceo */
-    color: #1a1a1a; /* Negro suave para texto */
-    font-family: 'Roboto', sans-serif; /* Fuente principal para legibilidad */
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+    font-family: var(--font-sans-serif);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
-p {
-    line-height: 1.6;
-}
+p { line-height: 1.6; }
 
-/* --- 2. ESTRUCTURA PRINCIPAL (HEADER, FOOTER) --- */
+/* --- 2. ESTRUCTURA PRINCIPAL --- */
 
 header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 20px 40px;
-    border-bottom: 1px solid #cccccc;
-    background-color: #ffffff;
-    flex-shrink: 0;
+    background-color: transparent;
+    width: 100%;
 }
 
-main {
-    flex-grow: 1;
-}
-
-footer {
-    text-align: center;
-    padding: 40px 20px;
-    margin-top: auto;
-    background-color: #f7f7f7;
-    border-top: 1px solid #cccccc;
-    font-size: 14px;
-    color: #555;
-}
+main { flex-grow: 1; padding: 0 40px; }
+footer { text-align: center; padding: 40px 20px; margin-top: auto; font-size: 14px; color: #555; }
 
 /* --- 3. COMPONENTES REUTILIZABLES --- */
 
 .logo {
-    font-family: 'Playfair Display', serif;
+    font-family: var(--font-serif);
     font-size: 28px;
     font-weight: 700;
-    color: #26DDC6; /* Verde Esmeralda */
+    color: var(--color-accent);
 }
 
 .cta-button {
     display: inline-block;
-    background-color: #26DDC6;
-    color: #ffffff;
-    padding: 15px 30px;
-    font-size: 18px;
+    background-color: var(--color-accent);
+    color: var(--color-text-primary);
+    padding: 12px 35px;
+    font-size: 16px;
     font-weight: bold;
     text-decoration: none;
-    border-radius: 5px;
+    border-radius: 50px;
     margin-top: 20px;
-    transition: transform 0.3s ease, background-color 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
     border: none;
+    cursor: pointer;
 }
 .cta-button:hover {
     transform: scale(1.05);
-    background-color: #22c7b3;
+    box-shadow: 0 4px 20px rgba(38, 221, 198, 0.4);
 }
-
-.story-card {
-    background-color: #ffffff;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.story-card:hover { 
-    transform: translateY(-10px);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-}
-.card-image { height: 200px; background-color: #ccc; }
-.card-content { padding: 20px; text-align: left; }
-.card-title { font-family: 'Playfair Display', serif; font-size: 24px; color: #1a1a1a; margin-bottom: 10px; }
-.card-author { font-size: 16px; color: #555; margin-bottom: 15px; font-style: italic; }
-.card-description { font-size: 15px; color: #333; line-height: 1.5; }
-.story-card-link { text-decoration: none; }
 
 /* --- 4. ESTILOS DE PÁGINAS ESPECÍFICAS --- */
 
 /* 4.1 NAVEGACIÓN */
 nav ul { display: flex; list-style: none; align-items: center; }
 nav ul li { margin-left: 30px; }
-nav ul li a { text-decoration: none; color: #333; font-size: 16px; font-weight: 700; transition: color 0.3s ease; }
-nav ul li a:hover { color: #26DDC6; }
-.boton-registro { background-color: #26DDC6; color: #ffffff; padding: 10px 20px; border-radius: 5px; transition: background-color 0.3s ease; font-size: 16px; font-weight: 700; }
-.boton-registro:hover { background-color: #22c7b3; }
-.bar { background-color: #333; } /* Color de la hamburguesa */
+nav ul li a { text-decoration: none; color: var(--color-text-secondary); font-size: 16px; font-weight: 700; transition: color 0.3s ease; }
+nav ul li a:hover { color: var(--color-accent); }
+.boton-registro { background-color: var(--color-accent); color: var(--color-text-primary); padding: 10px 20px; border-radius: 50px; }
 
 /* 4.2 PÁGINA INICIO (HERO) */
-.hero { text-align: center; padding: 80px 40px; background-color: #f7f7f7; }
-.hero h1 { font-family: 'Playfair Display', serif; color: #1a1a1a; font-size: clamp(36px, 6vw, 58px); line-height: 1.2; }
-.hero p { max-width: 600px; margin: 20px auto; font-size: 20px; color: #555;}
-.featured-stories { padding: 60px 20px; }
-.featured-stories h2 { font-family: 'Playfair Display', serif; text-align: center; font-size: 36px; margin-bottom: 40px; color: #1a1a1a; }
-.featured-stories-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto; }
+.hero { text-align: center; padding: 60px 0; } /* FIX: Alineación del contenedor hero a 'center' */
+.hero h1 { font-family: var(--font-serif); font-size: clamp(36px, 5vw, 52px); line-height: 1.2; }
+.hero p { max-width: 600px; margin: 20px auto; font-size: 18px; color: #555; } /* FIX: Añadido 'auto' al margin para centrar el párrafo */
 
-/* 4.3 PÁGINA EXPLORAR */
-.search-section { text-align: center; padding: 60px 20px; background-color: #f7f7f7; }
-.search-section h1 { font-family: 'Playfair Display', serif; color: #1a1a1a; font-size: clamp(36px, 5vw, 48px); margin-bottom: 30px; }
-.search-bar { display: flex; max-width: 700px; margin: 0 auto; border-radius: 8px; background-color: #ffffff; border: 1px solid #ccc; overflow: hidden; transition: border-color 0.3s ease; }
-.search-bar:focus-within { border-color: #26DDC6; }
-.search-bar input { width: 100%; flex: 1; min-width: 0; padding: 15px; font-size: 16px; background: transparent; color: #1a1a1a; border: none; outline: none; }
-.search-bar button { display: grid; place-items: center; padding: 0 25px; font-size: 16px; font-weight: bold; border: none; background-color: #26DDC6; color: #ffffff; cursor: pointer; transition: background-color 0.3s ease; }
-.search-bar button:hover { background-color: #22c7b3; }
-.stories-list { padding: 60px 20px; }
-
-/* 4.4 FORMULARIOS */
-.form-container { max-width: 500px; margin: 60px auto; padding: 40px; background-color: #ffffff; border-radius: 8px; text-align: left; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-.form-container h2 { font-family: 'Playfair Display', serif; text-align: center; color: #1a1a1a; }
-.form-container p { text-align: center; color: #555; margin-bottom: 30px; }
-.form-group { margin-bottom: 20px; }
-.form-group label { display: block; margin-bottom: 8px; font-weight: 700; }
-.form-group input { width: 100%; padding: 12px; font-size: 16px; background-color: #f7f7f7; border: 1px solid #ccc; border-radius: 5px; color: #1a1a1a; }
-.form-container button { width: 100%; margin-top: 10px; }
-.error-message { color: #e74c3c; font-size: 14px; margin-top: 5px; height: 16px; }
-
-/* 4.5 PÁGINA DETALLE DE HISTORIA */
-.story-detail-container { display: flex; gap: 40px; padding: 60px 20px; max-width: 1000px; margin: 0 auto; text-align: left; }
-.story-cover { flex-basis: 300px; flex-shrink: 0; height: 450px; background-color: #ccc; border-radius: 8px; }
-.story-info h1 { font-family: 'Playfair Display', serif; font-size: 42px; color: #1a1a1a; margin: 0; text-align: left; }
-.story-info h2 { font-size: 24px; color: #555; font-weight: normal; font-style: italic; margin: 10px 0 20px 0; }
-.chapter-list { padding: 0 20px 60px 20px; max-width: 1000px; margin: 0 auto; text-align: left; }
-.chapter-list h3 { font-family: 'Playfair Display', serif; font-size: 28px; border-bottom: 2px solid #e0e0e0; padding-bottom: 10px; margin-bottom: 20px; }
-.chapter-list ul { list-style: none; }
-.chapter-list li { background-color: #ffffff; margin-bottom: 10px; border-radius: 5px; border: 1px solid #e0e0e0; }
-.chapter-list li a { display: block; padding: 15px 20px; text-decoration: none; color: #333; font-size: 18px; font-weight: 700; transition: background-color 0.3s ease, color 0.3s ease; }
-.chapter-list li a:hover { background-color: #26DDC6; color: #ffffff; }
-
-/* 4.6 PÁGINA DE LECTURA */
-.reading-container { max-width: 750px; margin: 60px auto; padding: 0 20px; }
-.chapter-title { font-family: 'Playfair Display', serif; text-align: center; font-size: 40px; margin-bottom: 40px; }
-.chapter-navigation { display: flex; justify-content: space-between; margin: 40px 0; }
-.nav-button { text-decoration: none; color: #26DDC6; font-size: 18px; font-weight: 700; padding: 10px 15px; border: 2px solid #26DDC6; border-radius: 5px; transition: background-color 0.3s, color 0.3s; }
-.nav-button:hover { background-color: #26DDC6; color: #ffffff; }
-.nav-button:visited { color: #26DDC6; }
-.reading-content { text-align: left; font-family: 'Georgia', serif; font-size: 20px; line-height: 1.8; color: #333; }
-.reading-content p { margin-bottom: 2em; }
-
-/* 4.7 PÁGINA DE PERFIL */
-.profile-container {
-    max-width: 800px;
-    margin: 60px auto;
-    padding: 40px;
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+/* 4.3 TÍTULOS DE SECCIÓN */
+.section-title {
+    font-family: var(--font-serif);
+    font-size: 36px;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    text-align: center; /* Mantenemos la alineación centrada */
 }
 
-.profile-title {
-    font-family: 'Playfair Display', serif;
+/* 4.4 TARJETAS DE HISTORIAS Y SU CONTENEDOR */
+.featured-stories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+.story-card {
+    background-color: var(--color-accent-light);
+    border-radius: 15px;
+    overflow: hidden;
     text-align: center;
-    font-size: 42px;
-    margin-bottom: 40px;
-    color: #1a1a1a;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    border: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%; /* FIX: Esto fuerza a todas las tarjetas en una fila a tener la misma altura */
+}
+.story-card:hover { transform: translateY(-10px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+.story-card img {
+    width: 60%;
+    height: auto;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+.card-title { font-family: var(--font-serif); font-size: 22px; color: var(--color-text-primary); margin-bottom: 5px; }
+.card-author { font-family: var(--font-sans-serif); font-size: 14px; color: var(--color-text-secondary); margin-bottom: 15px; }
+.card-description { font-family: var(--font-sans-serif); font-size: 15px; color: var(--color-text-secondary); }
+.story-card-link { text-decoration: none; color: inherit; }
+
+/* 4.5 PÁGINA EXPLORAR (BARRA DE BÚSQUEDA) */
+.search-section { padding: 60px 0; }
+.search-bar {
+    display: flex;
+    max-width: 500px;
+    margin: 20px auto 0;
+    background-color: var(--color-background-white);
+    border-radius: 50px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    border: 1px solid #eee;
+}
+.search-bar input {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 15px 25px;
+    font-size: 16px;
+    background: transparent;
+}
+.search-bar button {
+    border: none;
+    background-color: var(--color-accent);
+    color: var(--color-text-primary);
+    padding: 0 30px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
 }
 
-.profile-details p {
+/* 4.6 FORMULARIOS (LOGIN/REGISTRO) */
+.form-container {
+    max-width: 480px;
+    margin: 60px auto; padding: 50px;
+    background-color: var(--color-background-white);
+    border-radius: 20px; text-align: center;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+}
+.form-container h2 { font-family: var(--font-serif); font-size: 36px; line-height: 1.2; margin-bottom: 10px; }
+.form-container p { font-family: var(--font-sans-serif); color: #555; margin-bottom: 40px; }
+.form-group { margin-bottom: 25px; text-align: left; }
+.form-group label { display: block; margin-bottom: 8px; font-weight: 700; color: var(--color-text-secondary); font-size: 14px; }
+.form-group input {
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+    background-color: var(--color-accent);
+    border: 2px solid transparent;
+    border-radius: 10px;
+    color: var(--color-text-primary);
+    outline: none;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+.form-group input:focus { border-color: var(--color-accent); }
+.form-container .cta-button { width: 100%; }
+.error-message { color: #e74c3c; font-size: 14px; margin-top: 5px; height: 16px; text-align: left; }
+
+/* --- CLASE DE UTILIDAD PARA OCULTAR ELEMENTOS --- */
+.hidden {
+    display: none !important;
+}
+
+/* 4.7 PÁGINA DETALLE DE HISTORIA (NUEVO DISEÑO) */
+.story-header-container, .chapter-list-container {
+    max-width: 800px; /* Ancho máximo para el contenido */
+    margin: 40px auto; /* Centra el contenedor */
+    text-align: left;
+}
+
+.story-header-container h1 {
+    font-family: var(--font-serif);
+    font-size: 48px;
+    margin-bottom: 5px;
+}
+
+.story-header-container h2 {
+    font-family: var(--font-sans-serif);
+    font-size: 20px;
+    font-weight: normal;
+    color: var(--color-text-secondary);
+    margin-bottom: 15px;
+}
+
+.story-meta {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 25px;
+}
+
+.story-synopsis {
     font-size: 18px;
-    color: #333;
-    border-bottom: 1px solid #e0e0e0;
-    padding: 15px 0;
+    line-height: 1.7;
+    margin-bottom: 30px;
 }
 
-.profile-details p:last-child {
+.chapter-list-container h3 {
+    font-family: var(--font-serif);
+    font-size: 28px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.chapter-list-container ul {
+    list-style: none; /* Quita los puntos de la lista */
+}
+
+.chapter-list-container li a {
+    display: block;
+    padding: 12px 5px;
+    text-decoration: none;
+    color: var(--color-text-primary);
+    font-size: 18px;
+    font-weight: 700;
+    border-bottom: 1px solid #eee;
+    transition: color 0.3s ease;
+}
+
+.chapter-list-container li a:hover {
+    color: var(--color-accent);
+}
+
+/* 4.8 PÁGINA DE LECTURA (NUEVO DISEÑO) */
+.reading-container {
+    max-width: 750px;
+    margin: 40px auto;
+}
+
+.chapter-title {
+    font-family: var(--font-serif);
+    font-size: 40px;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.chapter-navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 40px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+.chapter-navigation a {
+    text-decoration: none;
+    color: var(--color-accent);
+    font-weight: 700;
+    font-size: 16px;
+    transition: color 0.3s ease;
+}
+
+.chapter-navigation a:hover {
+    color: var(--color-text-primary);
+}
+
+.reading-content {
+    font-family: 'Georgia', serif; /* Fuente serif clásica para lectura larga */
+    font-size: 20px;
+    line-height: 1.8;
+    color: var(--color-text-secondary);
+}
+
+.reading-content p {
+    margin-bottom: 2em; /* Espacio entre párrafos */
+}
+
+/* Ajuste para la última barra de navegación */
+.reading-content + .chapter-navigation {
+    margin-top: 40px;
+    margin-bottom: 0;
+    padding-top: 15px;
+    padding-bottom: 0;
+    border-top: 1px solid #ddd;
     border-bottom: none;
 }
 
-.profile-details strong {
-    color: #1a1a1a;
-}
-
-/* --- 5. CLASES DE UTILIDAD Y RESPONSIVAS --- */
-.hidden { display: none !important; }
-.body-loading {
-    opacity: 0;
-    transition: opacity 0.5s ease;
-}
+/* 5. RESPONSIVIDAD */
 .hamburger { display: none; cursor: pointer; }
 .bar { display: block; width: 25px; height: 3px; margin: 5px auto; background-color: #333; transition: all 0.3s ease-in-out; }
 
 @media (max-width: 768px) {
+    main { padding: 0 20px; }
     header { padding: 20px; }
     header nav { display: none; }
     .hamburger { display: block; }
     .hamburger.active .bar:nth-child(2) { opacity: 0; }
     .hamburger.active .bar:nth-child(1) { transform: translateY(8px) rotate(45deg); }
     .hamburger.active .bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
-    nav.active { display: block; position: fixed; left: 0; top: 75px; width: 100%; background-color: #ffffff; text-align: center; z-index: 100; border-bottom: 1px solid #e0e0e0;}
+    nav.active { display: block; position: absolute; left: 0; top: 75px; width: 100%; background-color: #ffffff; text-align: center; z-index: 100; box-shadow: 0 5px 10px rgba(0,0,0,0.1); }
     nav.active ul { flex-direction: column; }
     nav.active ul li { margin: 20px 0; }
-    .story-detail-container { flex-direction: column; align-items: center; }
-    .featured-stories, .stories-list { padding: 40px 20px; }
 }

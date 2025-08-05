@@ -8,17 +8,17 @@
 </head>
 <body class="body-loading">
 
-    <header>
+<header>
     <div class="logo">A.U.T.O.R.</div>
     <nav>
         <ul>
-    <li><a href="index.html">Inicio</a></li>
-    <li><a href="explorar.html">Explorar</a></li>
-    <li id="nav-login"><a href="login.html">Iniciar Sesión</a></li>
-    <li id="nav-registro"><a href="registro.html" class="boton-registro">Registrarse</a></li>
-    <li id="nav-profile" class="hidden"><a href="perfil.html">Mi Perfil</a></li>
-    <li id="nav-logout" class="hidden"><a href="#" class="boton-registro">Cerrar Sesión</a></li>
-</ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="explorar.html">Explorar</a></li>
+            <li id="nav-login"><a href="login.html">Iniciar Sesión</a></li>
+            <li id="nav-registro"><a href="registro.html" class="boton-registro">Registrarse</a></li>
+            <li id="nav-profile" class="hidden"><a href="perfil.html">Mi Perfil</a></li>
+            <li id="nav-logout" class="hidden"><a href="#" class="boton-registro">Cerrar Sesión</a></li>
+        </ul>
     </nav>
     <div class="hamburger">
         <span class="bar"></span>
@@ -27,69 +27,64 @@
     </div>
 </header>
 
-    <main>
-        <section class="search-section">
-            <h1>Explora Todas las Historias</h1>
-            <div class="search-bar">
-                <input type="text" placeholder="Busca por título, autor o género...">
-                <button type="submit" class="cta-button">Buscar</button>
-            </div>
-        </section>
+<main>
+    <section class="search-section">
+        <h1 class="section-title">Explora Todas las Historias</h1>
+        <div class="search-bar">
+            <input type="text" placeholder="Busca por título, autor o género...">
+            <button type="submit">Buscar</button>
+        </div>
+    </section>
 
-        <section class="stories-list">
+    <section class="stories-list">
             <div class="featured-stories-grid">
                 
-                <!-- Aquí replicamos la cuadrícula de historias, podemos añadir más -->
-                <!-- Tarjeta de Historia 1 (Ahora es un enlace) -->
-<a href="historia.html" class="story-card-link">
-    <div class="story-card">
-        <div class="card-image"></div>
-        <div class="card-content">
-            <h3 class="card-title">Los Ecos de Nebulon</h3>
-            <p class="card-author">Por Elena Cósmica</p>
-            <p class="card-description">Una capitana renegada descubre un secreto que podría destruir o salvar la galaxia.</p>
-        </div>
-    </div>
-</a>
+                <a href="historia.html" class="story-card-link">
+                    <div class="story-card">
+                        <img src="https://placehold.co/300x450/26DDC6/1a1a1a?text=Portada" alt="Portada de la historia">
+                        <h3 class="card-title">Los Ecos de Nebulon</h3>
+                        <p class="card-author">Por Elena Cósmica</p>
+                        <p class="card-description">Una capitana renegada descubre un secreto que podría destruir o salvar la galaxia.</p>
+                    </div>
+                </a>
 
-                <div class="story-card">
-                    <div class="card-image"></div>
-                    <div class="card-content">
+                <a href="historia.html" class="story-card-link">
+                    <div class="story-card">
+                        <img src="https://placehold.co/300x450/26DDC6/1a1a1a?text=Portada" alt="Portada de la historia">
                         <h3 class="card-title">El Último Café de Lima</h3>
                         <p class="card-author">Por Javier Urbano</p>
                         <p class="card-description">En una Lima que nunca duerme, un detective y una barista desvelan una conspiración.</p>
                     </div>
-                </div>
+                </a>
 
-                <div class="story-card">
-                    <div class="card-image"></div>
-                    <div class="card-content">
+                <a href="historia.html" class="story-card-link">
+                    <div class="story-card">
+                        <img src="https://placehold.co/300x450/26DDC6/1a1a1a?text=Portada" alt="Portada de la historia">
                         <h3 class="card-title">Crónicas del Cuy Mágico</h3>
                         <p class="card-author">Por un Andino Anónimo</p>
-                        <p class="card-description">Las aventuras de un cuy con poderes místicos en los valles sagrados de los Incas.</p>
+                        <p class="card-description">Las aventuras de un cuy con poderes místicos en los valles sagrados.</p>
                     </div>
-                </div>
+                </a>
 
-                <!-- Historia adicional de ejemplo -->
-                <div class="story-card">
-                    <div class="card-image"></div>
-                    <div class="card-content">
+                <a href="historia.html" class="story-card-link">
+                    <div class="story-card">
+                        <img src="https://placehold.co/300x450/26DDC6/1a1a1a?text=Portada" alt="Portada de la historia">
                         <h3 class="card-title">La Sombra de Iquitos</h3>
                         <p class="card-author">Por Ana Silva</p>
                         <p class="card-description">Un biólogo se adentra en la selva para encontrar una planta legendaria, pero encuentra algo más.</p>
                     </div>
-                </div>
+                </a>
 
             </div>
-        </section>
-    </main>
+        </div>
+    </section>
+</main>
 
-    <footer>
-        <p>© 2025 Proyecto A.U.T.O.R. Todos los derechos reservados.</p>
-    </footer>
+<footer>
+    <p>© 2025 Proyecto A.U.T.O.R. Todos los derechos reservados.</p>
+</footer>
     
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
-    <script src="script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="script.js"></script>
 </body>
 </html>

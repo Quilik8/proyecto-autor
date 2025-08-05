@@ -9,49 +9,45 @@
 <body class="body-loading">
 
     <header>
-    <div class="logo">A.U.T.O.R.</div>
-    <nav>
-        <ul>
-    <li><a href="index.html">Inicio</a></li>
-    <li><a href="explorar.html">Explorar</a></li>
-    <li id="nav-login"><a href="login.html">Iniciar Sesión</a></li>
-    <li id="nav-registro"><a href="registro.html" class="boton-registro">Registrarse</a></li>
-    <li id="nav-profile" class="hidden"><a href="perfil.html">Mi Perfil</a></li>
-    <li id="nav-logout" class="hidden"><a href="#" class="boton-registro">Cerrar Sesión</a></li>
-</ul>
-    </nav>
-    <div class="hamburger">
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
-    </div>
-</header>
+        <div class="logo">A.U.T.O.R.</div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="explorar.html">Explorar</a></li>
+                <li id="nav-login"><a href="login.html">Iniciar Sesión</a></li>
+                <li id="nav-registro"><a href="registro.html" class="boton-registro">Registrarse</a></li>
+                <li id="nav-profile" class="hidden"><a href="perfil.html">Mi Perfil</a></li>
+                <li id="nav-logout" class="hidden"><a href="#" class="boton-registro">Cerrar Sesión</a></li>
+            </ul>
+        </nav>
+        <div class="hamburger">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
+    </header>
 
     <main>
-        <div class="story-detail-container">
-            <div class="story-cover">
-                <!-- Aquí iría la imagen de la portada del libro -->
+        <!-- Contenedor principal para la información de la historia -->
+        <div class="story-header-container">
+            <h1>Los Ecos de Nebulon</h1>
+            <h2>por Elena Cósmica</h2>
+            <div class="story-meta">
+                <span>Ciencia Ficción</span> | <span>15 Capítulos</span> | <span>En curso</span>
             </div>
-            <div class="story-info">
-                <h1>Los Ecos de Nebulon</h1>
-                <h2>por Elena Cósmica</h2>
-                <div class="story-meta">
-                    <span>Ciencia Ficción</span> | <span>15 Capítulos</span> | <span>En curso</span>
-                </div>
-                <p class="story-synopsis">
-                    En una galaxia al borde del colapso, la capitana renegada Kaelen Varis tropieza con los restos de una nave ancestral, la "Nebulon". Dentro no encuentra tesoros, sino un eco, una inteligencia artificial que contiene un secreto devastador: la verdad sobre la guerra que consumió a las antiguas civilizaciones. Perseguida por el implacable Imperio y desconfiada por la frágil Alianza, Kaelen y el eco deben descifrar el pasado para forjar un futuro, antes de que el mismo secreto que podría salvarlos a todos, los aniquile primero.
-                </p>
-                <a href="#" class="cta-button">Empezar a Leer (Cap. 1)</a>
-            </div>
+            <p class="story-synopsis">
+                En una galaxia al borde del colapso, la capitana renegada Kaelen Varis tropieza con los restos de una nave ancestral, la "Nebulon". Dentro no encuentra tesoros, sino un eco, una inteligencia artificial que contiene un secreto devastador: la verdad sobre la guerra que consumió a las antiguas civilizaciones. Perseguida por el implacable Imperio y desconfiada por la frágil Alianza, Kaelen y el eco deben descifrar el pasado para forjar un futuro, antes de que el mismo secreto que podría salvarlos a todos, los aniquile primero.
+            </p>
+            <a href="capitulo.html" class="cta-button">Empezar a Leer (Cap. 1)</a>
         </div>
 
-        <div class="chapter-list">
+        <!-- Contenedor para la lista de capítulos -->
+        <div class="chapter-list-container">
             <h3>Capítulos</h3>
             <ul>
                 <li><a href="capitulo.html">Capítulo 1: El Eco Silencioso</a></li>
                 <li><a href="#">Capítulo 2: Persecución en el Anillo de Asteroides</a></li>
                 <li><a href="#">Capítulo 3: La Verdad Fragmentada</a></li>
-                <!-- Y así sucesivamente... -->
             </ul>
         </div>
     </main>
@@ -61,7 +57,6 @@
     </footer>
     
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
     <script src="script.js"></script>
 </body>
 </html>
