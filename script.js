@@ -21,6 +21,14 @@ const navLogout = document.querySelector("#nav-logout");
  * Gestiona la sesión, la UI y la carga de datos.
  */
 const inicializarApp = async () => {
+    
+    await cargarHistorias();
+    await cargarDatosDePerfil();
+    await cargarDetalleHistoria();
+
+    document.body.classList.remove('body-loading');
+};
+
     // 1. Gestionar la sesión y actualizar el menú de navegación
     const { data: { session } } = await clienteSupabase.auth.getSession();
     if (session) {
@@ -41,7 +49,6 @@ const inicializarApp = async () => {
 
     // 3. Quitar la clase 'loading' para mostrar la página
     document.body.classList.remove('body-loading');
-};
 
 // --- Funciones de carga de datos ---
 
@@ -195,3 +202,67 @@ if (loginForm) {
         }
     });
 }
+// =================================================================
+// SECCIÓN 4: LÓGICA DE LA PÁGINA DE HISTORIA
+// =================================================================
+
+/**
+ * Carga los detalles de una historia específica y sus capítulos.
+ */
+const cargarDetalleHistoria = async () => {
+    // Primero, comprobamos si estamos en la página de historia
+    const storyContainer = document.querySelector('.story-header-container');
+    if (!storyContainer) return;
+
+    // Leemos el ID de la historia desde la URL (ej: ?id=1)
+    const params = new URLSearchParams(window.location.search);
+    const storyId = params.get('id');
+
+    if (!storyId) {
+        storyContainer.innerHTML = '<h1>Error: No se ha especificado una historia.</h1>';
+        return;
+    }
+
+    try {
+        // 1. Pedimos los datos de la historia a Supabase
+        const { data: story, error: storyError } = await clienteSupabase
+            .from('stories')
+            .select('*')
+            .eq('id', storyId)
+            .single(); // .single() nos da un solo objeto, no un array
+
+        if (storyError) throw storyError;
+
+        // 2. Pedimos los capítulos de ESA historia
+        const { data: chapters, error: chaptersError } = await clienteSupabase
+            .from('chapters')
+            .select('*')
+            .eq('story_id', storyId)
+            .order('chapter_number', { ascending: true }); // Los ordenamos
+
+        if (chaptersError) throw chaptersError;
+
+        // 3. Rellenamos el HTML con los datos que hemos recibido
+        document.getElementById('story-title').textContent = story.title;
+        // Aquí podríamos añadir el nombre del autor si hiciéramos un JOIN
+        document.getElementById('story-author').textContent = 'por un autor'; 
+        document.getElementById('story-meta').textContent = story.genre || 'Sin género';
+        document.getElementById('story-synopsis').textContent = story.synopsis;
+
+        // 4. Rellenamos la lista de capítulos
+        const chapterList = document.getElementById('chapter-list-ul');
+        chapterList.innerHTML = ''; // Limpiamos la lista
+        chapters.forEach(chapter => {
+            const chapterHTML = `
+                <li>
+                    <a href="capitulo.html?id=${chapter.id}">${chapter.title}</a>
+                </li>
+            `;
+            chapterList.insertAdjacentHTML('beforeend', chapterHTML);
+        });
+
+    } catch (error) {
+        console.error('Error cargando el detalle de la historia:', error);
+        storyContainer.innerHTML = `<h1>Error al cargar la historia.</h1><p>${error.message}</p>`;
+    }
+};
