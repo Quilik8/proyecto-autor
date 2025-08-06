@@ -9,23 +9,31 @@
 <body class="body-loading">
 
     <header>
-        <div class="logo">A.U.T.O.R.</div>
-        <nav>
-            <ul>
-                <li><a href="index.html">Inicio</a></li>
-                <li><a href="explorar.html">Explorar</a></li>
-                <li id="nav-login"><a href="login.html">Iniciar Sesión</a></li>
-                <li id="nav-registro"><a href="registro.html" class="boton-registro">Registrarse</a></li>
-                <li id="nav-profile" class="hidden"><a href="perfil.html">Mi Perfil</a></li>
-                <li id="nav-logout" class="hidden"><a href="#" class="boton-registro">Cerrar Sesión</a></li>
-            </ul>
-        </nav>
-        <div class="hamburger">
-            <span class="bar"></span>
-            <span class="bar"></span>
-            <span class="bar"></span>
-        </div>
-    </header>
+    <div class="logo">A.U.T.O.R.</div>
+
+    <!-- BARRA DE BÚSQUEDA GLOBAL -->
+    <div class="search-bar">
+        <input type="text" id="search-input" placeholder="Busca por título, autor o género...">
+        <button type="submit" id="search-button">Buscar</button>
+    </div>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Inicio</a></li>
+            <li><a href="explorar.html">Explorar</a></li>
+            <li id="nav-login"><a href="login.html">Iniciar Sesión</a></li>
+            <li id="nav-registro"><a href="registro.html" class="boton-registro">Registrarse</a></li>
+            <li id="nav-profile" class="hidden"><a href="perfil.html">Mi Perfil</a></li>
+            <li id="nav-logout" class="hidden"><a href="#" class="boton-registro">Cerrar Sesión</a></li>
+            <li><button id="theme-toggle" title="Cambiar tema">🌙</button></li>
+        </ul>
+    </nav>
+    <div class="hamburger">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+    </div>
+</header>
 
     <main>
         <div class="form-container">

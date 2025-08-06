@@ -162,12 +162,14 @@ Voto en Eventos de la Plataforma: Los usuarios con la suscripción A.U.T.O.R.+ o
    - Navega a `explorar.html`, hace clic en una historia y llega a `historia.html`.
    - Hace clic en un capítulo y finalmente llega a `capitulo.html` para leer.
 
-**2. Flujo de Creación de Contenido (Futuro - para el Autor):**
-   - El autor inicia sesión.
-   - Va a su `perfil.html` (que se convertirá en un panel de control).
-   - Hace clic en "Crear Nueva Historia".
-   - Rellena un formulario con el título, sinopsis y sube una portada.
-   - Es redirigido a la página de gestión de esa historia, donde puede añadir y publicar nuevos capítulos.
+**2. Flujo de Gestión de Contenido (Autor - Panel de Control):**
+   - El autor inicia sesión y navega a su `perfil.html`.
+   - La página de perfil ahora actúa como un panel de control, mostrando una lista de todas las historias que ha creado.
+   - Al hacer clic en una de sus historias, no es redirigido a la vista pública, sino a una nueva página de gestión: `gestionar-historia.html?id=[ID_DE_LA_HISTORIA]`.
+   - En esta página, el autor tiene un centro de mando completo para su obra:
+     - Ve los detalles actuales (título, sinopsis) y tiene un botón para editarlos.
+     - Ve la lista de todos sus capítulos, con opciones para editarlos o verlos.
+     - Utiliza un formulario dedicado para escribir y publicar nuevos capítulos directamente desde este panel.
 
 **3. Flujo de Colaboración (Futuro - para el Gremio):**
    - Un autor busca un "Editor" en la sección del Gremio.
@@ -236,9 +238,9 @@ La creación de una aplicación nativa se contempla como una fase avanzada del p
 
 **FASE 3: Pulido del Front-End**
 - [x] Misión 14: Mejorar la experiencia de usuario y el diseño visual (Tipografía, etc.).
-- [ ] Misión 15: Implementar Selector de Tema (Modo Claro/Oscuro).
-    - [ ] Añadir un interruptor en la UI (interfaz de usuario).
-    - [ ] Usar variables CSS para definir las paletas de colores de ambos temas.
+- [x] Misión 15: Implementar Selector de Tema (Modo Claro/Oscuro).
+    - [x] Añadir un interruptor en la UI (interfaz de usuario).
+    - [x] Usar variables CSS para definir las paletas de colores de ambos temas.
     - [ ] Guardar la preferencia del usuario en `localStorage` para que su elección sea recordada.
 
 **FASE 4: Backend y Base de Datos**
@@ -246,9 +248,14 @@ La creación de una aplicación nativa se contempla como una fase avanzada del p
 - [X] Misión 17: Conectar el Front-End con Supabase (Instalar cliente y configurar claves API).
 - [X] Misión 18: Implementar el registro de usuarios reales con Supabase Auth.
 - [X] Misión 19: Implementar el inicio de sesión real y la gestión de sesión con Supabase.
-- [ ] Misión 20: Crear la página de Perfil de Usuario y mostrar datos.
-- [ ] Misión 21: Diseñar y crear las tablas de la base de datos (perfiles, historias, capitulos).
-- [ ] Misión 22: Construir la funcionalidad para que un autor logueado pueda crear, editar y publicar historias y capítulos.
+- [x] Misión 20: Crear la página de Perfil de Usuario y mostrar datos.
+- [x] Misión 21: Diseñar y crear las tablas de la base de datos (perfiles, historias, capitulos).
+- [ ] Misión 22: Construir el Panel de Gestión de Contenido del Autor.
+    - [ ] **Sub-misión 22.1 (Evolucionar el Perfil):** Modificar la página `perfil.html` para que obtenga y muestre una lista de las historias creadas por el usuario que ha iniciado sesión. Cada historia en la lista será un enlace a su panel de gestión.
+    - [ ] **Sub-misión 22.2 (Crear la Estructura):** Crear el nuevo archivo `gestionar-historia.html` con la estructura HTML para: mostrar detalles de la historia, listar capítulos existentes y un formulario para añadir nuevos capítulos.
+    - [ ] **Sub-misión 22.3 (Dar Vida al Panel):** Implementar la lógica en `script.js` (`cargarPanelDeGestion`) para rellenar la página `gestionar-historia.html` con los datos correctos de la historia y sus capítulos desde Supabase.
+    - [ ] **Sub-misión 22.4 (Implementar Creación de Capítulos):** Conectar el formulario de "Añadir Nuevo Capítulo" a una función de JavaScript que guarde el nuevo capítulo en la base de datos.
+    - [ ] **Sub-misión 22.5 (Asegurar el Acceso):** Crear las políticas de seguridad RLS necesarias para permitir que un autor pueda `UPDATE` (actualizar) y `DELETE` (borrar) sus propias historias, y `INSERT` (añadir) capítulos solo a las historias que le pertenecen.
 
 **FASE 5: El Gremio - El Mercado de Talentos**
 - [ ] Misión 23: Implementar perfiles de usuario con roles seleccionables (**Autor, Lector, Editor, Diseñador, Traductor, Crítico, Beta-Reader**).
@@ -306,6 +313,7 @@ La creación de una aplicación nativa se contempla como una fase avanzada del p
   ├── capitulo.html
   ├── confirmacion.html
   ├── perfil.html
+  ├── gestionar-historia.html 
   ├── estilos.css
   ├── script.js
   └── Manual_AUTOR.md (Este mismo archivo)

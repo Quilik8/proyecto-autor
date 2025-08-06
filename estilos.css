@@ -15,6 +15,12 @@
     --color-background-white: #ffffff;
     --font-serif: 'Playfair Display', serif;
     --font-sans-serif: 'Roboto', sans-serif;
+
+     /* NUEVO: Paleta Modo Oscuro */
+    --color-background-dark: #121212;
+    --color-background-surface-dark: #1e1e1e;
+    --color-text-primary-dark: #e0e0e0;
+    --color-text-secondary-dark: #a0a0a0;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -37,6 +43,7 @@ header {
     justify-content: space-between;
     align-items: center;
     padding: 20px 40px;
+    gap: 30px; /* Espacio entre logo, búsqueda y nav */
     background-color: transparent;
     width: 100%;
 }
@@ -133,8 +140,8 @@ nav ul li a:hover { color: var(--color-accent); }
 .search-section { padding: 60px 0; }
 .search-bar {
     display: flex;
-    max-width: 500px;
-    margin: 20px auto 0;
+    flex-grow: 1; /* Permite que la barra de búsqueda crezca y ocupe el espacio */
+    max-width: 700px;
     background-color: var(--color-background-white);
     border-radius: 50px;
     overflow: hidden;
@@ -181,6 +188,23 @@ nav ul li a:hover { color: var(--color-accent); }
     color: var(--color-text-primary);
     outline: none;
     transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+.form-group textarea {
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+    font-family: var(--font-sans-serif); /* Asegura que la fuente sea la misma */
+    background-color: var(--color-accent);
+    border: 2px solid transparent;
+    border-radius: 10px;
+    color: var(--color-text-primary);
+    outline: none;
+    resize: vertical; /* Permite al usuario cambiar el alto del cuadro */
+    transition: border-color 0.3s ease;
+}
+
+.form-group textarea:focus {
+    border-color: var(--color-accent);
 }
 .form-group input:focus { border-color: var(--color-accent); }
 .form-container .cta-button { width: 100%; }
@@ -309,6 +333,43 @@ nav ul li a:hover { color: var(--color-accent); }
 .hamburger { display: none; cursor: pointer; }
 .bar { display: block; width: 25px; height: 3px; margin: 5px auto; background-color: #333; transition: all 0.3s ease-in-out; }
 
+/* --- ESTILOS PARA EL MODO OSCURO --- */
+body.dark-mode {
+    background-color: var(--color-background-dark);
+    color: var(--color-text-primary-dark);
+}
+
+body.dark-mode .story-card,
+body.dark-mode .form-container,
+body.dark-mode .search-bar {
+    background-color: var(--color-background-surface-dark);
+    border-color: #444; /* Borde sutil para la barra de búsqueda */
+}
+
+body.dark-mode .story-card-link,
+body.dark-mode .card-title,
+body.dark-mode .card-description,
+body.dark-mode .form-group label,
+body.dark-mode .chapter-list-container li a {
+    color: var(--color-text-primary-dark);
+}
+
+body.dark-mode .card-author,
+body.dark-mode .story-header-container h2,
+body.dark-mode .story-meta,
+body.dark-mode .reading-content {
+    color: var(--color-text-secondary-dark);
+}
+
+body.dark-mode nav ul li a {
+    color: var(--color-text-primary-dark);
+}
+
+body.dark-mode nav ul li a:hover,
+body.dark-mode .chapter-list-container li a:hover {
+    color: var(--color-accent);
+}
+
 @media (max-width: 768px) {
     main { padding: 0 20px; }
     header { padding: 20px; }
@@ -320,4 +381,16 @@ nav ul li a:hover { color: var(--color-accent); }
     nav.active { display: block; position: absolute; left: 0; top: 75px; width: 100%; background-color: #ffffff; text-align: center; z-index: 100; box-shadow: 0 5px 10px rgba(0,0,0,0.1); }
     nav.active ul { flex-direction: column; }
     nav.active ul li { margin: 20px 0; }
+}
+
+#theme-toggle {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--color-text-secondary);
+    padding: 0;
+}
+body.dark-mode #theme-toggle {
+    color: var(--color-text-primary-dark);
 }
