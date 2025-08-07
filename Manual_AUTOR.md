@@ -251,8 +251,8 @@ La creación de una aplicación nativa se contempla como una fase avanzada del p
 - [x] Misión 20: Crear la página de Perfil de Usuario y mostrar datos.
 - [x] Misión 21: Diseñar y crear las tablas de la base de datos (perfiles, historias, capitulos).
 - [ ] Misión 22: Construir el Panel de Gestión de Contenido del Autor.
-    - [ ] **Sub-misión 22.1 (Evolucionar el Perfil):** Modificar la página `perfil.html` para que obtenga y muestre una lista de las historias creadas por el usuario que ha iniciado sesión. Cada historia en la lista será un enlace a su panel de gestión.
-    - [ ] **Sub-misión 22.2 (Crear la Estructura):** Crear el nuevo archivo `gestionar-historia.html` con la estructura HTML para: mostrar detalles de la historia, listar capítulos existentes y un formulario para añadir nuevos capítulos.
+    - [x] **Sub-misión 22.1 (Evolucionar el Perfil):** Modificar la página `perfil.html` para que obtenga y muestre una lista de las historias creadas por el usuario que ha iniciado sesión. Cada historia en la lista será un enlace a su panel de gestión.
+    - [x] **Sub-misión 22.2 (Crear la Estructura):** Crear el nuevo archivo `gestionar-historia.html` con la estructura HTML para: mostrar detalles de la historia, listar capítulos existentes y un formulario para añadir nuevos capítulos.
     - [ ] **Sub-misión 22.3 (Dar Vida al Panel):** Implementar la lógica en `script.js` (`cargarPanelDeGestion`) para rellenar la página `gestionar-historia.html` con los datos correctos de la historia y sus capítulos desde Supabase.
     - [ ] **Sub-misión 22.4 (Implementar Creación de Capítulos):** Conectar el formulario de "Añadir Nuevo Capítulo" a una función de JavaScript que guarde el nuevo capítulo en la base de datos.
     - [ ] **Sub-misión 22.5 (Asegurar el Acceso):** Crear las políticas de seguridad RLS necesarias para permitir que un autor pueda `UPDATE` (actualizar) y `DELETE` (borrar) sus propias historias, y `INSERT` (añadir) capítulos solo a las historias que le pertenecen.
