@@ -5,6 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crear Nueva Historia - A.U.T.O.R.</title>
     <link rel="stylesheet" href="estilos.css">
+    <script>
+      (function() {
+        try {
+          var theme = localStorage.getItem('theme');
+          if (theme === 'dark') {
+            document.documentElement.classList.add('dark-mode');
+          }
+        } catch (e) { /* ignoramos errores si localStorage está desactivado */ }
+      })();
+    </script>
+
+    <title>A.U.T.O.R. - Inicio</title>
+    <link rel="stylesheet" href="estilos.css">
 </head>
 <body class="body-loading">
 
@@ -17,17 +30,17 @@
             <button type="submit" id="search-button">Buscar</button>
         </div>
 
-        <nav>
-            <ul>
-                <li><a href="index.html">Inicio</a></li>
-                <li><a href="explorar.html">Explorar</a></li>
-                <li id="nav-login"><a href="login.html">Iniciar Sesión</a></li>
-                <li id="nav-registro"><a href="registro.html" class="boton-registro">Registrarse</a></li>
-                <li id="nav-profile" class="hidden"><a href="perfil.html">Mi Perfil</a></li>
-                <li id="nav-logout" class="hidden"><a href="#" class="boton-registro">Cerrar Sesión</a></li>
-                <li><button id="theme-toggle" title="Cambiar tema">🌙</button></li>
-            </ul>
-        </nav>
+        <nav class="nav-loading">
+    <ul>
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="explorar.html">Explorar</a></li>
+        <li id="nav-login" class="hidden"><a href="login.html">Iniciar Sesión</a></li>
+        <li id="nav-registro" class="hidden"><a href="registro.html" class="boton-registro">Registrarse</a></li>
+        <li id="nav-profile" class="hidden"><a href="perfil.html">Mi Perfil</a></li>
+        <li id="nav-logout" class="hidden"><a href="#" class="boton-registro">Cerrar Sesión</a></li>
+        <li><button id="theme-toggle" title="Cambiar tema">🌙</button></li>
+    </ul>
+</nav>
         <div class="hamburger">
             <span class="bar"></span>
             <span class="bar"></span>

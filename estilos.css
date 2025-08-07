@@ -3,8 +3,9 @@
    ================================================================= */
 
 /* =================================================================
-   1. RESET GLOBAL Y ESTRUCTURA PRINCIPAL (CON ALTURA CORREGIDA)
+   1. RESET GLOBAL Y ESTRUCTURA PRINCIPAL
    ================================================================= */
+
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@400;700&display=swap');
 
 :root {
@@ -12,11 +13,12 @@
     --color-accent-light: #80E9D9;
     --color-text-primary: #1a1a1a;
     --color-text-secondary: #333;
-    --color-background: #f7f7ff;
+    --color-background: #f7f7ff; /* Un gris azulado muy sutil */
     --color-background-white: #ffffff;
     --font-serif: 'Playfair Display', serif;
     --font-sans-serif: 'Roboto', sans-serif;
 
+     /* Paleta Modo Oscuro */
     --color-background-dark: #121212;
     --color-background-surface-dark: #1e1e1e;
     --color-text-primary-dark: #e0e0e0;
@@ -25,47 +27,40 @@
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* -- La base de la solución de altura -- */
-html, body {
-    height: 100%;
-}
-
 body {
     background-color: var(--color-background);
     color: var(--color-text-primary);
     font-family: var(--font-sans-serif);
-    /* El body ahora es un contenedor flex que organiza header, main y footer */
     display: flex;
     flex-direction: column;
+    min-height: 100vh; /* Usa min-height para asegurar que el body ocupe al menos toda la pantalla */
 }
 
 p { line-height: 1.6; }
 
-/* -- Estructura principal -- */
+/* --- 2. ESTRUCTURA PRINCIPAL --- */
+
 header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 20px 40px;
-    gap: 30px;
+    gap: 30px; /* Espacio entre logo, búsqueda y nav */
     width: 100%;
 }
 
 main { 
-    flex-grow: 1; /* Permite que main ocupe el espacio sobrante */
+    flex-grow: 1; 
     padding: 0 40px; 
-    /* Necesario para que el contenido de main también pueda ser flexible */
-    display: flex;
-    flex-direction: column;
 }
 
 footer { 
     text-align: center; 
     padding: 40px 20px; 
+    margin-top: auto; 
     font-size: 14px; 
-    color: #555;
-    /* Evita que el footer se estire */
-    flex-shrink: 0; 
+    color: #555; 
+    flex-shrink: 0;
 }
 
 /* --- 3. COMPONENTES REUTILIZABLES --- */
@@ -96,6 +91,10 @@ footer {
     box-shadow: 0 4px 20px rgba(38, 221, 198, 0.4);
 }
 
+.hidden {
+    display: none !important;
+}
+
 /* --- 4. ESTILOS DE PÁGINAS ESPECÍFICAS --- */
 
 /* 4.1 NAVEGACIÓN */
@@ -104,6 +103,10 @@ nav ul li { margin-left: 30px; }
 nav ul li a { text-decoration: none; color: var(--color-text-secondary); font-size: 16px; font-weight: 700; transition: color 0.3s ease; }
 nav ul li a:hover { color: var(--color-accent); }
 .boton-registro { background-color: var(--color-accent); color: var(--color-text-primary); padding: 10px 20px; border-radius: 50px; }
+nav.nav-loading {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
 
 /* 4.2 PÁGINA INICIO (HERO) */
 .hero { text-align: center; padding: 60px 0; } /* FIX: Alineación del contenedor hero a 'center' */
@@ -227,11 +230,6 @@ nav ul li a:hover { color: var(--color-accent); }
 .form-container .cta-button { width: 100%; }
 .error-message { color: #e74c3c; font-size: 14px; margin-top: 5px; height: 16px; text-align: left; }
 
-/* --- CLASE DE UTILIDAD PARA OCULTAR ELEMENTOS --- */
-.hidden {
-    display: none !important;
-}
-
 /* 4.7 PÁGINA DETALLE DE HISTORIA (NUEVO DISEÑO) */
 .story-header-container, .chapter-list-container {
     max-width: 800px; /* Ancho máximo para el contenido */
@@ -351,39 +349,39 @@ nav ul li a:hover { color: var(--color-accent); }
 .bar { display: block; width: 25px; height: 3px; margin: 5px auto; background-color: #333; transition: all 0.3s ease-in-out; }
 
 /* --- ESTILOS PARA EL MODO OSCURO --- */
-body.dark-mode {
+.dark-mode body {
     background-color: var(--color-background-dark);
     color: var(--color-text-primary-dark);
 }
 
-body.dark-mode .story-card,
-body.dark-mode .form-container,
-body.dark-mode .search-bar {
+.dark-mode .story-card,
+.dark-mode .form-container,
+.dark-mode .search-bar {
     background-color: var(--color-background-surface-dark);
     border-color: #444; /* Borde sutil para la barra de búsqueda */
 }
 
-body.dark-mode .story-card-link,
-body.dark-mode .card-title,
-body.dark-mode .card-description,
-body.dark-mode .form-group label,
-body.dark-mode .chapter-list-container li a {
+.dark-mode .story-card-link,
+.dark-mode .card-title,
+.dark-mode .card-description,
+.dark-mode .form-group label,
+.dark-mode .chapter-list-container li a {
     color: var(--color-text-primary-dark);
 }
 
-body.dark-mode .card-author,
-body.dark-mode .story-header-container h2,
-body.dark-mode .story-meta,
-body.dark-mode .reading-content {
+.dark-mode .card-author,
+.dark-mode .story-header-container h2,
+.dark-mode .story-meta,
+.dark-mode .reading-content {
     color: var(--color-text-secondary-dark);
 }
 
-body.dark-mode nav ul li a {
+.dark-mode nav ul li a {
     color: var(--color-text-primary-dark);
 }
 
-body.dark-mode nav ul li a:hover,
-body.dark-mode .chapter-list-container li a:hover {
+.dark-mode nav ul li a:hover,
+.dark-mode .chapter-list-container li a:hover {
     color: var(--color-accent);
 }
 
@@ -403,7 +401,7 @@ body.dark-mode .chapter-list-container li a:hover {
     border-radius: 15px;
     margin-bottom: 20px;
 }
-body.dark-mode .profile-header {
+.dark-mode .profile-header {
     background-color: var(--color-background-surface-dark);
 }
 
@@ -430,7 +428,7 @@ body.dark-mode .profile-header {
     display: flex;
     border-bottom: 2px solid #ddd;
 }
-body.dark-mode .profile-tabs {
+.dark-mode .profile-tabs {
     border-bottom-color: #444;
 }
 
@@ -445,7 +443,7 @@ body.dark-mode .profile-tabs {
     border-bottom: 3px solid transparent;
     transition: all 0.3s ease;
 }
-body.dark-mode .tab-link {
+.dark-mode .tab-link {
     color: var(--color-text-secondary-dark);
 }
 
@@ -459,7 +457,7 @@ body.dark-mode .tab-link {
     background-color: var(--color-background-white);
     border-radius: 0 0 15px 15px;
 }
-body.dark-mode .profile-content {
+.dark-mode .profile-content {
     background-color: var(--color-background-surface-dark);
 }
 
@@ -477,7 +475,7 @@ body.dark-mode .profile-content {
     padding: 15px;
     border-bottom: 1px solid #eee;
 }
-body.dark-mode .management-list-item {
+.dark-mode .management-list-item {
     border-bottom-color: #444;
 }
 .management-list-item h4 {
@@ -505,7 +503,7 @@ body.dark-mode .management-list-item {
     border-bottom: 1px solid #ddd;
     padding-bottom: 10px;
 }
-body.dark-mode .management-panel h3 {
+.dark-mode .management-panel h3 {
     border-bottom-color: #444;
 }
 
@@ -520,7 +518,7 @@ body.dark-mode .management-panel h3 {
     padding: 12px 0;
     border-bottom: 1px solid #eee;
 }
-body.dark-mode .chapter-management-item {
+.dark-mode .chapter-management-item {
     border-bottom-color: #444;
 }
 
@@ -557,20 +555,40 @@ body.dark-mode .chapter-management-item {
     color: var(--color-text-secondary);
     padding: 0;
 }
-body.dark-mode #theme-toggle {
+.dark-mode #theme-toggle {
     color: var(--color-text-primary-dark);
 }
 
 /* =================================================================
-   ESTILOS PARA EL EDITOR DE CAPÍTULOS
+   ESTILOS DEL EDITOR (VERSIÓN FINAL Y AISLADA)
    ================================================================= */
+
+/* Aplica un layout flex a <main> SÓLO en la página del editor */
+main:has(.editor-layout) {
+    display: flex;
+    flex-direction: column;
+}
+
 .editor-layout {
+    flex-grow: 1;
     display: grid;
-    grid-template-columns: 300px minmax(0, 1fr);
+    grid-template-columns: 280px 1fr; /* Le quitamos un poco a la izquierda */
     gap: 40px;
     width: 100%;
-    flex-grow: 1; /* El layout ahora crece para llenar 'main' */
-    padding: 40px 0; /* Añadimos padding vertical para que no toque los bordes */
+    max-width: 1600px; /* Le damos más espacio en total */
+    padding: 40px;
+}
+
+.editor-panel,
+#chapter-editor-form {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+#chapter-content-input {
+    flex-grow: 1;
+    resize: vertical;
 }
 
 .chapter-list-panel {
@@ -579,7 +597,8 @@ body.dark-mode #theme-toggle {
     border-radius: 15px;
     height: fit-content;
 }
-body.dark-mode .chapter-list-panel {
+
+.dark-mode .chapter-list-panel {
     background-color: var(--color-background-surface-dark);
 }
 
@@ -589,7 +608,8 @@ body.dark-mode .chapter-list-panel {
     padding-bottom: 10px;
     border-bottom: 1px solid #ddd;
 }
-body.dark-mode .chapter-list-panel h3 {
+
+.dark-mode .chapter-list-panel h3 {
     border-bottom-color: #444;
 }
 
@@ -603,14 +623,16 @@ body.dark-mode .chapter-list-panel h3 {
     font-weight: 700;
     transition: background-color 0.2s ease;
 }
-body.dark-mode #editor-chapter-list a {
+
+.dark-mode #editor-chapter-list a {
     color: var(--color-text-primary-dark);
 }
 
 #editor-chapter-list a:hover {
     background-color: #e9e9f2;
 }
-body.dark-mode #editor-chapter-list a:hover {
+
+.dark-mode #editor-chapter-list a:hover {
     background-color: #2c2c2c;
 }
 
@@ -618,34 +640,27 @@ body.dark-mode #editor-chapter-list a:hover {
     background-color: var(--color-accent);
     color: var(--color-text-primary);
 }
-body.dark-mode #editor-chapter-list a.active-chapter {
-    background-color: var(--color-accent);
+
+.dark-mode #editor-chapter-list a.active-chapter {
     color: var(--color-text-primary);
-}
-
-.editor-panel {
-    display: flex;
-}
-
-.editor-panel .form-container,
-.editor-panel #chapter-editor-form {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-#chapter-content-input {
-    flex-grow: 1;
-    resize: vertical;
 }
 
 @media (max-width: 992px) {
     .editor-layout {
         grid-template-columns: 1fr;
-        flex-grow: 0; /* En móvil la altura es automática */
-        padding: 0;
     }
-    main {
-        padding: 0 20px;
-    }
+}
+
+/* =================================================================
+   ANULACIONES ESPECÍFICAS PARA EL EDITOR
+   ================================================================= */
+
+/* Anula los límites del .form-container cuando está dentro del editor */
+.editor-panel .form-container {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+    background-color: transparent;
+    text-align: left; /* Alinea las etiquetas a la izquierda, que es mejor para el editor */
 }
