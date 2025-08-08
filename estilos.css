@@ -651,6 +651,14 @@ main:has(.editor-layout) {
     }
 }
 
+/* Estilo para el botón "Añadir Nuevo Capítulo" en el panel del editor */
+#add-new-chapter-editor-btn {
+    display: block; /* Para que ocupe todo el ancho */
+    text-align: center;
+    margin-bottom: 20px; /* Espacio antes de la lista de capítulos */
+    text-decoration: none; /* Por si acaso */
+}
+
 /* =================================================================
    ANULACIONES ESPECÍFICAS PARA EL EDITOR
    ================================================================= */
@@ -663,4 +671,26 @@ main:has(.editor-layout) {
     box-shadow: none;
     background-color: transparent;
     text-align: left; /* Alinea las etiquetas a la izquierda, que es mejor para el editor */
+}
+/* =================================================================
+   ESTILOS PARA INDICADORES DE ESTADO
+   ================================================================= */
+
+.status-tag {
+    font-size: 12px;
+    font-weight: bold;
+    padding: 3px 8px;
+    border-radius: 50px;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+.status-tag.draft {
+    background-color: #555;
+    color: #fff;
+}
+
+.dark-mode .status-tag.draft {
+    background-color: #888;
+    color: #121212;
 }

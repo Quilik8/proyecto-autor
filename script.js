@@ -202,7 +202,7 @@ const inicializarPaginasDeHistorias = async () => {
     }
 };
 
-// --- Lógica para la página de detalle de historia ---
+// --- Lógica para la página de detalle de historia (VERSIÓN CORREGIDA) ---
 const inicializarPaginaDetalleHistoria = async () => {
     const storyContainer = document.querySelector('.story-header-container');
     if (!storyContainer) return;
@@ -213,28 +213,64 @@ const inicializarPaginaDetalleHistoria = async () => {
         storyContainer.innerHTML = '<h1>Error: ID de historia no encontrado.</h1>';
         return;
     }
+
     try {
-        const { data: story, error: storyError } = await clienteSupabase.from('stories').select(`*, profiles(username)`).eq('id', storyId).single();
-        if (storyError || !story) throw storyError || new Error('Historia no encontrada');
+        // --- PASO 1: Obtener la historia principal ---
+        const { data: story, error: storyError } = await clienteSupabase
+            .from('stories')
+            .select('*, profiles(username)')
+            .eq('id', storyId)
+            .single();
 
-        const { data: chapters, error: chaptersError } = await clienteSupabase.from('chapters').select('*').eq('story_id', storyId).eq('status', 'publicado').order('chapter_number', { ascending: true });
+        // Si hay un error al buscar la historia, nos detenemos.
+        if (storyError) throw storyError;
 
+        // --- PASO 2: Obtener los capítulos publicados de esa historia ---
+        const { data: chapters, error: chaptersError } = await clienteSupabase
+            .from('chapters')
+            .select('*')
+            .eq('story_id', storyId)
+            .eq('status', 'publicado')
+            .order('chapter_number', { ascending: true });
+
+        // Si hay un error al buscar los capítulos, nos detenemos.
+        if (chaptersError) throw chaptersError;
+
+        // --- PASO 3: Actualizar la información en la página ---
         document.getElementById('story-title').textContent = story.title;
         document.getElementById('story-author').textContent = `por ${story.profiles.username}`;
         document.getElementById('story-meta').textContent = story.genre || 'Sin género';
         document.getElementById('story-synopsis').textContent = story.synopsis;
 
+        // --- PASO 4: Gestionar la lista de capítulos y el botón ---
         const chapterList = document.getElementById('chapter-list-ul');
-        chapterList.innerHTML = '';
-        chapters.forEach(chapter => {
-            const chapterHTML = `<li><a href="capitulo.html?id=${chapter.id}">${chapter.chapter_number}. ${chapter.title}</a></li>`;
-            chapterList.insertAdjacentHTML('beforeend', chapterHTML);
-        });
+        const startReadingBtn = document.querySelector('.story-header-container .cta-button');
+        chapterList.innerHTML = ''; // Limpiamos la lista por si acaso.
+
+        if (chapters && chapters.length > 0) {
+            // Si SÍ hay capítulos publicados:
+            // 1. Rellenamos la lista de capítulos.
+            chapters.forEach(chapter => {
+                const chapterHTML = `<li><a href="capitulo.html?id=${chapter.id}">${chapter.chapter_number}. ${chapter.title}</a></li>`;
+                chapterList.insertAdjacentHTML('beforeend', chapterHTML);
+            });
+
+            // 2. Actualizamos el botón para que apunte al PRIMER capítulo.
+            startReadingBtn.href = `capitulo.html?id=${chapters[0].id}`;
+            startReadingBtn.style.display = 'inline-block'; // Nos aseguramos que sea visible.
+
+        } else {
+            // Si NO hay capítulos publicados:
+            // 1. Mostramos un mensaje en la lista.
+            chapterList.innerHTML = '<li>Aún no hay capítulos publicados para esta historia.</li>';
+            // 2. Ocultamos el botón "Empezar a Leer".
+            startReadingBtn.style.display = 'none';
+        }
+
     } catch (error) {
         storyContainer.innerHTML = `<h1>Error al cargar la historia.</h1><p>${error.message}</p>`;
     }
 };
-
 // --- Lógica para la página de lectura de capítulo ---
 const inicializarPaginaDeLectura = async () => {
     const chapterContainer = document.querySelector('.reading-container');
@@ -305,7 +341,11 @@ const inicializarPaginaDePerfil = async () => {
 };
 
 
-// --- Lógica para las páginas de GESTIÓN de AUTOR ---
+// =================================================================
+// CÓDIGO NUEVO Y COMPLETO PARA REEMPLAZAR
+// =================================================================
+
+// --- Lógica para las páginas de GESTIÓN de AUTOR (Versión con Indicadores de Borrador) ---
 const inicializarPaginasDeGestion = async () => {
     // Para la página de crear historia
     const createStoryForm = document.querySelector("#create-story-form");
@@ -344,7 +384,7 @@ const inicializarPaginasDeGestion = async () => {
         }
         try {
             const { data: story, error: storyError } = await clienteSupabase.from('stories').select('*').eq('id', storyId).single();
-            if (storyError || !story) throw storyError || new Error('Historia no encontrada');
+            if (storyError) throw storyError;
             const { data: { session } } = await clienteSupabase.auth.getSession();
             if (!session || session.user.id !== story.author_id) {
                 managementContainer.innerHTML = '<h1>Acceso Denegado</h1><p>No tienes permiso para gestionar esta historia.</p>';
@@ -355,14 +395,48 @@ const inicializarPaginasDeGestion = async () => {
             document.getElementById('manage-synopsis').value = story.synopsis;
             const addNewChapterBtn = document.getElementById('add-new-chapter-btn');
             addNewChapterBtn.href = `editar-capitulo.html?story_id=${storyId}`;
+            
             const { data: chapters, error: chaptersError } = await clienteSupabase.from('chapters').select('*').eq('story_id', storyId).order('chapter_number', { ascending: true });
             if (chaptersError) throw chaptersError;
+            
             const chapterListDiv = document.getElementById('management-chapter-list');
             chapterListDiv.innerHTML = '';
             chapters.forEach(chapter => {
-                const chapterHTML = `<div class="chapter-management-item"><p>${chapter.chapter_number}. ${chapter.title}</p><div class="chapter-actions"><a href="editar-capitulo.html?story_id=${storyId}&chapter_id=${chapter.id}">Editar</a><a href="#" style="color: #e74c3c;">Borrar</a></div></div>`;
+                // *** MODIFICACIÓN 1: Añadir etiqueta de borrador ***
+                const statusTag = chapter.status === 'borrador'
+                    ? `<span class="status-tag draft">Borrador</span>`
+                    : '';
+                
+                const chapterHTML = `
+                    <div class="chapter-management-item">
+                        <p>${chapter.chapter_number}. ${chapter.title}${statusTag}</p>
+                        <div class="chapter-actions">
+                            <a href="editar-capitulo.html?story_id=${storyId}&chapter_id=${chapter.id}">Editar</a>
+                            <a href="#" class="delete-chapter-link" data-chapter-id="${chapter.id}" style="color: #e74c3c;">Borrar</a>
+                        </div>
+                    </div>`;
                 chapterListDiv.insertAdjacentHTML('beforeend', chapterHTML);
             });
+
+            // Delegación de eventos para los botones de borrado
+            chapterListDiv.addEventListener('click', async (event) => {
+                if (event.target && event.target.classList.contains('delete-chapter-link')) {
+                    event.preventDefault();
+                    const chapterIdToDelete = event.target.dataset.chapterId;
+                    const confirmation = confirm('¿Estás seguro de que quieres borrar este capítulo? Esta acción es permanente.');
+                    if (confirmation) {
+                        try {
+                            const { error } = await clienteSupabase.from('chapters').delete().eq('id', chapterIdToDelete);
+                            if (error) throw error;
+                            event.target.closest('.chapter-management-item').remove();
+                            alert('Capítulo borrado con éxito.');
+                        } catch (error) {
+                            alert(`Error al borrar el capítulo: ${error.message}`);
+                        }
+                    }
+                }
+            });
+
         } catch (error) {
             console.error('Error cargando el panel de gestión:', error);
             managementContainer.innerHTML = '<h1>Error al cargar los datos.</h1>';
@@ -401,10 +475,9 @@ const inicializarPaginasDeGestion = async () => {
         }
     }
 
-
     // Para la página de editar capítulo
     const editorLayout = document.querySelector('.editor-layout');
-    if(editorLayout) {
+    if (editorLayout) {
         const editorForm = document.getElementById('chapter-editor-form');
         const params = new URLSearchParams(window.location.search);
         const storyId = params.get('story_id');
@@ -414,19 +487,33 @@ const inicializarPaginasDeGestion = async () => {
             return;
         }
         document.getElementById('story-id-input').value = storyId;
+        
         const backToManagementLink = document.getElementById('back-to-management-link');
         if (backToManagementLink) {
             backToManagementLink.href = `gestionar-historia.html?id=${storyId}`;
         }
+
+        const addNewChapterBtn = document.getElementById('add-new-chapter-editor-btn');
+        if (addNewChapterBtn) {
+            addNewChapterBtn.href = `editar-capitulo.html?story_id=${storyId}`;
+        }
+
         try {
-            const { data: chapters, error } = await clienteSupabase.from('chapters').select('id, title, chapter_number').eq('story_id', storyId).order('chapter_number', { ascending: true });
+            const { data: chapters, error } = await clienteSupabase.from('chapters').select('id, title, chapter_number, status').eq('story_id', storyId).order('chapter_number', { ascending: true });
             if (error) throw error;
             const chapterListDiv = document.getElementById('editor-chapter-list');
             chapterListDiv.innerHTML = '';
             chapters.forEach(chap => {
                 const link = document.createElement('a');
                 link.href = `editar-capitulo.html?story_id=${storyId}&chapter_id=${chap.id}`;
-                link.textContent = `${chap.chapter_number}. ${chap.title}`;
+                
+                // *** MODIFICACIÓN 2: Añadir etiqueta de borrador ***
+                const statusTag = chap.status === 'borrador'
+                    ? `<span class="status-tag draft">Borrador</span>`
+                    : '';
+                
+                link.innerHTML = `${chap.chapter_number}. ${chap.title}${statusTag}`;
+                
                 if (chap.id === chapterId) {
                     link.classList.add('active-chapter');
                 }
@@ -435,11 +522,12 @@ const inicializarPaginasDeGestion = async () => {
         } catch (error) {
             console.error('Error cargando la lista de capítulos:', error);
         }
+
         if (chapterId) {
             document.getElementById('editor-heading').textContent = 'Editando Capítulo';
             try {
                 const { data: chapter, error } = await clienteSupabase.from('chapters').select('*').eq('id', chapterId).single();
-                if (error || !chapter) throw error || new Error('Capítulo no encontrado');
+                if (error) throw error;
                 document.getElementById('chapter-title-input').value = chapter.title;
                 document.getElementById('chapter-content-input').value = chapter.content;
             } catch (error) {
@@ -450,51 +538,44 @@ const inicializarPaginasDeGestion = async () => {
         }
         
         const guardarCapitulo = async (status) => {
-    const title = document.getElementById('chapter-title-input').value;
-    const content = document.getElementById('chapter-content-input').value;
-    const currentStoryId = document.getElementById('story-id-input').value;
-    const errorDiv = document.getElementById('editor-error');
-    errorDiv.textContent = '';
+            const title = document.getElementById('chapter-title-input').value;
+            const content = document.getElementById('chapter-content-input').value;
+            const currentStoryId = document.getElementById('story-id-input').value;
+            const errorDiv = document.getElementById('editor-error');
+            errorDiv.textContent = '';
+            try {
+                const params = new URLSearchParams(window.location.search);
+                const chapterId = params.get('chapter_id');
+                if (chapterId) {
+                    const { error } = await clienteSupabase.from('chapters').update({ title, content, status: status }).eq('id', chapterId);
+                    if (error) throw error;
+                    alert(`Capítulo guardado como: ${status}`);
+                    // Recargamos para ver el cambio de estado en la lista
+                    window.location.reload();
+                } else {
+                    const { count, error: countError } = await clienteSupabase.from('chapters').select('*', { count: 'exact', head: true }).eq('story_id', currentStoryId);
+                    if (countError) throw countError;
+                    const newChapterNumber = (count || 0) + 1;
+                    const { data: newChapter, error: insertError } = await clienteSupabase.from('chapters').insert({ story_id: currentStoryId, title, content, chapter_number: newChapterNumber, status: status }).select().single();
+                    if (insertError) throw insertError;
+                    window.location.href = `editar-capitulo.html?story_id=${currentStoryId}&chapter_id=${newChapter.id}`;
+                }
+            } catch (error) {
+                errorDiv.textContent = `Error al guardar: ${error.message}`;
+            }
+        };
 
-    try {
-        const params = new URLSearchParams(window.location.search);
-        const chapterId = params.get('chapter_id');
-
-        if (chapterId) { // Estamos editando un capítulo existente
-            const { error } = await clienteSupabase.from('chapters')
-                .update({ title, content, status: status }) // Actualizamos el status
-                .eq('id', chapterId);
-            if (error) throw error;
-            alert(`Capítulo guardado como: ${status}`);
-        } else { // Estamos creando un nuevo capítulo
-            const { count, error: countError } = await clienteSupabase.from('chapters').select('*', { count: 'exact', head: true }).eq('story_id', currentStoryId);
-            if (countError) throw countError;
-            const newChapterNumber = (count || 0) + 1;
-            const { data: newChapter, error: insertError } = await clienteSupabase.from('chapters')
-                .insert({ story_id: currentStoryId, title, content, chapter_number: newChapterNumber, status: status }) // Incluimos el status
-                .select().single();
-            if (insertError) throw insertError;
-            // Redirigimos para que la página se recargue con el nuevo ID del capítulo
-            window.location.href = `editar-capitulo.html?story_id=${currentStoryId}&chapter_id=${newChapter.id}`;
-        }
-    } catch (error) {
-        errorDiv.textContent = `Error al guardar: ${error.message}`;
-    }
-};
-
-// Event listener para el botón "Guardar y Publicar"
-editorForm.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    await guardarCapitulo('publicado');
+        editorForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            await guardarCapitulo('publicado');
 });
 
-// Event listener para el nuevo botón "Guardar Borrador"
-const saveDraftBtn = document.getElementById('save-draft-btn');
-if (saveDraftBtn) {
-    saveDraftBtn.addEventListener('click', async () => {
-        await guardarCapitulo('borrador');
-    });
-}
+        const saveDraftBtn = document.getElementById('save-draft-btn');
+        if (saveDraftBtn) {
+            saveDraftBtn.addEventListener('click', async () => {
+                await guardarCapitulo('borrador');
+            });
+        }
 
         const deleteButton = document.getElementById('delete-chapter-btn');
         if (chapterId && deleteButton) {
