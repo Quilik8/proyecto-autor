@@ -256,7 +256,7 @@ La creación de una aplicación nativa se contempla como una fase avanzada del p
     - [x] **Sub-misión 22.3 (Dar Vida al Panel):** Implementar la lógica en `script.js` (`cargarPanelDeGestion`) para rellenar la página `gestionar-historia.html` con los datos correctos de la historia y sus capítulos desde Supabase.
     - [x] **Sub-misión 22.4 (Implementar Creación de Capítulos):** Conectar el formulario de "Añadir Nuevo Capítulo" a una función de JavaScript que guarde el nuevo capítulo en la base de datos.
     - [x] **Sub-misión 22.5 (Asegurar el Acceso):** Crear las políticas de seguridad RLS necesarias para permitir que un autor pueda `UPDATE` (actualizar) y `DELETE` (borrar) sus propias historias, y `INSERT` (añadir) capítulos solo a las historias que le pertenecen.
-    - [x] **Misión 22.5: Asegurando el Acceso con RLS** Crear Políticas de Acceso: Escribiremos las reglas (políticas) para cada operación (SELECT, INSERT, UPDATE, DELETE) en cada tabla, asegurándonos de que todo el mundo pueda ver el contenido público, pero solo los dueños puedan modificarlo.
+    - [x] **Sub-misión 22.6: Diferenciar Borradores y Publicados.** 
 
 
 **FASE 5: El Gremio - El Mercado de Talentos**

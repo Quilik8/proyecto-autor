@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Perfil - A.U.T.O.R.</title>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<body class="body-loading">
+
+    <header>
+        <div class="logo">A.U.T.O.R.</div>
+        <nav class="nav-loading">
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="explorar.html">Explorar</a></li>
+                <li id="nav-login" class="hidden"><a href="login.html">Iniciar Sesión</a></li>
+                <li id="nav-registro" class="hidden"><a href="registro.html" class="boton-registro">Registrarse</a></li>
+                <li id="nav-profile" class="hidden"><a href="perfil.html">Mi Perfil</a></li>
+                <li id="nav-logout" class="hidden"><a href="#" class="boton-registro">Cerrar Sesión</a></li>
+                <li><button id="theme-toggle" title="Cambiar tema">🌙</button></li>
+            </ul>
+        </nav>
+        <div class="hamburger">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
+    </header>
+
+    <main>
+        <div class="form-container">
+            <h2>Editar tu Perfil</h2>
+            <p>Actualiza tu información pública y tu avatar.</p>
+            
+            <form id="edit-profile-form">
+                <!-- Previsualización del Avatar -->
+                <div class="form-group avatar-upload-container">
+                    <img src="https://placehold.co/150x150/80E9D9/1a1a1a?text=Avatar" alt="Avatar actual" class="profile-avatar" id="avatar-preview">
+                    <label for="avatar-input" class="cta-button" style="padding: 8px 20px; margin-top: 10px;">Cambiar Avatar</label>
+                    <input type="file" id="avatar-input" accept="image/png, image/jpeg" style="display: none;">
+                </div>
+
+                <div class="form-group">
+                    <label for="username-input">Nombre de Usuario</label>
+                    <input type="text" id="username-input" name="username" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="bio-input">Biografía</label>
+                    <textarea id="bio-input" name="bio" rows="4" placeholder="Cuéntale al mundo un poco sobre ti..."></textarea>
+                </div>
+                
+                <div class="error-message" id="edit-profile-error"></div>
+
+                <button type="submit" class="cta-button">Guardar Cambios</button>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2025 Proyecto A.U.T.O.R. Todos los derechos reservados.</p>
+    </footer>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="script.js"></script>
+</body>
+</html>
