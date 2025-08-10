@@ -256,25 +256,35 @@ La creación de una aplicación nativa se contempla como una fase avanzada del p
     - [x] **Sub-misión 22.3 (Dar Vida al Panel):** Implementar la lógica en `script.js` (`cargarPanelDeGestion`) para rellenar la página `gestionar-historia.html` con los datos correctos de la historia y sus capítulos desde Supabase.
     - [x] **Sub-misión 22.4 (Implementar Creación de Capítulos):** Conectar el formulario de "Añadir Nuevo Capítulo" a una función de JavaScript que guarde el nuevo capítulo en la base de datos.
     - [x] **Sub-misión 22.5 (Asegurar el Acceso):** Crear las políticas de seguridad RLS necesarias para permitir que un autor pueda `UPDATE` (actualizar) y `DELETE` (borrar) sus propias historias, y `INSERT` (añadir) capítulos solo a las historias que le pertenecen.
-    - [x] **Sub-misión 22.6: Diferenciar Borradores y Publicados.** 
+    - [X] **Sub-misión 22.6:** Implementar el borrado de capítulos.
+- [X] Misión 23: Implementar Políticas de Seguridad a Nivel de Fila (RLS) para todas las tablas y operaciones, asegurando que los usuarios solo puedan modificar su propio contenido.
 
+**FASE 4.5: Misión de Pulido Final (En Proceso)**
+- [ ] Misión 24: Completar la funcionalidad del Perfil de Usuario.
+    - [X] **Sub-misión 24.1:** Permitir la edición de `username` y `bio`.
+    - [X] **Sub-misión 24.2:** Permitir la subida de un `avatar` de perfil a Supabase Storage.
+    - [ ] **Sub-misión 24.3:** Implementar el borrado de una historia completa (y sus capítulos asociados).
+- [ ] Misión 25: Refinar la Experiencia de Usuario (UX).
+    - [X] **Sub-misión 25.1:** Corregir el diseño de la barra de búsqueda en dispositivos móviles.
+    - [ ] **Sub-misión 25.2:** Añadir "Estadísticas a la Vista" en el panel de gestión (conteo de capítulos, palabras, etc.).
+- [x] Misión 26: Gestión de Portadas de Historias.
 
 **FASE 5: El Gremio - El Mercado de Talentos**
-- [ ] Misión 23: Implementar perfiles de usuario con roles seleccionables (**Autor, Lector, Editor, Diseñador, Traductor, Crítico, Beta-Reader**).
-- [ ] Misión 24: Construir un sistema de portafolios y de reseñas entre usuarios (ej. un autor reseña al editor).
-- [ ] Misión 25: Implementar un sistema de búsqueda y filtros para encontrar colaboradores.
-- [ ] Misión 26: Construir la mensajería interna.
-- [ ] Misión 27: Implementar sistema de "contratos" simplificados y reparto de ganancias.
+- [ ] Misión 27: Implementar perfiles de usuario con roles seleccionables (**Autor, Lector, Editor, Diseñador, Traductor, Crítico, Beta-Reader**).
+- [ ] Misión 28: Construir un sistema de portafolios y de reseñas entre usuarios (ej. un autor reseña al editor).
+- [ ] Misión 29: Implementar un sistema de búsqueda y filtros para encontrar colaboradores.
+- [ ] Misión 30: Construir la mensajería interna.
+- [ ] Misión 31: Implementar sistema de "contratos" simplificados y reparto de ganancias.
 
 **FASE 6: El Ecosistema de Progreso y Comunidad**
-- [ ] **Misión 28 (Hub Comunitario):**
+- [ ] **Misión 32 (Hub Comunitario):**
     - [ ] Implementar un sistema de foros integrado con perfiles.
     - [ ] Permitir la inserción de contenido externo (YouTube, etc.) en los hilos.
-- [ ] **Misión 29 (Sistema de Progreso Global):**
+- [ ] **Misión 33 (Sistema de Progreso Global):**
     - [ ] Diseñar y crear la base de datos para los Puntos de Experiencia (XP) y la Moneda Virtual.
     - [ ] **Árbol del Lector:** Implementar la lógica de ganancia de XP/Moneda (leer, comentar, etc.).
     - [ ] **Árbol del Creador (Autores/Gremio):** Implementar la lógica de ganancia de XP (publicar, recibir donaciones, completar trabajos).
-- [ ] **Misión 30 (Economía Virtual):**
+- [ ] **Misión 34 (Economía Virtual):**
     - [ ] Construir la "tienda" para gastar monedas.
     - [ ] Implementar recompensas estéticas (marcos, insignias) y funcionales (comentarios destacados).
     - [ ] Construir la **Biblioteca Premium** (colecciones, notas) y su sistema de desbloqueo (pago y con monedas).
@@ -301,6 +311,99 @@ La creación de una aplicación nativa se contempla como una fase avanzada del p
 ---
 
 ## Parte 3: El Estado Técnico
+
+**Configuración Detallada del Backend (Supabase)**
+
+Esta sección documenta el estado actual de la infraestructura en Supabase, diseñada para ser procesada y entendida por cualquier desarrollador o IA (como Gemini 2.5 Pro).
+
+1. Estructura de la Base de Datos (Tablas y Relaciones)
+La base de datos PostgreSQL se organiza en las siguientes tablas principales dentro del schema public:
+
+Tabla: profiles
+Propósito: Almacena los datos públicos y editables de los usuarios, extendiendo la información del sistema de autenticación.
+Estructura de Columnas:
+id (uuid, Primary Key): Clave primaria de la tabla.
+updated_at (timestamptz): Marca de tiempo de la última actualización.
+username (text): Nombre de usuario público y editable.
+full_name (text, nullable): Nombre completo del usuario. (Actualmente no se utiliza en los formularios).
+avatar_url (text, nullable): URL pública de la imagen de perfil alojada en Supabase Storage.
+bio (text, nullable): Biografía del usuario.
+Relaciones Clave (Foreign Keys):
+La columna profiles.id tiene una relación de clave externa con auth.users.id. Esto es crítico y vincula cada perfil a un usuario de autenticación, garantizando la integridad de los datos.
+
+Tabla: stories
+Propósito: Almacena la información principal de cada obra o historia.
+Estructura de Columnas:
+id (uuid, Primary Key): Identificador único de la historia.
+created_at (timestamptz): Marca de tiempo de creación.
+title (text): Título de la historia.
+synopsis (text): Resumen o sinopsis de la historia.
+author_id (uuid): Clave externa que referencia a profiles.id, indicando el autor.
+cover_image_url (text, nullable): URL de la imagen de portada.
+genre (text, nullable): Género de la historia.
+
+Tabla: chapters
+Propósito: Almacena el contenido de cada capítulo individual, vinculado a una historia.
+Estructura de Columnas:
+id (uuid, Primary Key): Identificador único del capítulo.
+created_at (timestamptz): Marca de tiempo de creación.
+story_id (uuid): Clave externa que referencia a stories.id.
+title (text): Título del capítulo.
+content (text): Contenido principal del capítulo.
+chapter_number (integer): Número de orden del capítulo.
+status (text, default: 'borrador'): Estado del capítulo. Puede ser 'borrador' o 'publicado'.
+
+2. Autenticación y Automatización (Triggers)
+
+Se ha implementado un trigger a nivel de base de datos para asegurar que cada nuevo usuario tenga un perfil desde el momento de su registro.
+
+Función: public.handle_new_user()
+Disparador (Trigger): on_auth_user_created
+Evento: Se ejecuta AFTER INSERT ON auth.users.
+Acción: Cuando se crea un nuevo usuario en el sistema de autenticación, esta función se dispara e inserta automáticamente una nueva fila en public.profiles. La fila se rellena con el id, username y full_name extraídos de los metadatos del nuevo usuario. Esto es fundamental para que la lógica de "editar perfil" funcione correctamente desde el primer momento.
+
+Código del Trigger:
+
+create function public.handle_new_user()
+returns trigger as $$
+begin
+  insert into public.profiles (id, username, full_name)
+  values (new.id, new.raw_user_meta_data->>'username', new.raw_user_meta_data->>'full_name');
+  return new;
+end;
+$$ language plpgsql security definer;
+
+create trigger on_auth_user_created
+  after insert on auth.users
+  for each row execute procedure public.handle_new_user();
+
+3. Almacenamiento de Archivos (Supabase Storage)
+
+Se utiliza para gestionar los archivos subidos por los usuarios, principalmente avatares.
+
+Bucket: avatars
+Acceso: El bucket está configurado como Público para permitir que las URLs de las imágenes se puedan mostrar directamente en la aplicación.
+Políticas de Seguridad de Storage:
+Permitir inserción de avatar propio (INSERT): Permite a cualquier usuario subir un archivo al bucket avatars. La lógica del front-end se encarga de que la ruta de subida sea [user_id]/avatar.ext.
+Permitir modificar o borrar avatar propio (UPDATE, DELETE): Un usuario solo puede modificar o borrar un archivo si su auth.uid() coincide con el nombre de la carpeta de primer nivel donde reside el archivo, garantizando que solo puedan gestionar su propio avatar.
+
+4. Políticas de Seguridad (Row Level Security - RLS)
+
+RLS está activado en todas las tablas (profiles, stories, chapters) para garantizar un control de acceso granular y seguro.
+
+Para la tabla profiles:
+
+SELECT: Pública. Cualquiera puede leer los perfiles.
+UPDATE: Un usuario solo puede actualizar su propio perfil (auth.uid() = id). Se usa tanto en USING como en WITH CHECK.
+INSERT: Un usuario solo puede crear un perfil para sí mismo (auth.uid() = id). Se usa WITH CHECK.
+Para la tabla stories:
+SELECT: Pública. Cualquiera puede leer las historias.
+INSERT: Solo usuarios autenticados.
+UPDATE / DELETE: Solo el autor de la historia (auth.uid() = author_id).
+Para la tabla chapters:
+SELECT: Cualquiera puede leer un capítulo si su status es 'publicado', O si el que lo lee es el autor de la historia (para permitirle ver sus borradores).
+INSERT / UPDATE / DELETE: Solo permitido si el auth.uid() del usuario coincide con el author_id de la historia a la que pertenece el capítulo (se logra mediante una subconsulta a la tabla stories).
+
 
 - **Repositorio de GitHub:** [Pega aquí la URL de tu repositorio de GitHub]
 - **Sitio de Pruebas en Netlify:** [Pega aquí la URL que te dio Netlify si decidiste publicar]

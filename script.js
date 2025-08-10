@@ -293,73 +293,97 @@ const inicializarPaginaDeLectura = async () => {
     }
 };
 
-
-// --- Lógica para la página de PERFIL (VERSIÓN CORREGIDA Y COMPLETA) ---
+// --- VERSIÓN DE DIAGNÓSTICO para inicializarPaginaDePerfil ---
 const inicializarPaginaDePerfil = async () => {
-    const profilePageContainer = document.querySelector('.profile-page-container');
-    if (!profilePageContainer) return;
+    console.log("PASO 0: Iniciando la función inicializarPaginaDePerfil.");
 
-    const { data: { session } } = await clienteSupabase.auth.getSession();
+    const profilePageContainer = document.querySelector('.profile-page-container');
+    if (!profilePageContainer) {
+        console.error("ERROR CRÍTICO: No se encontró el contenedor .profile-page-container. La función se detiene.");
+        return;
+    }
+
+    // 1. OBTENER LA SESIÓN DEL USUARIO
+    console.log("PASO 1: Intentando obtener la sesión del usuario...");
+    const { data: { session }, error: sessionError } = await clienteSupabase.auth.getSession();
+
+    if (sessionError) {
+        console.error("ERROR EN PASO 1: Hubo un error al obtener la sesión:", sessionError.message);
+        return;
+    }
     if (!session) {
+        console.warn("ALERTA EN PASO 1: No hay sesión activa. Redirigiendo a login.html");
         window.location.href = 'login.html';
         return;
     }
+    console.log("PASO 1 - ÉXITO: Sesión obtenida para el usuario:", session.user.email);
     const user = session.user;
 
-    // --- CARGAR DATOS DEL PERFIL (username, bio, avatar) ---
+    // 2. INTENTAR CARGAR LOS DATOS DEL PERFIL
+    console.log("PASO 2: Intentando cargar datos de la tabla 'profiles' para el ID:", user.id);
     try {
-        const { data: profile, error } = await clienteSupabase
+        const { data: profile, error: profileError } = await clienteSupabase
             .from('profiles')
-            .select('username, bio, avatar_url') // Consulta corregida, sin 'email'
+            .select('username, bio, avatar_url')
             .eq('id', user.id)
             .single();
-            
-        if (error) throw error;
 
-        document.getElementById("profile-username").textContent = profile.username || 'Usuario';
+        // Imprimimos EXACTAMENTE lo que Supabase nos devuelve.
+        console.log("PASO 2 - RESULTADO: Datos de 'profile' recibidos:", profile);
+        console.log("PASO 2 - RESULTADO: Error de 'profile' recibido:", profileError);
+
+        if (profileError && profileError.code !== 'PGRST116') {
+            throw profileError; // Si el error no es "fila no encontrada", lo lanzamos.
+        }
+
+        // 3. INTENTAR ACTUALIZAR LA PÁGINA CON LOS DATOS
+        console.log("PASO 3: Intentando actualizar el HTML con los datos del perfil...");
         document.getElementById("profile-email").textContent = user.email;
-        document.querySelector(".profile-avatar").src = profile.avatar_url || 'https://placehold.co/150x150/80E9D9/1a1a1a?text=Avatar';
-        document.getElementById("profile-bio").textContent = profile.bio || ''; 
-    
+        if (profile) {
+            document.getElementById("profile-username").textContent = profile.username || 'Nombre no definido';
+            document.getElementById("profile-bio").textContent = profile.bio || 'Biografía no definida.';
+            document.querySelector(".profile-avatar").src = profile.avatar_url || 'https://placehold.co/150x150/80E9D9/1a1a1a?text=Avatar';
+        } else {
+            document.getElementById("profile-username").textContent = 'Perfil no encontrado';
+            document.getElementById("profile-bio").textContent = 'Edita tu perfil para crearlo.';
+        }
+        console.log("PASO 3 - ÉXITO: HTML del perfil actualizado.");
+
     } catch (error) {
-        console.error('Error cargando los datos del perfil del usuario:', error);
+        console.error("ERROR EN PASO 2 o 3: Falló la carga o actualización del perfil.", error.message);
     }
 
-    // --- CARGAR HISTORIAS DEL USUARIO (LÓGICA RESTAURADA) ---
+    // 4. CARGAR LAS HISTORIAS DEL USUARIO
+    console.log("PASO 4: Intentando cargar historias para el autor con ID:", user.id);
     try {
-        const { data: stories, error } = await clienteSupabase
+        const { data: stories, error: storiesError } = await clienteSupabase
             .from('stories')
             .select('id, title')
             .eq('author_id', user.id);
 
-        if (error) throw error;
+        console.log("PASO 4 - RESULTADO: Datos de 'stories' recibidos:", stories);
+        console.log("PASO 4 - RESULTADO: Error de 'stories' recibido:", storiesError);
+        
+        if (storiesError) throw storiesError;
 
         const storiesListDiv = document.getElementById('gestion-stories-list');
-        storiesListDiv.innerHTML = ''; // Limpiar antes de añadir
-        if (stories.length === 0) {
-            storiesListDiv.innerHTML = '<p>Aún no has creado ninguna historia.</p>';
-        } else {
+        storiesListDiv.innerHTML = '';
+        if (stories && stories.length > 0) {
+            console.log(`PASO 4: Encontradas ${stories.length} historias. Construyendo lista...`);
             stories.forEach(story => {
                 const storyElement = `<div class="management-list-item"><h4>${story.title}</h4><a href="gestionar-historia.html?id=${story.id}" class="cta-button" style="padding: 6px 15px; margin: 0;">Gestionar</a></div>`;
                 storiesListDiv.insertAdjacentHTML('beforeend', storyElement);
             });
+        } else {
+            storiesListDiv.innerHTML = '<p>No se encontraron historias para este autor.</p>';
         }
+        console.log("PASO 4 - ÉXITO: Panel de gestión de obras actualizado.");
+
     } catch (error) {
-        console.error('Error cargando las historias del usuario:', error);
+        console.error("ERROR EN PASO 4: Falló la carga de historias.", error.message);
     }
-    
-    // Configurar pestañas (esta parte ya estaba bien)
-    const tabs = document.querySelectorAll('.tab-link');
-    const tabContents = document.querySelectorAll('.tab-content');
-    tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            tabs.forEach(item => item.classList.remove('active'));
-            tabContents.forEach(item => item.classList.remove('active'));
-            const targetTab = document.getElementById(tab.dataset.tab);
-            tab.classList.add('active');
-            targetTab.classList.add('active');
-        });
-    });
+
+    console.log("PASO FINAL: La función inicializarPaginaDePerfil ha terminado su ejecución.");
 };
 
 // =================================================================
@@ -368,35 +392,108 @@ const inicializarPaginaDePerfil = async () => {
 
 // --- Lógica para las páginas de GESTIÓN de AUTOR (Versión con Indicadores de Borrador) ---
 const inicializarPaginasDeGestion = async () => {
-    // Para la página de crear historia
     const createStoryForm = document.querySelector("#create-story-form");
     if (createStoryForm) {
-        createStoryForm.addEventListener("submit", async (event) => {
-            event.preventDefault();
-            const title = document.querySelector("#story-title-input").value;
-            const synopsis = document.querySelector("#story-synopsis-input").value;
-            const genre = document.querySelector("#story-genre-input").value;
-            const cover_image_url = document.querySelector("#story-cover-input").value;
-            const errorDiv = document.querySelector("#create-story-error");
-            errorDiv.textContent = "";
-            const { data: { session } } = await clienteSupabase.auth.getSession();
-            if (!session) {
-                errorDiv.textContent = "Debes iniciar sesión para crear una historia.";
-                return;
+    const coverInput = document.getElementById('cover-input');
+    const coverPreview = document.getElementById('cover-preview');
+    const errorDiv = document.getElementById('create-story-error');
+    let newCoverFile = null;
+
+    // Previsualizar la imagen seleccionada
+    coverInput.addEventListener('change', () => {
+        const file = coverInput.files[0];
+        if (file) {
+            newCoverFile = file;
+            const reader = new FileReader();
+            reader.onload = (e) => { coverPreview.src = e.target.result; };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    createStoryForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        errorDiv.textContent = ''; // Limpiar errores previos
+        const { data: { session } } = await clienteSupabase.auth.getSession();
+        if (!session) {
+            errorDiv.textContent = "Debes iniciar sesión para crear una historia.";
+            return;
+        }
+        const user = session.user;
+        const title = document.querySelector("#story-title-input").value;
+        const synopsis = document.querySelector("#story-synopsis-input").value;
+        const genre = document.querySelector("#story-genre-input").value;
+
+        // Validar que el título no esté vacío
+        if (!title.trim()) {
+            errorDiv.textContent = "El título de la historia es obligatorio.";
+            return;
+        }
+
+        try {
+            // --- PASO 1: Insertar la historia SIN la portada para obtener su ID real ---
+            const { data: newStory, error: insertError } = await clienteSupabase
+                .from('stories')
+                .insert({ title, synopsis, genre, author_id: user.id })
+                .select()
+                .single();
+
+            if (insertError) throw insertError;
+            
+            // Si no se ha elegido portada, la creación termina aquí y es exitosa.
+            if (!newCoverFile) {
+                 window.location.href = `gestionar-historia.html?id=${newStory.id}`;
+                 return;
             }
-            try {
-                const { data, error } = await clienteSupabase.from('stories').insert([{ title, synopsis, genre, cover_image_url, author_id: session.user.id }]).select().single();
-                if (error) throw error;
-                window.location.href = `historia.html?id=${data.id}`;
-            } catch (error) {
-                errorDiv.textContent = "Error al publicar la historia: " + error.message;
-            }
-        });
-    }
+
+            // --- PASO 2: Si hay portada, subirla usando el ID real de la historia ---
+            const fileExt = newCoverFile.name.split('.').pop();
+            // La ruta correcta usa el ID de la historia que acabamos de obtener.
+            const filePath = `${user.id}/${newStory.id}.${fileExt}`;
+
+            const { error: uploadError } = await clienteSupabase.storage
+                .from('covers')
+                .upload(filePath, newCoverFile);
+
+            if (uploadError) throw uploadError;
+
+            // --- PASO 3: Obtener la URL pública y ACTUALIZAR la historia con ella ---
+            const { data: urlData } = clienteSupabase.storage.from('covers').getPublicUrl(filePath);
+            const coverUrl = urlData.publicUrl;
+
+            const { error: updateError } = await clienteSupabase
+                .from('stories')
+                .update({ cover_image_url: coverUrl })
+                .eq('id', newStory.id);
+
+            if (updateError) throw updateError;
+            
+            // --- PASO 4: Redirigir al panel de gestión ---
+            window.location.href = `gestionar-historia.html?id=${newStory.id}`;
+
+        } catch (error) {
+            errorDiv.textContent = "Error al publicar la historia: " + error.message;
+        }
+    });
+}
 
     // Para la página de gestionar historia
     const managementContainer = document.querySelector('#management-page-container');
     if (managementContainer) {
+        const manageCoverPreview = document.getElementById('manage-cover-preview');
+const manageCoverInput = document.getElementById('manage-cover-input');
+let newCoverFile = null;
+
+if (manageCoverInput) {
+    manageCoverInput.addEventListener('change', () => {
+        const file = manageCoverInput.files[0];
+        if (file) {
+            newCoverFile = file;
+            const reader = new FileReader();
+            reader.onload = (e) => { manageCoverPreview.src = e.target.result; };
+            reader.readAsDataURL(file);
+        }
+    });
+}
         const params = new URLSearchParams(window.location.search);
         const storyId = params.get('id');
         if (!storyId) {
@@ -414,8 +511,52 @@ const inicializarPaginasDeGestion = async () => {
             document.getElementById('management-story-title').textContent = `Gestionando: ${story.title}`;
             document.getElementById('manage-title').value = story.title;
             document.getElementById('manage-synopsis').value = story.synopsis;
+            if (story.cover_image_url) {
+    manageCoverPreview.src = story.cover_image_url;
+}
             const addNewChapterBtn = document.getElementById('add-new-chapter-btn');
             addNewChapterBtn.href = `editar-capitulo.html?story_id=${storyId}`;
+
+            // =================================================================
+// ===== INICIO: LÓGICA NUEVA PARA BORRAR HISTORIA COMPLETA =====
+// =================================================================
+const deleteStoryBtn = document.getElementById('delete-story-btn');
+if (deleteStoryBtn) {
+    deleteStoryBtn.addEventListener('click', async () => {
+        const storyTitle = story.title; // Usamos el título cargado de la DB, es más seguro.
+
+        // 1. Primera confirmación: el usuario debe escribir el título.
+        const confirmation1 = prompt(`Para confirmar el borrado, escribe el título de la historia: "${storyTitle}"`);
+
+        // 2. Solo si el título coincide, procedemos a la segunda confirmación.
+        if (confirmation1 === storyTitle) {
+             const confirmation2 = confirm(`¿Estás ABSOLUTAMENTE SEGURO de que quieres borrar "${storyTitle}"?\n\n¡ESTA ACCIÓN ES PERMANENTE Y BORRARÁ TODOS SUS CAPÍTULOS!`);
+             
+             // 3. Solo si la segunda confirmación es positiva, ejecutamos el borrado.
+             if (confirmation2) {
+                try {
+                    const { error } = await clienteSupabase
+                        .from('stories')
+                        .delete()
+                        .eq('id', storyId);
+
+                    if (error) throw error;
+
+                    alert('La historia y todos sus capítulos han sido borrados con éxito.');
+                    window.location.href = 'perfil.html'; // Redirigimos al perfil del autor.
+
+                } catch (error) {
+                    alert(`Error al borrar la historia: ${error.message}`);
+                }
+            }
+        } else if (confirmation1 !== null) { // Si el usuario escribió algo pero es incorrecto.
+            alert("El título no coincide. El borrado ha sido cancelado.");
+        }
+    });
+}
+// ===============================================================
+// ===== FIN: LÓGICA NUEVA PARA BORRAR HISTORIA COMPLETA =====
+// ===============================================================
             
             const { data: chapters, error: chaptersError } = await clienteSupabase.from('chapters').select('*').eq('story_id', storyId).order('chapter_number', { ascending: true });
             if (chaptersError) throw chaptersError;
@@ -465,37 +606,55 @@ const inicializarPaginasDeGestion = async () => {
 
         const editStoryForm = document.getElementById('edit-story-details-form');
         if (editStoryForm) {
-            editStoryForm.addEventListener('submit', async (event) => {
-                event.preventDefault();
-                const title = document.getElementById('manage-title').value;
-                const synopsis = document.getElementById('manage-synopsis').value;
-                const submitButton = editStoryForm.querySelector('button[type="submit"]');
-                const originalButtonText = submitButton.textContent;
-                const params = new URLSearchParams(window.location.search);
-                const storyId = params.get('id');
-                if (!storyId) {
-                    alert('Error: No se pudo encontrar el ID de la historia para guardar.');
-                    return;
-                }
-                submitButton.disabled = true;
-                submitButton.textContent = 'Guardando...';
-                try {
-                    const { error } = await clienteSupabase.from('stories').update({ title: title, synopsis: synopsis }).eq('id', storyId);
-                    if (error) throw error;
-                    submitButton.textContent = '¡Guardado!';
-                    setTimeout(() => {
-                        submitButton.disabled = false;
-                        submitButton.textContent = originalButtonText;
-                    }, 2000);
-                } catch (error) {
-                    alert(`Error al guardar los cambios: ${error.message}`);
-                    submitButton.disabled = false;
-                    submitButton.textContent = originalButtonText;
-                }
-            });
-        }
-    }
+    editStoryForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const submitButton = editStoryForm.querySelector('button[type="submit"]');
+        const originalButtonText = submitButton.textContent;
+        submitButton.disabled = true;
+        submitButton.textContent = 'Guardando...';
 
+        try {
+            const { data: { session } } = await clienteSupabase.auth.getSession();
+            const user = session.user;
+            const params = new URLSearchParams(window.location.search);
+            const storyId = params.get('id');
+            
+            let updates = {
+                title: document.getElementById('manage-title').value,
+                synopsis: document.getElementById('manage-synopsis').value,
+            };
+
+            // Si se eligió una nueva portada, súbela y obtén la URL
+            if (newCoverFile) {
+                const fileExt = newCoverFile.name.split('.').pop();
+                const filePath = `${user.id}/${storyId}.${fileExt}`;
+                
+                await clienteSupabase.storage
+                    .from('covers')
+                    .update(filePath, newCoverFile, { upsert: true }); // upsert: true crea o reemplaza
+
+                const { data: urlData } = clienteSupabase.storage.from('covers').getPublicUrl(filePath);
+                updates.cover_image_url = urlData.publicUrl + `?t=${new Date().getTime()}`; // Timestamp para evitar caché
+            }
+
+            const { error } = await clienteSupabase.from('stories').update(updates).eq('id', storyId);
+            if (error) throw error;
+            
+            submitButton.textContent = '¡Guardado!';
+            setTimeout(() => {
+                submitButton.disabled = false;
+                submitButton.textContent = originalButtonText;
+                if (newCoverFile) window.location.reload(); // Recargar para ver la nueva portada desde la URL limpia
+            }, 1500);
+
+        } catch (error) {
+            alert(`Error al guardar los cambios: ${error.message}`);
+            submitButton.disabled = false;
+            submitButton.textContent = originalButtonText;
+        }
+    });
+}
+}
     // Para la página de editar capítulo
     const editorLayout = document.querySelector('.editor-layout');
     if (editorLayout) {
@@ -622,11 +781,9 @@ const inicializarPaginasDeGestion = async () => {
 
 // --- Lógica para la página de EDITAR PERFIL ---
 const inicializarPaginaEditarPerfil = async () => {
-    // 1. Identificar si estamos en la página correcta
     const editProfileForm = document.getElementById('edit-profile-form');
     if (!editProfileForm) return;
 
-    // 2. Elementos del DOM que vamos a necesitar
     const usernameInput = document.getElementById('username-input');
     const bioInput = document.getElementById('bio-input');
     const avatarPreview = document.getElementById('avatar-preview');
@@ -634,17 +791,15 @@ const inicializarPaginaEditarPerfil = async () => {
     const errorDiv = document.getElementById('edit-profile-error');
     const submitButton = editProfileForm.querySelector('button[type="submit"]');
 
-    let newAvatarFile = null; // Variable para guardar el nuevo archivo de avatar
+    let newAvatarFile = null;
 
-    // 3. Verificar que el usuario haya iniciado sesión y cargar sus datos
     const { data: { session } } = await clienteSupabase.auth.getSession();
     if (!session) {
-        window.location.href = 'login.html'; // Si no hay sesión, lo mandamos a login
+        window.location.href = 'login.html';
         return;
     }
     const user = session.user;
 
-    // Buscamos el perfil del usuario en nuestra tabla 'profiles'
     try {
         const { data: profile, error } = await clienteSupabase
             .from('profiles')
@@ -654,12 +809,10 @@ const inicializarPaginaEditarPerfil = async () => {
 
         if (error && error.code !== 'PGRST116') throw error;
 
-        // Rellenamos el formulario con los datos encontrados
         if (profile) {
             usernameInput.value = profile.username || '';
             bioInput.value = profile.bio || '';
             if (profile.avatar_url) {
-                // Añadimos un timestamp para evitar que el navegador use una imagen antigua de la caché
                 avatarPreview.src = profile.avatar_url + `?t=${new Date().getTime()}`;
             }
         }
@@ -667,132 +820,106 @@ const inicializarPaginaEditarPerfil = async () => {
         errorDiv.textContent = `Error al cargar el perfil: ${error.message}`;
     }
     
-    // 4. Lógica para la previsualización del avatar al seleccionarlo
     avatarInput.addEventListener('change', () => {
         const file = avatarInput.files[0];
         if (file) {
-            newAvatarFile = file; // Guardamos el archivo para subirlo después
+            newAvatarFile = file;
             const reader = new FileReader();
             reader.onload = (e) => {
-                // Mostramos la imagen seleccionada inmediatamente
                 avatarPreview.src = e.target.result;
             };
             reader.readAsDataURL(file);
         }
     });
 
-// =================================================================
-// CÓDIGO NUEVO Y CORRECTO PARA EL GUARDADO DEL PERFIL
-// =================================================================
-editProfileForm.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    submitButton.disabled = true;
-    submitButton.textContent = 'Guardando...';
-    errorDiv.textContent = '';
+    editProfileForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        submitButton.disabled = true;
+        submitButton.textContent = 'Guardando...';
+        errorDiv.textContent = '';
 
-    const user = session.user; // Nos aseguramos de tener el objeto de usuario
+        try {
+            let avatarUrlToSave = null;
 
-    try {
-        let avatarUrlToSave = null;
+            if (newAvatarFile) {
+                const fileExt = newAvatarFile.name.split('.').pop();
+                const filePath = `${user.id}/avatar.${fileExt}`;
 
-        // --- PASO 1: SUBIR EL AVATAR (SI EXISTE) - LÓGICA CORREGIDA ---
-if (newAvatarFile) {
-    const fileExt = newAvatarFile.name.split('.').pop();
-    const filePath = `${user.id}/avatar.${fileExt}`; // Usamos un nombre de archivo consistente
+                await clienteSupabase.storage
+                    .from('avatars')
+                    .update(filePath, newAvatarFile, { upsert: true });
 
-    // Primero, intentamos actualizar un archivo existente.
-    const { data: updateData, error: updateError } = await clienteSupabase.storage
-        .from('avatars')
-        .update(filePath, newAvatarFile, {
-            cacheControl: '3600',
-            upsert: false // Importante: NO crear si no existe
-        });
-
-    // Si la actualización falla (probablemente porque no había un archivo anterior),
-    // entonces procedemos a subir uno nuevo.
-    if (updateError) {
-        const { data: uploadData, error: uploadError } = await clienteSupabase.storage
-            .from('avatars')
-            .upload(filePath, newAvatarFile, {
-                cacheControl: '3600',
-                upsert: false // Doble seguridad: no sobrescribir
-            });
-        
-        if (uploadError) {
-            // Si la subida también falla, lanzamos el error.
-            throw uploadError;
-        }
-    }
-
-    // Obtenemos la URL pública (le añadimos un timestamp para evitar problemas de caché)
-    const { data: urlData } = clienteSupabase.storage
-        .from('avatars')
-        .getPublicUrl(filePath);
-    avatarUrlToSave = urlData.publicUrl + `?t=${new Date().getTime()}`;
-}
-
-        // --- PASO 2: ACTUALIZAR LA AUTENTICACIÓN PRIMERO ---
-        // Esto sincroniza la fuente de datos primaria de Supabase
-        const { data: updatedUser, error: updateUserError } = await clienteSupabase.auth.updateUser({
-            data: { 
-                username: usernameInput.value 
-                // Aquí podrías añadir más metadatos si quisieras en el futuro
+                const { data: urlData } = clienteSupabase.storage.from('avatars').getPublicUrl(filePath);
+                avatarUrlToSave = urlData.publicUrl + `?t=${new Date().getTime()}`;
             }
-        });
-        if (updateUserError) throw updateUserError;
 
+            // ===== ESTE ES EL OBJETO CORREGIDO =====
+            const profileUpdates = {
+                username: usernameInput.value,
+                bio: bioInput.value,
+            };
 
-        // --- PASO 3: ACTUALIZAR NUESTRA TABLA PÚBLICA 'profiles' ---
-        // Preparamos el objeto con los datos a guardar.
-        const profileUpdates = {
-            id: user.id,
-            username: usernameInput.value,
-            bio: bioInput.value,
-            id: user.id,
-    username: usernameInput.value,
-    bio: bioInput.value,
-        };
+            if (avatarUrlToSave) {
+                profileUpdates.avatar_url = avatarUrlToSave;
+            }
 
-        // Añadimos la URL del avatar solo si se subió uno nuevo.
-        if (avatarUrlToSave) {
-            profileUpdates.avatar_url = avatarUrlToSave;
+            const { error: updateProfileError } = await clienteSupabase
+                .from('profiles')
+                .update(profileUpdates)
+                .eq('id', user.id);
+
+            if (updateProfileError) throw updateProfileError;
+
+            alert('¡Perfil actualizado con éxito!');
+            window.location.href = 'perfil.html';
+
+        } catch (error) {
+            errorDiv.textContent = `Error al guardar los cambios: ${error.message}`;
+            submitButton.disabled = false;
+            submitButton.textContent = 'Guardar Cambios';
         }
-
-        // Usamos .update() porque el perfil ya debe existir gracias al trigger.
-        const { error: updateProfileError } = await clienteSupabase
-            .from('profiles')
-            .update(profileUpdates)
-            .eq('id', user.id);
-
-        if (updateProfileError) throw updateProfileError;
-
-        // --- PASO 4: ÉXITO ---
-        alert('¡Perfil actualizado con éxito!');
-        window.location.href = 'perfil.html';
-
-    } catch (error) {
-        errorDiv.textContent = `Error al guardar los cambios: ${error.message}`;
-        submitButton.disabled = false;
-        submitButton.textContent = 'Guardar Cambios';
-    }
-});
-
+    });
 };
 
 // =================================================================
-// SECCIÓN 6: PUNTO DE ENTRADA DE LA APLICACIÓN
+// SECCIÓN 6: PUNTO DE ENTRADA DE LA APLICACIÓN (VERSIÓN OPTIMIZADA)
 // =================================================================
 document.addEventListener('DOMContentLoaded', async () => {
+    // 1. Los scripts globales siempre se ejecutan
     await ejecutarScriptsGlobales();
 
-    // Ahora, ejecutamos la lógica específica de la página actual
-    inicializarPaginasDeFormulario();
-    await inicializarPaginasDeHistorias();
-    await inicializarPaginaDetalleHistoria();
-    await inicializarPaginaDeLectura();
-    await inicializarPaginaDePerfil();
-    await inicializarPaginasDeGestion();
-    await inicializarPaginaEditarPerfil();
+    // 2. Obtenemos la página actual desde el atributo del body
+    const currentPage = document.body.dataset.page;
+
+    // 3. Ejecutamos solo el código específico de la página
+    switch (currentPage) {
+        case 'index':
+        case 'explorar':
+            await inicializarPaginasDeHistorias();
+            break;
+        case 'registro':
+        case 'login':
+            inicializarPaginasDeFormulario();
+            break;
+        case 'detalle-historia':
+            await inicializarPaginaDetalleHistoria();
+            break;
+        case 'lectura':
+            await inicializarPaginaDeLectura();
+            break;
+        case 'perfil':
+            await inicializarPaginaDePerfil();
+            break;
+        case 'editar-perfil':
+            await inicializarPaginaEditarPerfil();
+            break;
+        case 'crear-historia':
+        case 'gestion-historia':
+        case 'editar-capitulo':
+            await inicializarPaginasDeGestion();
+            break;
+    }
     
+    // 4. Hacemos visible el body cuando todo ha cargado
     document.body.classList.remove('body-loading');
 });
