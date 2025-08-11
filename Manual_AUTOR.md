@@ -187,6 +187,8 @@ Voto en Eventos de la Plataforma: Los usuarios con la suscripción A.U.T.O.R.+ o
     - **Alternativa Open Source:** Ofrece más control y transparencia que otras opciones propietarias.
 - **Alojamiento y Despliegue (Futuro):** La estrategia es usar **Netlify** o **Vercel** para el despliegue del front-end, por su integración perfecta con GitHub y sus generosos planes gratuitos.
 
+- **Sistema de Ejecución por Página (Front-End):** Para optimizar la carga y evitar ejecutar código innecesario, se implementó un sistema de "enrutamiento" del lado del cliente. Cada página HTML principal tiene un atributo `data-page` en su etiqueta `<body>` (ej. `<body data-page="perfil">`). El archivo `script.js`, al cargarse, lee este atributo y utiliza una estructura `switch` para ejecutar únicamente las funciones de inicialización requeridas para esa página específica.
+
 ### Revisión de la Experiencia de Usuario Inicial (UX v2.0)
 
 Tras la maquetación inicial, se ha decidido refinar la experiencia del primer contacto del usuario con la plataforma para centrarse inmediatamente en el contenido.
@@ -203,6 +205,8 @@ Tras la maquetación inicial, se ha decidido refinar la experiencia del primer c
     1.  Crear las tablas (`historias`, `capitulos`) en Supabase.
     2.  Modificar la página `explorar.html` para que obtenga la lista de historias desde la base de datos.
     3.  Construir los formularios que permitirán a los autores (una vez logueados) crear estas historias.
+
+- **Reconstrucción del CSS (v5.0):** Tras encontrar numerosos conflictos de responsividad y diseño inconsistente, se tomó la decisión estratégica de reconstruir por completo el archivo `estilos.css`. La nueva versión (v5.0) se estructuró en 5 partes lógicas: Fundamentos, Estructura, Componentes, Páginas de Contenido y, finalmente, una sección unificada de Modo Oscuro y Responsividad. Este enfoque eliminó el código redundante y solucionó los problemas de layout en el `header` y los paneles de gestión en vistas móviles.
 
 
 ### Estrategia de Aplicación Móvil
@@ -263,14 +267,14 @@ La creación de una aplicación nativa se contempla como una fase avanzada del p
 - [ ] Misión 24: Completar la funcionalidad del Perfil de Usuario.
     - [X] **Sub-misión 24.1:** Permitir la edición de `username` y `bio`.
     - [X] **Sub-misión 24.2:** Permitir la subida de un `avatar` de perfil a Supabase Storage.
-    - [ ] **Sub-misión 24.3:** Implementar el borrado de una historia completa (y sus capítulos asociados).
+    - [x] **Sub-misión 24.3:** Implementar el borrado de una historia completa (y sus capítulos asociados).
 - [ ] Misión 25: Refinar la Experiencia de Usuario (UX).
     - [X] **Sub-misión 25.1:** Corregir el diseño de la barra de búsqueda en dispositivos móviles.
-    - [ ] **Sub-misión 25.2:** Añadir "Estadísticas a la Vista" en el panel de gestión (conteo de capítulos, palabras, etc.).
-- [x] Misión 26: Gestión de Portadas de Historias.
+    - [x] **Sub-misión 25.2:** Añadir "Estadísticas a la Vista" en el panel de gestión (conteo de capítulos, palabras, etc.).
+    - [x] **Misión 26:** Gestión de Portadas de Historias.
 
 **FASE 5: El Gremio - El Mercado de Talentos**
-- [ ] Misión 27: Implementar perfiles de usuario con roles seleccionables (**Autor, Lector, Editor, Diseñador, Traductor, Crítico, Beta-Reader**).
+- [ ] Misión 27: Implementar perfiles de usuario con roles seleccionables (**Autor, Lector, Editor, Diseñador, Traductor, Crítico, Beta-Reader, etc**).
 - [ ] Misión 28: Construir un sistema de portafolios y de reseñas entre usuarios (ej. un autor reseña al editor).
 - [ ] Misión 29: Implementar un sistema de búsqueda y filtros para encontrar colaboradores.
 - [ ] Misión 30: Construir la mensajería interna.
@@ -334,20 +338,21 @@ La columna profiles.id tiene una relación de clave externa con auth.users.id. E
 Tabla: stories
 Propósito: Almacena la información principal de cada obra o historia.
 Estructura de Columnas:
-id (uuid, Primary Key): Identificador único de la historia.
-created_at (timestamptz): Marca de tiempo de creación.
+id (bigint, Primary Key, Identity): Identificador numérico único y autoincremental de la historia.
+created_at (timestamz): Marca de tiempo de creación.
 title (text): Título de la historia.
 synopsis (text): Resumen o sinopsis de la historia.
-author_id (uuid): Clave externa que referencia a profiles.id, indicando el autor.
+author_id (uuid): Clave externa que referencia a `profiles.id`, indicando el autor.
 cover_image_url (text, nullable): URL de la imagen de portada.
 genre (text, nullable): Género de la historia.
+*Nota Crítica:* A diferencia de `profiles` y `chapters`, la clave primaria `id` de la tabla `stories` se configuró como `bigint` (serial) en lugar de `uuid`. Esta decisión impactó la creación de las políticas de seguridad de Storage, que tuvieron que ser adaptadas para convertir los nombres de archivo a `bigint` para su comparación.
 
 Tabla: chapters
 Propósito: Almacena el contenido de cada capítulo individual, vinculado a una historia.
 Estructura de Columnas:
 id (uuid, Primary Key): Identificador único del capítulo.
-created_at (timestamptz): Marca de tiempo de creación.
-story_id (uuid): Clave externa que referencia a stories.id.
+created_at (timestamz): Marca de tiempo de creación.
+story_id (bigint): Clave externa que referencia a `stories.id`.
 title (text): Título del capítulo.
 content (text): Contenido principal del capítulo.
 chapter_number (integer): Número de orden del capítulo.
@@ -379,30 +384,33 @@ create trigger on_auth_user_created
 
 3. Almacenamiento de Archivos (Supabase Storage)
 
-Se utiliza para gestionar los archivos subidos por los usuarios, principalmente avatares.
+Se utilizan dos buckets públicos para gestionar los archivos subidos por los usuarios.
 
-Bucket: avatars
-Acceso: El bucket está configurado como Público para permitir que las URLs de las imágenes se puedan mostrar directamente en la aplicación.
-Políticas de Seguridad de Storage:
-Permitir inserción de avatar propio (INSERT): Permite a cualquier usuario subir un archivo al bucket avatars. La lógica del front-end se encarga de que la ruta de subida sea [user_id]/avatar.ext.
-Permitir modificar o borrar avatar propio (UPDATE, DELETE): Un usuario solo puede modificar o borrar un archivo si su auth.uid() coincide con el nombre de la carpeta de primer nivel donde reside el archivo, garantizando que solo puedan gestionar su propio avatar.
+Bucket: `avatars`
+Acceso: Público. Gestiona las imágenes de perfil de los usuarios. Las políticas de seguridad garantizan que cada usuario solo pueda gestionar (`INSERT`, `UPDATE`, `DELETE`) los archivos dentro de su propia carpeta, nombrada con su `user_id`.
+
+Bucket: `covers`
+Acceso: Público. Aloja las portadas de las historias. Se han implementado tres políticas de seguridad a nivel de fila para controlar el acceso:
+-   **Política de INSERT (Subida):** Permite a un usuario autenticado subir un archivo solo si el nombre del archivo (sin extensión y convertido a `bigint`) coincide con el `id` de una historia de la cual es autor.
+-   **Política de UPDATE (Actualización):** Permite a un usuario autenticado modificar un archivo existente bajo las mismas condiciones de propiedad que el INSERT.
+-   **Política de SELECT (Lectura):** Permite el acceso de lectura público (`public`) a todos los archivos del bucket, para que las imágenes puedan ser mostradas en la web.
 
 4. Políticas de Seguridad (Row Level Security - RLS)
 
-RLS está activado en todas las tablas (profiles, stories, chapters) para garantizar un control de acceso granular y seguro.
+RLS está activado en todas las tablas (`profiles`, `stories`, `chapters`) para garantizar un control de acceso granular y seguro.
 
-Para la tabla profiles:
+Para la tabla `profiles`:
+- **SELECT:** Pública. Cualquiera puede leer los perfiles.
+- **UPDATE:** Un usuario solo puede actualizar su propio perfil (`auth.uid() = id`).
 
-SELECT: Pública. Cualquiera puede leer los perfiles.
-UPDATE: Un usuario solo puede actualizar su propio perfil (auth.uid() = id). Se usa tanto en USING como en WITH CHECK.
-INSERT: Un usuario solo puede crear un perfil para sí mismo (auth.uid() = id). Se usa WITH CHECK.
-Para la tabla stories:
-SELECT: Pública. Cualquiera puede leer las historias.
-INSERT: Solo usuarios autenticados.
-UPDATE / DELETE: Solo el autor de la historia (auth.uid() = author_id).
-Para la tabla chapters:
-SELECT: Cualquiera puede leer un capítulo si su status es 'publicado', O si el que lo lee es el autor de la historia (para permitirle ver sus borradores).
-INSERT / UPDATE / DELETE: Solo permitido si el auth.uid() del usuario coincide con el author_id de la historia a la que pertenece el capítulo (se logra mediante una subconsulta a la tabla stories).
+Para la tabla `stories`:
+- **SELECT:** Pública. Cualquiera puede leer las historias.
+- **INSERT:** Solo usuarios autenticados.
+- **UPDATE / DELETE:** Solo el autor de la historia (`auth.uid() = author_id`).
+
+Para la tabla `chapters`:
+- **SELECT:** Cualquiera puede leer un capítulo si su `status` es 'publicado', O si el que lo lee es el autor de la historia (para permitirle ver sus borradores).
+- **INSERT / UPDATE / DELETE:** Solo permitido si el `auth.uid()` del usuario coincide con el `author_id` de la historia a la que pertenece el capítulo (se logra mediante una subconsulta a la tabla `stories`).
 
 
 - **Repositorio de GitHub:** [Pega aquí la URL de tu repositorio de GitHub]

@@ -480,10 +480,10 @@ const inicializarPaginasDeGestion = async () => {
     const managementContainer = document.querySelector('#management-page-container');
     if (managementContainer) {
         const manageCoverPreview = document.getElementById('manage-cover-preview');
-const manageCoverInput = document.getElementById('manage-cover-input');
-let newCoverFile = null;
+ const manageCoverInput = document.getElementById('manage-cover-input');
+ let newCoverFile = null;
 
-if (manageCoverInput) {
+ if (manageCoverInput) {
     manageCoverInput.addEventListener('change', () => {
         const file = manageCoverInput.files[0];
         if (file) {
@@ -493,7 +493,7 @@ if (manageCoverInput) {
             reader.readAsDataURL(file);
         }
     });
-}
+ }
         const params = new URLSearchParams(window.location.search);
         const storyId = params.get('id');
         if (!storyId) {
@@ -513,15 +513,15 @@ if (manageCoverInput) {
             document.getElementById('manage-synopsis').value = story.synopsis;
             if (story.cover_image_url) {
     manageCoverPreview.src = story.cover_image_url;
-}
+ }
             const addNewChapterBtn = document.getElementById('add-new-chapter-btn');
             addNewChapterBtn.href = `editar-capitulo.html?story_id=${storyId}`;
 
             // =================================================================
-// ===== INICIO: LÓGICA NUEVA PARA BORRAR HISTORIA COMPLETA =====
-// =================================================================
-const deleteStoryBtn = document.getElementById('delete-story-btn');
-if (deleteStoryBtn) {
+ // ===== INICIO: LÓGICA NUEVA PARA BORRAR HISTORIA COMPLETA =====
+ // =================================================================
+ const deleteStoryBtn = document.getElementById('delete-story-btn');
+ if (deleteStoryBtn) {
     deleteStoryBtn.addEventListener('click', async () => {
         const storyTitle = story.title; // Usamos el título cargado de la DB, es más seguro.
 
@@ -553,14 +553,34 @@ if (deleteStoryBtn) {
             alert("El título no coincide. El borrado ha sido cancelado.");
         }
     });
-}
-// ===============================================================
-// ===== FIN: LÓGICA NUEVA PARA BORRAR HISTORIA COMPLETA =====
-// ===============================================================
+ }
+ // ===============================================================
+ // ===== FIN: LÓGICA NUEVA PARA BORRAR HISTORIA COMPLETA =====
+ // ===============================================================
             
             const { data: chapters, error: chaptersError } = await clienteSupabase.from('chapters').select('*').eq('story_id', storyId).order('chapter_number', { ascending: true });
             if (chaptersError) throw chaptersError;
             
+            // ===== INICIO: CÁLCULO DE ESTADÍSTICAS =====
+ const chapterCount = chapters.length;
+ const publishedCount = chapters.filter(c => c.status === 'publicado').length;
+ const totalWords = chapters.reduce((sum, chapter) => {
+    const wordCount = chapter.content ? chapter.content.trim().split(/\s+/).length : 0;
+    return sum + wordCount;
+ }, 0);
+ const statsContainer = document.getElementById('story-stats-container');
+ if (statsContainer) {
+    statsContainer.innerHTML = `
+        <h4>Estadísticas de la Obra</h4>
+        <div class="stats-grid">
+            <div class="stat-item"><span class="stat-number">${chapterCount}</span><span class="stat-label">Capítulos</span></div>
+            <div class="stat-item"><span class="stat-number">${publishedCount}</span><span class="stat-label">Publicados</span></div>
+            <div class="stat-item"><span class="stat-number">${totalWords.toLocaleString('es')}</span><span class="stat-label">Palabras</span></div>
+        </div>
+    `;
+ }
+ // ===== FIN: CÁLCULO DE ESTADÍSTICAS =====
+        
             const chapterListDiv = document.getElementById('management-chapter-list');
             chapterListDiv.innerHTML = '';
             chapters.forEach(chapter => {
@@ -653,8 +673,8 @@ if (deleteStoryBtn) {
             submitButton.textContent = originalButtonText;
         }
     });
-}
-}
+ }
+ }
     // Para la página de editar capítulo
     const editorLayout = document.querySelector('.editor-layout');
     if (editorLayout) {
@@ -748,7 +768,7 @@ if (deleteStoryBtn) {
         editorForm.addEventListener('submit', async (event) => {
             event.preventDefault();
             await guardarCapitulo('publicado');
-});
+ });
 
         const saveDraftBtn = document.getElementById('save-draft-btn');
         if (saveDraftBtn) {

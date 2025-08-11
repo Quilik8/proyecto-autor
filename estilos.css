@@ -1,31 +1,39 @@
 /* =================================================================
-   ARCHIVOS DE ESTILO DE A.U.T.O.R. - VERSIÓN 4.4 (CORRECCIONES FINALES)
+   PROYECTO A.U.T.O.R. - CSS RECONSTRUIDO - v5.0
    ================================================================= */
 
 /* =================================================================
-   1. RESET GLOBAL Y ESTRUCTURA PRINCIPAL
+   PARTE 1: FUNDAMENTOS Y VARIABLES GLOBALES
    ================================================================= */
 
+/* --- 1.1 Importación de Fuentes --- */
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@400;700&display=swap');
 
+/* --- 1.2 Variables Globales (Raíz) --- */
 :root {
+    /* Paleta Modo Claro */
     --color-accent: #26DDC6;
     --color-accent-light: #80E9D9;
     --color-text-primary: #1a1a1a;
     --color-text-secondary: #333;
-    --color-background: #f7f7ff; /* Un gris azulado muy sutil */
+    --color-background: #f7f7ff;
     --color-background-white: #ffffff;
     --font-serif: 'Playfair Display', serif;
     --font-sans-serif: 'Roboto', sans-serif;
 
-     /* Paleta Modo Oscuro */
+    /* Paleta Modo Oscuro */
     --color-background-dark: #121212;
     --color-background-surface-dark: #1e1e1e;
     --color-text-primary-dark: #e0e0e0;
     --color-text-secondary-dark: #a0a0a0;
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+/* --- 1.3 Reseteo Básico y Estilos del Body --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
 body {
     background-color: var(--color-background);
@@ -33,45 +41,55 @@ body {
     font-family: var(--font-sans-serif);
     display: flex;
     flex-direction: column;
-    min-height: 100vh; /* Usa min-height para asegurar que el body ocupe al menos toda la pantalla */
+    min-height: 100vh;
 }
 
-p { line-height: 1.6; }
+p {
+    line-height: 1.6;
+}
 
-/* --- 2. ESTRUCTURA PRINCIPAL --- */
+/* =================================================================
+   PARTE 2: ESTRUCTURA PRINCIPAL Y COMPONENTES
+   ================================================================= */
 
+/* --- 2.1 Layout Principal (Header, Main, Footer) --- */
 header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap; /* Permite que los elementos bajen de línea si no caben */
+    gap: 20px;       /* Espacio entre los elementos del header */
     padding: 20px 40px;
-    gap: 30px; /* Espacio entre logo, búsqueda y nav */
     width: 100%;
 }
 
 main { 
-    flex-grow: 1; 
+    flex-grow: 1; /* El contenido principal ocupa el espacio sobrante */
     padding: 0 40px; 
+    width: 100%;
 }
 
 footer { 
     text-align: center; 
     padding: 40px 20px; 
-    margin-top: auto; 
+    margin-top: auto; /* Empuja el footer hacia abajo */
     font-size: 14px; 
     color: #555; 
-    flex-shrink: 0;
+    flex-shrink: 0; /* Evita que el footer se encoja */
 }
 
-/* --- 3. COMPONENTES REUTILIZABLES --- */
+/* --- 2.2 Componentes Reutilizables --- */
 
+/* Logo */
 .logo {
     font-family: var(--font-serif);
     font-size: 28px;
     font-weight: 700;
     color: var(--color-accent);
+    flex-shrink: 0; /* El logo no se deforma */
 }
 
+/* Botón de Llamada a la Acción (CTA) */
 .cta-button {
     display: inline-block;
     background-color: var(--color-accent);
@@ -91,76 +109,30 @@ footer {
     box-shadow: 0 4px 20px rgba(38, 221, 198, 0.4);
 }
 
+/* Botón de Cambio de Tema (Sol) */
+#theme-toggle {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--color-text-secondary);
+    padding: 0;
+}
+/* La clase .hidden sigue siendo útil */
 .hidden {
     display: none !important;
 }
 
-/* --- 4. ESTILOS DE PÁGINAS ESPECÍFICAS --- */
+/* =================================================================
+   PARTE 3: COMPONENTES COMPLEJOS (NAVEGACIÓN, FORMULARIOS, TARJETAS)
+   ================================================================= */
 
-/* 4.1 NAVEGACIÓN */
-nav ul { display: flex; list-style: none; align-items: center; }
-nav ul li { margin-left: 30px; }
-nav ul li a { text-decoration: none; color: var(--color-text-secondary); font-size: 16px; font-weight: 700; transition: color 0.3s ease; }
-nav ul li a:hover { color: var(--color-accent); }
-.boton-registro { background-color: var(--color-accent); color: var(--color-text-primary); padding: 10px 20px; border-radius: 50px; }
-nav.nav-loading {
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
-}
-
-/* 4.2 PÁGINA INICIO (HERO) */
-.hero { text-align: center; padding: 60px 0; } /* FIX: Alineación del contenedor hero a 'center' */
-.hero h1 { font-family: var(--font-serif); font-size: clamp(36px, 5vw, 52px); line-height: 1.2; }
-.hero p { max-width: 600px; margin: 20px auto; font-size: 18px; color: #555; } /* FIX: Añadido 'auto' al margin para centrar el párrafo */
-
-/* 4.3 TÍTULOS DE SECCIÓN */
-.section-title {
-    font-family: var(--font-serif);
-    font-size: 36px;
-    margin-top: 40px;
-    margin-bottom: 20px;
-    text-align: center; /* Mantenemos la alineación centrada */
-}
-
-/* 4.4 TARJETAS DE HISTORIAS Y SU CONTENEDOR */
-.featured-stories-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 30px;
-}
-.story-card {
-    background-color: var(--color-accent-light);
-    border-radius: 15px;
-    overflow: hidden;
-    text-align: center;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-    border: none;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    padding: 20px;
+/* --- 3.1 Navegación y Barra de Búsqueda --- */
+header .search-bar {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 100%; /* FIX: Esto fuerza a todas las tarjetas en una fila a tener la misma altura */
-}
-.story-card:hover { transform: translateY(-10px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
-.story-card img {
-    width: 60%;
-    height: auto;
-    aspect-ratio: 2 / 3;
-    object-fit: cover;
-    border-radius: 5px;
-    margin-bottom: 20px;
-}
-.card-title { font-family: var(--font-serif); font-size: 22px; color: var(--color-text-primary); margin-bottom: 5px; }
-.card-author { font-family: var(--font-sans-serif); font-size: 14px; color: var(--color-text-secondary); margin-bottom: 15px; }
-.card-description { font-family: var(--font-sans-serif); font-size: 15px; color: var(--color-text-secondary); }
-.story-card-link { text-decoration: none; color: inherit; }
-
-/* 4.5 PÁGINA EXPLORAR (BARRA DE BÚSQUEDA) */
-.search-section { padding: 60px 0; }
-.search-bar {
-    display: flex;
-    flex-grow: 1; /* Permite que la barra de búsqueda crezca y ocupe el espacio */
+    flex-grow: 1; /* Ocupa el espacio sobrante */
+    flex-basis: 300px; /* Tamaño base antes de crecer/encogerse */
+    min-width: 250px;
     max-width: 700px;
     background-color: var(--color-background-white);
     border-radius: 50px;
@@ -176,7 +148,7 @@ nav.nav-loading {
     padding: 15px 25px;
     font-size: 16px;
     background: transparent;
-    min-width: 0; /* <-- AÑADE ESTA LÍNEA MÁGICA */
+    min-width: 0;
 }
 .search-bar button {
     border: none;
@@ -188,193 +160,347 @@ nav.nav-loading {
     cursor: pointer;
 }
 
-/* 4.6 FORMULARIOS (LOGIN/REGISTRO) */
+header nav {
+    flex-shrink: 0; /* La navegación no se encoge */
+}
+nav ul { 
+    display: flex; 
+    list-style: none; 
+    align-items: center; 
+}
+nav ul li { 
+    margin-left: 30px; 
+}
+nav ul li a { 
+    text-decoration: none; 
+    color: var(--color-text-secondary); 
+    font-size: 16px; 
+    font-weight: 700; 
+    transition: color 0.3s ease; 
+}
+nav ul li a:hover { 
+    color: var(--color-accent); 
+}
+.boton-registro { 
+    background-color: var(--color-accent); 
+    color: var(--color-text-primary); 
+    padding: 10px 20px; 
+    border-radius: 50px; 
+}
+nav.nav-loading {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+
+/* --- 3.2 Formularios --- */
 .form-container {
     max-width: 480px;
-    margin: 60px auto; padding: 50px;
+    margin: 60px auto; 
+    padding: 50px;
     background-color: var(--color-background-white);
-    border-radius: 20px; text-align: center;
+    border-radius: 20px; 
+    text-align: center;
     box-shadow: 0 10px 40px rgba(0,0,0,0.1);
 }
-.form-container h2 { font-family: var(--font-serif); font-size: 36px; line-height: 1.2; margin-bottom: 10px; }
-.form-container p { font-family: var(--font-sans-serif); color: #555; margin-bottom: 40px; }
-.form-group { margin-bottom: 25px; text-align: left; }
-.form-group label { display: block; margin-bottom: 8px; font-weight: 700; color: var(--color-text-secondary); font-size: 14px; }
-.form-group input {
+.form-container h2 { 
+    font-family: var(--font-serif); 
+    font-size: 36px; 
+    line-height: 1.2; 
+    margin-bottom: 10px; 
+}
+.form-container p { 
+    font-family: var(--font-sans-serif); 
+    color: #555; 
+    margin-bottom: 40px; 
+}
+.form-group { 
+    margin-bottom: 25px; 
+    text-align: left; 
+}
+.form-group label { 
+    display: block; 
+    margin-bottom: 8px; 
+    font-weight: 700; 
+    color: var(--color-text-secondary); 
+    font-size: 14px; 
+}
+.form-group input,
+.form-group textarea {
     width: 100%;
     padding: 15px;
     font-size: 16px;
-    background-color: var(--color-accent);
-    border: 2px solid transparent;
+    background-color: var(--color-accent); /* ¡AQUÍ ESTÁ LA MAGIA! */
+    border: 2px solid transparent; /* Hacemos el borde transparente por defecto */
     border-radius: 10px;
     color: var(--color-text-primary);
     outline: none;
     transition: border-color 0.3s ease, background-color 0.3s ease;
 }
 .form-group textarea {
-    width: 100%;
-    padding: 15px;
-    font-size: 16px;
-    font-family: var(--font-sans-serif); /* Asegura que la fuente sea la misma */
-    background-color: var(--color-accent);
-    border: 2px solid transparent;
-    border-radius: 10px;
-    color: var(--color-text-primary);
-    outline: none;
-    resize: vertical; /* Permite al usuario cambiar el alto del cuadro */
-    transition: border-color 0.3s ease;
-}
-
-.form-group textarea:focus {
-    border-color: var(--color-accent);
-}
-.form-group input:focus { border-color: var(--color-accent); }
-.form-container .cta-button { width: 100%; }
-.error-message { color: #e74c3c; font-size: 14px; margin-top: 5px; height: 16px; text-align: left; }
-
-/* 4.7 PÁGINA DETALLE DE HISTORIA (NUEVO DISEÑO) */
-.story-header-container, .chapter-list-container {
-    max-width: 800px; /* Ancho máximo para el contenido */
-    margin: 40px auto; /* Centra el contenedor */
-    text-align: left;
-}
-
-.story-header-container h1 {
-    font-family: var(--font-serif);
-    font-size: 48px;
-    margin-bottom: 5px;
-}
-
-.story-header-container h2 {
     font-family: var(--font-sans-serif);
-    font-size: 20px;
-    font-weight: normal;
-    color: var(--color-text-secondary);
-    margin-bottom: 15px;
+    resize: vertical;
+}
+.form-group input:focus,
+.form-group textarea:focus { 
+    border-color: var(--color-accent); 
+}
+.form-container .cta-button { 
+    width: 100%; 
+}
+.error-message { 
+    color: #e74c3c; 
+    font-size: 14px; 
+    margin-top: 5px; 
+    height: 16px; 
+    text-align: left; 
 }
 
-.story-meta {
-    font-size: 16px;
-    color: #555;
-    margin-bottom: 25px;
+/* Estilos para la sección de bienvenida en index.html */
+.hero {
+    text-align: center;
+    padding: 60px 20px;
 }
-
-.story-synopsis {
-    font-size: 18px;
-    line-height: 1.7;
-    margin-bottom: 30px;
-}
-
-.chapter-list-container h3 {
+.hero h1 {
     font-family: var(--font-serif);
-    font-size: 28px;
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 10px;
+    font-size: clamp(36px, 5vw, 52px);
+    line-height: 1.2;
+}
+.hero p {
+    max-width: 600px;
+    margin: 20px auto;
+    font-size: 18px;
+    color: #555;
+}
+
+/* --- 3.3 Tarjetas de Historias --- */
+.section-title {
+    font-family: var(--font-serif);
+    font-size: 36px;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.featured-stories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+.story-card {
+    background-color: var(--color-accent);
+    border-radius: 15px;
+    overflow: hidden;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%; 
+}
+.story-card:hover { 
+    transform: translateY(-10px); 
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1); 
+}
+.story-card img {
+    width: 60%;
+    height: auto;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    border-radius: 5px;
     margin-bottom: 20px;
 }
-
-.chapter-list-container ul {
-    list-style: none; /* Quita los puntos de la lista */
+.card-title { 
+    font-family: var(--font-serif); 
+    font-size: 22px; 
+    color: var(--color-text-primary); 
+    margin-bottom: 5px; 
+}
+.card-author { 
+    font-family: var(--font-sans-serif); 
+    font-size: 14px; 
+    color: var(--color-text-secondary); 
+    margin-bottom: 15px; 
+}
+.card-description { 
+    font-family: var(--font-sans-serif); 
+    font-size: 15px; 
+    color: var(--color-text-secondary); 
+}
+.story-card-link { 
+    text-decoration: none; 
+    color: inherit; 
 }
 
-.chapter-list-container li a {
-    display: block;
-    padding: 12px 5px;
-    text-decoration: none;
-    color: var(--color-text-primary);
-    font-size: 18px;
-    font-weight: 700;
-    border-bottom: 1px solid #eee;
-    transition: color 0.3s ease;
-}
+/* =================================================================
+   PARTE 4: PÁGINAS DE CONTENIDO (LECTURA, PERFIL, GESTIÓN)
+   ================================================================= */
 
-.chapter-list-container li a:hover {
-    color: var(--color-accent);
-}
-
-/* 4.8 PÁGINA DE LECTURA (NUEVO DISEÑO) */
+/* --- 4.1 Páginas de Detalle de Historia y Lectura --- */
+.story-header-container, 
+.chapter-list-container,
 .reading-container {
-    max-width: 750px;
+    max-width: 800px;
     margin: 40px auto;
 }
 
-.chapter-title {
-    font-family: var(--font-serif);
-    font-size: 40px;
+.story-header-container h1 { font-family: var(--font-serif); font-size: 48px; margin-bottom: 5px; }
+.story-header-container h2 { font-family: var(--font-sans-serif); font-size: 20px; font-weight: normal; color: var(--color-text-secondary); margin-bottom: 15px; }
+.story-meta { font-size: 16px; color: #555; margin-bottom: 25px; }
+.story-synopsis { font-size: 18px; line-height: 1.7; margin-bottom: 30px; }
+
+.chapter-list-container h3 { font-family: var(--font-serif); font-size: 28px; border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 20px; }
+.chapter-list-container ul { list-style: none; }
+.chapter-list-container li a { display: block; padding: 12px 5px; text-decoration: none; color: var(--color-text-primary); font-size: 18px; font-weight: 700; border-bottom: 1px solid #eee; transition: color 0.3s ease; }
+.chapter-list-container li a:hover { color: var(--color-accent); }
+
+.chapter-title { font-family: var(--font-serif); font-size: 40px; text-align: center; margin-bottom: 30px; }
+.chapter-navigation { display: flex; justify-content: space-between; margin-bottom: 40px; padding-bottom: 15px; border-bottom: 1px solid #ddd; }
+.chapter-navigation a { text-decoration: none; color: var(--color-accent); font-weight: 700; font-size: 16px; transition: color 0.3s ease; }
+.chapter-navigation a:hover { color: var(--color-text-primary); }
+.reading-content { font-family: 'Georgia', serif; font-size: 20px; line-height: 1.8; color: var(--color-text-secondary); }
+.reading-content p { margin-bottom: 2em; }
+.reading-content + .chapter-navigation { margin-top: 40px; margin-bottom: 0; padding-top: 15px; padding-bottom: 0; border-top: 1px solid #ddd; border-bottom: none; }
+
+/* --- 4.2 Página de Perfil de Usuario --- */
+.profile-page-container { max-width: 1000px; width: 100%; margin: 40px auto; }
+.profile-header { display: flex; align-items: center; background-color: rgba(128, 233, 217, 0.4); padding: 30px; border-radius: 15px; margin-bottom: 20px; }
+.profile-avatar { width: 150px; height: 150px; border-radius: 50%; margin-right: 30px; object-fit: cover; }
+.profile-info h1 { font-family: var(--font-serif); font-size: 36px; margin: 0; }
+.profile-info p { font-size: 18px; color: var(--color-text-secondary); margin: 5px 0 0 0; }
+.profile-tabs { display: flex; border-bottom: 2px solid #d1d1d1; }
+.tab-link { padding: 15px 25px; cursor: pointer; background: none; border: none; font-size: 18px; font-weight: 700; color: var(--color-text-secondary); border-bottom: 3px solid transparent; transition: all 0.3s ease; }
+.tab-link.active, .tab-link:hover { color: var(--color-accent); border-bottom-color: var(--color-accent); }
+.profile-content { padding: 30px; background-color: rgba(128, 233, 217, 0.4); border-radius: 0 0 15px 15px; }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+.management-list-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #ccc; }
+.management-list-item h4 { margin: 0; font-size: 20px; }
+
+/* --- 4.3 Paneles de Gestión y Edición --- */
+.management-page-container { max-width: 1200px; margin: 40px auto; }
+.management-layout, .editor-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+.editor-layout { grid-template-columns: 280px 1fr; }
+
+.chapter-list-panel { background-color: var(--color-background-white); padding: 20px; border-radius: 15px; height: fit-content; }
+.management-panel h3, .chapter-list-panel h3 { font-family: var(--font-serif); font-size: 24px; margin-bottom: 20px; border-bottom: 2px solid #ccc; padding-bottom: 10px; }
+
+.chapter-management-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0;  border-bottom: 1px solid #ccc; }
+.chapter-management-item p { margin: 0; font-weight: 700; }
+.chapter-actions { display: flex; align-items: center; flex-shrink: 0; }
+.chapter-actions a { text-decoration: none; margin-left: 10px; font-size: 14px; font-weight: bold; }
+
+/* Estilos específicos del editor */
+#add-new-chapter-editor-btn, #back-to-management-link { display: block; text-align: center; margin-bottom: 20px; text-decoration: none; }
+#editor-chapter-list a { display: block; text-decoration: none; color: var(--color-text-primary); padding: 12px 15px; border-radius: 8px; margin-bottom: 5px; font-weight: 700; transition: background-color 0.2s ease; }
+#editor-chapter-list a:hover { background-color: #e9e9f2; }
+#editor-chapter-list a.active-chapter { background-color: var(--color-accent); color: var(--color-text-primary); }
+.editor-panel .form-container { max-width: none; margin: 0; padding: 0; box-shadow: none; background-color: transparent; text-align: left; }
+#chapter-content-input { resize: vertical; min-height: 400px; }
+
+/* --- 4.4 Otros componentes específicos --- */
+
+/* Subida de Avatares y Portadas */
+.avatar-upload-container { text-align: center; margin-bottom: 20px; }
+.avatar-upload-container .profile-avatar { margin-bottom: 10px; border: 4px solid var(--color-accent-light); }
+.avatar-upload-container .cta-button { margin-top: 10px; }
+input[type="file"] { display: none; }
+
+/* Etiquetas de Estado (ej. Borrador) */
+.status-tag { font-size: 12px; font-weight: bold; padding: 3px 8px; border-radius: 50px; margin-left: 10px; vertical-align: middle; }
+.status-tag.draft { background-color: #555; color: #fff; }
+
+/* --- 4.5 Estilos para las Estadísticas del Panel de Gestión --- */
+#story-stats-container {
+    max-width: 1200px; /* Mismo ancho que el contenedor principal */
+    margin: 40px auto; /* Centra el bloque y le da espacio vertical */
+    padding-top: 30px;
+    border-top: 2px solid #ccc; /* Usamos el color de borde visible que definimos */
+}
+
+#story-stats-container h4 {
     text-align: center;
-    margin-bottom: 30px;
-}
-
-.chapter-navigation {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 40px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #ddd;
-}
-
-.chapter-navigation a {
-    text-decoration: none;
-    color: var(--color-accent);
-    font-weight: 700;
-    font-size: 16px;
-    transition: color 0.3s ease;
-}
-
-.chapter-navigation a:hover {
-    color: var(--color-text-primary);
-}
-
-.reading-content {
-    font-family: 'Georgia', serif; /* Fuente serif clásica para lectura larga */
+    margin-bottom: 20px;
+    font-family: var(--font-serif);
     font-size: 20px;
-    line-height: 1.8;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-number {
+    display: block;
+    font-size: 32px;
+    font-weight: 700;
+    font-family: var(--font-serif);
+    color: var(--color-accent);
+}
+
+.stat-label {
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
     color: var(--color-text-secondary);
 }
 
-.reading-content p {
-    margin-bottom: 2em; /* Espacio entre párrafos */
+/* Ajustes para el modo oscuro */
+.dark-mode #story-stats-container { border-top-color: #444; }
+.dark-mode .stat-label {
+    color: var(--color-text-secondary-dark);
 }
 
-/* Ajuste para la última barra de navegación */
-.reading-content + .chapter-navigation {
-    margin-top: 40px;
-    margin-bottom: 0;
-    padding-top: 15px;
-    padding-bottom: 0;
-    border-top: 1px solid #ddd;
-    border-bottom: none;
+/* =================================================================
+   PARTE 5: MODO OSCURO Y RESPONSIVIDAD
+   ================================================================= */
+
+/* --- 5.1 Estilos para el Modo Oscuro --- */
+.dark-mode nav .cta-button,
+.dark-mode nav .boton-registro,
+.dark-mode .avatar-upload-container .cta-button {
+    color: var(--color-text-primary) !important;
 }
 
-/* 5. RESPONSIVIDAD */
-.hamburger { display: none; cursor: pointer; }
-.bar { display: block; width: 25px; height: 3px; margin: 5px auto; background-color: #333; transition: all 0.3s ease-in-out; }
-
-/* --- ESTILOS PARA EL MODO OSCURO --- */
 .dark-mode body {
     background-color: var(--color-background-dark);
     color: var(--color-text-primary-dark);
 }
 
-.dark-mode .story-card,
-.dark-mode .form-container,
-.dark-mode .search-bar {
-    background-color: var(--color-background-surface-dark);
-    border-color: #444; /* Borde sutil para la barra de búsqueda */
+.dark-mode .card-description {
+    color: var(--color-text-primary-dark);
+    opacity: 0.7; /* Lo hacemos ligeramente transparente para diferenciarlo del título */
 }
 
-.dark-mode .story-card-link,
+.dark-mode .story-card,
+.dark-mode .form-container,
+.dark-mode .search-bar,
+.dark-mode .profile-header,
+.dark-mode .profile-content,
+.dark-mode .chapter-list-panel {
+    background-color: var(--color-background-surface-dark);
+    border-color: #444;
+}
+
 .dark-mode .card-title,
-.dark-mode .card-description,
 .dark-mode .form-group label,
-.dark-mode .chapter-list-container li a {
+.dark-mode .chapter-list-container li a,
+.dark-mode #editor-chapter-list a {
     color: var(--color-text-primary-dark);
 }
 
 .dark-mode .card-author,
 .dark-mode .story-header-container h2,
 .dark-mode .story-meta,
-.dark-mode .reading-content {
+.dark-mode .reading-content,
+.dark-mode .profile-info p {
     color: var(--color-text-secondary-dark);
 }
 
@@ -383,345 +509,14 @@ nav.nav-loading {
 }
 
 .dark-mode nav ul li a:hover,
-.dark-mode .chapter-list-container li a:hover {
-    color: var(--color-accent);
-}
-
-/* =================================================================
-   ESTILOS PARA LA PÁGINA DE PERFIL v2.0
-   ================================================================= */
-.profile-page-container {
-    max-width: 1000px;
-    margin: 40px auto;
-}
-
-.profile-header {
-    display: flex;
-    align-items: center;
-    background-color: var(--color-background-white);
-    padding: 30px;
-    border-radius: 15px;
-    margin-bottom: 20px;
-}
-.dark-mode .profile-header {
-    background-color: var(--color-background-surface-dark);
-}
-
-.profile-avatar {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    margin-right: 30px;
-    object-fit: cover;
-}
-
-.profile-info h1 {
-    font-family: var(--font-serif);
-    font-size: 36px;
-    margin: 0;
-}
-.profile-info p {
-    font-size: 18px;
-    color: var(--color-text-secondary);
-    margin: 5px 0 0 0;
-}
-
-/* Corregimos el color del texto secundario del perfil en modo oscuro */
-.dark-mode .profile-info p {
-    color: var(--color-text-secondary-dark);
-}
-
-.profile-tabs {
-    display: flex;
-    border-bottom: 2px solid #ddd;
-}
-.dark-mode .profile-tabs {
-    border-bottom-color: #444;
-}
-
-.tab-link {
-    padding: 15px 25px;
-    cursor: pointer;
-    background: none;
-    border: none;
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--color-text-secondary);
-    border-bottom: 3px solid transparent;
-    transition: all 0.3s ease;
-}
-.dark-mode .tab-link {
-    color: var(--color-text-secondary-dark);
-}
-
-.tab-link.active, .tab-link:hover {
-    color: var(--color-accent);
-    border-bottom-color: var(--color-accent);
-}
-
-.profile-content {
-    padding: 30px;
-    background-color: var(--color-background-white);
-    border-radius: 0 0 15px 15px;
-}
-.dark-mode .profile-content {
-    background-color: var(--color-background-surface-dark);
-}
-
-.tab-content {
-    display: none;
-}
-.tab-content.active {
-    display: block;
-}
-
-.management-list-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px;
-    border-bottom: 1px solid #eee;
-}
-.dark-mode .management-list-item {
-    border-bottom-color: #444;
-}
-.management-list-item h4 {
-    margin: 0;
-    font-size: 20px;
-}
-/* =================================================================
-   ESTILOS PARA EL PANEL DE GESTIÓN
-   ================================================================= */
-.management-page-container {
-    max-width: 1200px;
-    margin: 40px auto;
-}
-
-.management-layout {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 40px;
-}
-
-.management-panel h3 {
-    font-family: var(--font-serif);
-    font-size: 24px;
-    margin-bottom: 20px;
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 10px;
-}
-.dark-mode .management-panel h3 {
-    border-bottom-color: #444;
-}
-
-.chapter-management-list {
-    margin-bottom: 30px;
-}
-
-.chapter-management-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 0;
-    border-bottom: 1px solid #eee;
-}
-.dark-mode .chapter-management-item {
-    border-bottom-color: #444;
-}
-
-.chapter-management-item p {
-    margin: 0;
-    font-weight: 700;
-}
-
-.chapter-actions a {
-    text-decoration: none;
-    margin-left: 10px;
-    font-size: 14px;
-    font-weight: bold;
-}
-
-@media (max-width: 768px) {
-    main { padding: 0 20px; }
-    header { 
-        padding: 20px; 
-        flex-direction: column; /* Apila los elementos verticalmente */
-        align-items: flex-start; /* Alinea todo a la izquierda */
-        gap: 20px; /* Ajusta el espacio entre el logo y la búsqueda */
-    }
-
-    .search-bar {
-        width: 100%; /* La barra de búsqueda ahora ocupa todo el ancho */
-    }
-    /* ------------------------------------------- */
-
-    header nav { display: none; }
-    .hamburger { 
-        display: block;
-        position: absolute; /* La posicionamos en la esquina superior derecha */
-        top: 25px;
-        right: 20px;
-    }
-    /* ... otros estilos de hamburguesa ... */
-    
-    /* Ajustamos el menú desplegable a la nueva posición */
-    nav.active {
-        top: 130px; /* Aumentamos el espacio desde arriba */
-    }
-    .dark-mode nav.active {
-    background-color: var(--color-background-surface-dark); /* Le ponemos un fondo oscuro */
-    box-shadow: none; /* Quitamos la sombra, que no se ve en oscuro */
-}
-    .hamburger { display: block; }
-    .hamburger.active .bar:nth-child(2) { opacity: 0; }
-    .hamburger.active .bar:nth-child(1) { transform: translateY(8px) rotate(45deg); }
-    .hamburger.active .bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
-    nav.active { display: block; position: absolute; left: 0; top: 75px; width: 100%; background-color: #ffffff; text-align: center; z-index: 100; box-shadow: 0 5px 10px rgba(0,0,0,0.1); }
-    nav.active ul { flex-direction: column; }
-    nav.active ul li { margin: 20px 0; }
-}
-
-#theme-toggle {
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-    color: var(--color-text-secondary);
-    padding: 0;
-}
-.dark-mode #theme-toggle {
-    color: var(--color-text-primary-dark);
-}
-
-/* =================================================================
-   ESTILOS DEL EDITOR (VERSIÓN FINAL Y AISLADA)
-   ================================================================= */
-
-/* Aplica un layout flex a <main> SÓLO en la página del editor */
-main:has(.editor-layout) {
-    display: flex;
-    flex-direction: column;
-}
-
-.editor-layout {
-    flex-grow: 1;
-    display: grid;
-    grid-template-columns: 280px 1fr; /* Le quitamos un poco a la izquierda */
-    gap: 40px;
-    width: 100%;
-    max-width: 1600px; /* Le damos más espacio en total */
-    padding: 40px;
-}
-
-.editor-panel,
-#chapter-editor-form {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-}
-
-#chapter-content-input {
-    flex-grow: 1;
-    resize: vertical;
-}
-
-.chapter-list-panel {
-    background-color: var(--color-background-white);
-    padding: 20px;
-    border-radius: 15px;
-    height: fit-content;
-}
-
-.dark-mode .chapter-list-panel {
-    background-color: var(--color-background-surface-dark);
-}
-
-.chapter-list-panel h3 {
-    font-family: var(--font-serif);
-    margin-bottom: 15px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #ddd;
-}
-
-.dark-mode .chapter-list-panel h3 {
-    border-bottom-color: #444;
-}
-
-#editor-chapter-list a {
-    display: block;
-    text-decoration: none;
-    color: var(--color-text-primary);
-    padding: 12px 15px;
-    border-radius: 8px;
-    margin-bottom: 5px;
-    font-weight: 700;
-    transition: background-color 0.2s ease;
-}
-
-.dark-mode #editor-chapter-list a {
-    color: var(--color-text-primary-dark);
-}
-
-#editor-chapter-list a:hover {
-    background-color: #e9e9f2;
-}
-
+.dark-mode .chapter-list-container li a:hover,
 .dark-mode #editor-chapter-list a:hover {
+    color: var(--color-accent);
     background-color: #2c2c2c;
 }
-
-#editor-chapter-list a.active-chapter {
-    background-color: var(--color-accent);
-    color: var(--color-text-primary);
-}
-
 .dark-mode #editor-chapter-list a.active-chapter {
     color: var(--color-text-primary);
-}
-
-@media (max-width: 992px) {
-    .editor-layout {
-        grid-template-columns: 1fr;
-    }
-}
-
-/* Estilo para el botón "Añadir Nuevo Capítulo" en el panel del editor */
-#add-new-chapter-editor-btn {
-    display: block; /* Para que ocupe todo el ancho */
-    text-align: center;
-    margin-bottom: 20px; /* Espacio antes de la lista de capítulos */
-    text-decoration: none; /* Por si acaso */
-}
-
-/* =================================================================
-   ANULACIONES ESPECÍFICAS PARA EL EDITOR
-   ================================================================= */
-
-/* Anula los límites del .form-container cuando está dentro del editor */
-.editor-panel .form-container {
-    max-width: none;
-    margin: 0;
-    padding: 0;
-    box-shadow: none;
-    background-color: transparent;
-    text-align: left; /* Alinea las etiquetas a la izquierda, que es mejor para el editor */
-}
-/* =================================================================
-   ESTILOS PARA INDICADORES DE ESTADO
-   ================================================================= */
-
-.status-tag {
-    font-size: 12px;
-    font-weight: bold;
-    padding: 3px 8px;
-    border-radius: 50px;
-    margin-left: 10px;
-    vertical-align: middle;
-}
-
-.status-tag.draft {
-    background-color: #555;
-    color: #fff;
+    background-color: var(--color-accent);
 }
 
 .dark-mode .status-tag.draft {
@@ -729,24 +524,101 @@ main:has(.editor-layout) {
     color: #121212;
 }
 
-/* =================================================================
-   ESTILOS PARA LA PÁGINA DE EDITAR PERFIL
-   ================================================================= */
-
-.avatar-upload-container {
-    text-align: center; /* Centra la imagen y el botón */
-    margin-bottom: 40px;
-}
-
-.avatar-upload-container .profile-avatar {
-    margin-bottom: 10px;
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 4px solid var(--color-accent-light);
-}
-
 .dark-mode .avatar-upload-container .profile-avatar {
     border-color: #333;
+}
+
+.dark-mode .bar {
+    background-color: var(--color-text-primary-dark);
+}
+.dark-mode #theme-toggle {
+    color: var(--color-text-primary-dark);
+}
+
+.dark-mode #story-stats-container { border-top-color: #444; }
+.dark-mode .stat-label { color: var(--color-text-secondary-dark); }
+
+/* --- 5.2 Lógica de Responsividad para Pantallas Pequeñas --- */
+
+/* La hamburguesa está oculta en escritorio */
+.hamburger {
+    display: none;
+    cursor: pointer;
+    z-index: 101; /* Para que esté por encima de todo */
+}
+.bar {
+    display: block;
+    width: 25px;
+    height: 3px;
+    margin: 5px auto;
+    background-color: var(--color-text-secondary);
+    transition: all 0.3s ease-in-out;
+}
+
+
+@media (max-width: 992px) {
+
+    /* --- Arreglos Finales de Perfil en Móvil --- */
+.profile-page-container {
+    padding: 0; /* Anula cualquier padding que pueda interferir */
+}
+
+.profile-tabs {
+    flex-wrap: wrap; /* ¡La clave! Permite que las pestañas salten a la siguiente línea */
+    justify-content: center; /* Centra las pestañas para un mejor aspecto */
+}
+
+    /* --- Ajustes generales para móvil --- */
+    main { padding: 0 20px; }
+    header { padding: 20px; }
+
+    /* --- Header y Navegación --- */
+    header nav {
+        display: none; /* Ocultamos el menú de escritorio */
+        width: 100%;
+        order: 1; /* El menú irá al final en el DOM, pero lo mostramos primero */
+    }
+    .hamburger {
+        display: block; /* Mostramos la hamburguesa */
+    }
+    header .search-bar {
+        order: 2; /* La barra de búsqueda siempre va después del menú y el logo */
+    }
+    
+    /* Comportamiento del menú hamburguesa activo */
+    .hamburger.active .bar:nth-child(2) { opacity: 0; }
+    .hamburger.active .bar:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+    .hamburger.active .bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+    
+    nav.active {
+        display: block;
+        text-align: center;
+        margin-top: 20px;
+    }
+    nav.active ul {
+        flex-direction: column;
+        gap: 20px;
+    }
+    nav.active ul li {
+        margin-left: 0;
+    }
+    
+    /* --- Layouts de Rejilla a Una Columna --- */
+    .management-layout,
+    .editor-layout {
+        grid-template-columns: 1fr; /* ¡LA CLAVE! Apila las columnas */
+    }
+
+    /* --- Ajustes Específicos de Página --- */
+    .profile-header {
+        flex-direction: column;
+        text-align: center;
+    }
+    .profile-avatar {
+        margin-right: 0;
+        margin-bottom: 20px;
+    }
+    .management-list-item h4 {
+        min-width: 0; /* Permite que el texto se ajuste */
+    }
 }
