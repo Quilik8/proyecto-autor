@@ -50,7 +50,17 @@
                     <label for="bio-input">Biografía</label>
                     <textarea id="bio-input" name="bio" rows="4" placeholder="Cuéntale al mundo un poco sobre ti..."></textarea>
                 </div>
-                
+                <div class="form-group">
+    <label>Roles / Profesiones</label>
+    <div id="predefined-roles-container" class="roles-checkbox-container">
+        <!-- Los checkboxes se generarán aquí con JavaScript -->
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="custom-roles-input">Otros Roles (separados por comas)</label>
+    <input type="text" id="custom-roles-input" placeholder="Ej: Poeta, Guionista, Artista Conceptual...">
+</div>
                 <div class="error-message" id="edit-profile-error"></div>
 
                 <button type="submit" class="cta-button">Guardar Cambios</button>

@@ -230,8 +230,8 @@ nav.nav-loading {
     width: 100%;
     padding: 15px;
     font-size: 16px;
-    background-color: var(--color-accent); /* ¡AQUÍ ESTÁ LA MAGIA! */
-    border: 2px solid transparent; /* Hacemos el borde transparente por defecto */
+    background-color: rgba(128, 233, 217, 0.2);
+    border: 2px solid #ddd;
     border-radius: 10px;
     color: var(--color-text-primary);
     outline: none;
@@ -244,6 +244,7 @@ nav.nav-loading {
 .form-group input:focus,
 .form-group textarea:focus { 
     border-color: var(--color-accent); 
+    background-color: var(--color-background-white);
 }
 .form-container .cta-button { 
     width: 100%; 
@@ -252,9 +253,77 @@ nav.nav-loading {
     color: #e74c3c; 
     font-size: 14px; 
     margin-top: 5px; 
-    height: 16px; 
+    min-height: 16px; 
     text-align: left; 
 }
+
+/* Estilos para contenedores de checkboxes y radios */
+.roles-checkbox-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 10px;
+    background-color: rgba(0,0,0,0.02);
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid #eee;
+}
+
+.role-checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Checkbox personalizado */
+.role-checkbox-item input[type="checkbox"] { display: none; }
+.role-checkbox-item label {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    font-weight: normal;
+    font-size: 15px;
+}
+.role-checkbox-item label::before {
+    content: '';
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+.role-checkbox-item input[type="checkbox"]:checked + label::before {
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
+    content: '✔';
+    color: var(--color-text-primary);
+    text-align: center;
+    line-height: 16px;
+    font-size: 14px;
+}
+
+/* Radio personalizado (para la página de crear-entrada) */
+.role-checkbox-item input[type="radio"] { display: none; }
+.role-checkbox-item input[type="radio"] + label {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    font-weight: normal;
+    font-size: 15px;
+    width: 100%;
+    justify-content: center;
+    padding: 10px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+.role-checkbox-item input[type="radio"]:checked + label {
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
+    color: var(--color-text-primary);
+    font-weight: bold;
+}
+
 
 /* Estilos para la sección de bienvenida en index.html */
 .hero {
@@ -339,6 +408,58 @@ nav.nav-loading {
    ================================================================= */
 
 /* --- 4.1 Páginas de Detalle de Historia y Lectura --- */
+
+/* ===== NUEVOS ESTILOS PARA EL LAYOUT DE DETALLE DE HISTORIA ===== */
+
+.story-details-layout {
+    max-width: 1000px; /* Un poco más ancho para que quepa todo bien */
+    margin: 40px auto;
+    display: flex;
+    gap: 40px; /* Espacio entre la portada y la información */
+    align-items: flex-start; /* Alinea los items al principio */
+}
+
+.cover-column {
+    flex-basis: 300px; /* Ancho base de la columna de la portada */
+    flex-shrink: 0; /* Evita que la columna se encoja */
+}
+
+#story-cover-image {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.info-column {
+    flex-grow: 1; /* La columna de info ocupa el espacio sobrante */
+}
+
+/* Hacemos que la info de la columna derecha ocupe todo el espacio vertical */
+.info-column h1, 
+.info-column h2, 
+.info-column .story-meta, 
+.info-column .story-synopsis, 
+.info-column .cta-button {
+    margin-bottom: 20px; /* Espaciado consistente */
+}
+
+/* --- Responsividad para el nuevo layout --- */
+@media (max-width: 768px) {
+    .story-details-layout {
+        flex-direction: column; /* Apila las columnas verticalmente */
+        align-items: center; /* Centra la portada en móvil */
+        text-align: center; /* Centra el texto */
+    }
+    .cover-column {
+        width: 60%; /* La portada ocupa el 60% del ancho del contenedor */
+        max-width: 250px;
+    }
+    .info-column h1 {
+        font-size: 36px;
+    }
+}
+
 .story-header-container, 
 .chapter-list-container,
 .reading-container {
@@ -378,6 +499,29 @@ nav.nav-loading {
 .tab-content.active { display: block; }
 .management-list-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #ccc; }
 .management-list-item h4 { margin: 0; font-size: 20px; }
+
+/* Contenedor para las etiquetas de rol */
+#profile-roles-container {
+    display: flex;
+    flex-wrap: wrap; /* Para que las etiquetas pasen a la siguiente línea si no caben */
+    gap: 8px;      /* Espacio entre etiquetas */
+}
+
+/* Estilo individual de cada etiqueta de rol */
+.role-tag {
+    background-color: var(--color-accent-light);
+    color: var(--color-text-primary);
+    padding: 5px 12px;
+    border-radius: 50px; /* Las hace píldoras redondeadas */
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* --- Adaptación para el modo oscuro --- */
+.dark-mode .role-tag {
+    background-color: #333; /* Un gris oscuro que contrasta bien */
+    color: var(--color-text-primary-dark);
+}
 
 /* --- 4.3 Paneles de Gestión y Edición --- */
 .management-page-container { max-width: 1200px; margin: 40px auto; }
@@ -456,6 +600,42 @@ input[type="file"] { display: none; }
 .dark-mode #story-stats-container { border-top-color: #444; }
 .dark-mode .stat-label {
     color: var(--color-text-secondary-dark);
+}
+
+/* --- Estilos para selectores de radio personalizados --- */
+.role-checkbox-item input[type="radio"] {
+    display: none;
+}
+
+.role-checkbox-item input[type="radio"] + label {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    font-weight: normal;
+    font-size: 15px;
+    width: 100%;
+    justify-content: center;
+    padding: 10px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.role-checkbox-item input[type="radio"]:checked + label {
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
+    color: var(--color-text-primary);
+    font-weight: bold;
+}
+
+/* Modo Oscuro para los radios */
+.dark-mode .role-checkbox-item input[type="radio"] + label {
+    border-color: #444;
+}
+.dark-mode .role-checkbox-item input[type="radio"]:checked + label {
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
+    color: var(--color-text-primary);
 }
 
 /* =================================================================

@@ -150,6 +150,29 @@ Rol de "Embajador de Género": No se compra, sino que se otorga a los usuarios c
 
 Voto en Eventos de la Plataforma: Los usuarios con la suscripción A.U.T.O.R.+ o que hayan alcanzado un cierto nivel de XP tienen un voto en decisiones comunitarias, como "¿Cuál debería ser el tema del próximo concurso de escritura?" o "¿Qué autor clásico deberíamos destacar este mes?".
 
+### Contenido Dinámico y Editorial: La Bitácora del Creador
+
+Para expandir A.U.T.O.R. más allá de las obras de formato largo y crear un ecosistema de contenido más rico, se introduce el concepto de **"La Bitácora"**. Esta funcionalidad dota a cada creador (no solo autores, sino también críticos, editores, etc.) de un espacio editorial propio, similar a un blog personal integrado en su perfil.
+
+La Bitácora permite la creación de dos formatos de contenido distintos:
+
+1.  **Apuntes:**
+    *   **Propósito:** Contenido corto y de interacción rápida. Ideal para anuncios, ideas fugaces, preguntas a la comunidad, o compartir enlaces.
+    *   **Estructura:** Un cuerpo de texto con un límite de caracteres generoso.
+    *   **Visualización:** Se muestra de forma completa en el feed de la Bitácora.
+
+2.  **Artículos:**
+    *   **Propósito:** Contenido de formato largo, estructurado y de mayor profundidad. Perfecto para críticas, reseñas, columnas de opinión, ensayos o capítulos únicos.
+    *   **Estructura:** Requiere un **Título** y un **Cuerpo de texto** sin límite. Opcionalmente, puede incluir una imagen de cabecera.
+    *   **Visualización:** En el feed de la Bitácora, se muestra una tarjeta con el título, un extracto y un botón de "Leer más...". Al hacer clic, se abre una página de lectura dedicada y libre de distracciones.
+
+**Beneficios Estratégicos:**
+
+*   **Empodera a todos los Roles:** Le da a un **Crítico** la herramienta adecuada para sus reseñas y a un **Autor** un canal para sus anuncios, todo dentro del mismo sistema.
+*   **Aumenta el Valor de la Plataforma:** Atrae y retiene talento más allá de los novelistas, como periodistas, ensayistas y expertos del sector.
+*   **Nuevas Vías de Monetización:** La distinción de formato facilita la monetización futura. Un "Artículo" premium de un experto podría ser de pago, mientras que los "Apuntes" pueden recibir propinas o "aplausos".
+*   **Mejora la Comunidad:** Centraliza la conversación y el contenido editorial dentro de A.U.T.O.R., creando una experiencia más completa para el lector.
+
 ### Flujos de Usuario Clave
 
 **1. Flujo de Nuevo Usuario (Registro y Primera Lectura):**
@@ -274,7 +297,12 @@ La creación de una aplicación nativa se contempla como una fase avanzada del p
     - [x] **Misión 26:** Gestión de Portadas de Historias.
 
 **FASE 5: El Gremio - El Mercado de Talentos**
-- [ ] Misión 27: Implementar perfiles de usuario con roles seleccionables (**Autor, Lector, Editor, Diseñador, Traductor, Crítico, Beta-Reader, etc**).
+- [x] Misión 27: Implementar perfiles de usuario con roles seleccionables (**Autor, Lector, Editor, Diseñador, Traductor, Crítico, Beta-Reader, etc**).
+- [ ] **Misión Intermedia: La Bitácora del Creador (MVP)**
+    - [ ] **Sub-misión A (Backend):** Crear la nueva tabla `bitacora` en Supabase. Deberá incluir columnas como `author_id`, `type` ('apunte' o 'articulo'), `title` (opcional), `content`, etc.
+    - [ ] **Sub-misión B (Creación de Contenido):** Crear una nueva página de edición (`crear-entrada.html`) que pregunte al usuario qué tipo de entrada desea crear. La interfaz cambiará dinámicamente para mostrar un editor simple para "Apuntes" o uno con título para "Artículos".
+    - [ ] **Sub-misión C (Visualización):** Añadir una pestaña "Bitácora" al perfil público. Al hacer clic, esta pestaña cargará y mostrará un feed con todas las entradas del usuario, diferenciando visualmente entre apuntes y artículos.
+    - [ ] **Visión Futura para esta Misión:** Implementar la página de lectura dedicada para los artículos, añadir un sistema de "Seguimiento" de creadores y explorar la monetización por entrada.
 - [ ] Misión 28: Construir un sistema de portafolios y de reseñas entre usuarios (ej. un autor reseña al editor).
 - [ ] Misión 29: Implementar un sistema de búsqueda y filtros para encontrar colaboradores.
 - [ ] Misión 30: Construir la mensajería interna.

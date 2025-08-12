@@ -49,28 +49,33 @@
 </header>
 
     <main>
-        <!-- Contenedor principal para la información de la historia -->
-        <div class="story-header-container">
-    <h1 id="story-title">Cargando...</h1>
-    <h2 id="story-author"></h2>
+    <!-- Contenedor principal para el nuevo layout de 2 columnas -->
+    <div class="story-details-layout">
 
-    <div class="story-meta" id="story-meta">
+        <!-- Columna Izquierda: La Portada -->
+        <div class="cover-column">
+            <img src="https://placehold.co/300x450/80E9D9/1a1a1a?text=Portada" alt="Portada de la historia" id="story-cover-image">
+        </div>
+
+        <!-- Columna Derecha: La Información -->
+        <div class="info-column">
+            <h1 id="story-title">Cargando...</h1>
+            <h2 id="story-author"></h2>
+            <div class="story-meta" id="story-meta"></div>
+            <p class="story-synopsis" id="story-synopsis"></p>
+            <a href="capitulo.html" class="cta-button">Empezar a Leer (Cap. 1)</a>
+        </div>
+        
     </div>
 
-    <p class="story-synopsis" id="story-synopsis"></p>
-    
-    <!-- El botón ahora está correctamente dentro del contenedor -->
-    <a href="capitulo.html" class="cta-button">Empezar a Leer (Cap. 1)</a>
-</div>
-
-        <!-- Contenedor para la lista de capítulos -->
-        <div class="chapter-list-container">
-    <h3>Capítulos</h3>
-    <ul id="chapter-list-ul">
-        <!-- JS rellenará esta lista -->
-    </ul>
-</div>
-    </main>
+    <!-- Contenedor para la lista de capítulos (sin cambios) -->
+    <div class="chapter-list-container">
+        <h3>Capítulos</h3>
+        <ul id="chapter-list-ul">
+            <!-- JS rellenará esta lista -->
+        </ul>
+    </div>
+</main>
 
     <footer>
         <p>© 2025 Proyecto A.U.T.O.R. Todos los derechos reservados.</p>

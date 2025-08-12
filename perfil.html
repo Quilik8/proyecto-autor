@@ -54,6 +54,7 @@
                     <h1 id="profile-username">Cargando...</h1>
                     <p id="profile-email">Cargando...</p>
                     <p id="profile-bio" style="font-size: 16px; margin-top: 10px;"></p>
+                    <div id="profile-roles-container" style="margin-top: 15px;"></div>
                     <a href="editar-perfil.html" id="edit-profile-btn" class="cta-button" style="margin-top: 10px; padding: 8px 20px;">Editar Perfil</a>
                 </div>
             </div>
@@ -71,7 +72,10 @@
                 <div id="tab-gestion" class="tab-content active">
                     <h2>Panel de Gestión de Obras</h2>
                     <p>Aquí puedes administrar tus historias, editar detalles y añadir nuevos capítulos.</p>
-                    <a href="crear-historia.html" class="cta-button" style="margin-bottom: 20px;">+ Crear Nueva Historia</a>
+                    <div class="gestion-actions-container" style="margin-bottom: 30px; border-bottom: 1px solid #ccc; padding-bottom: 20px;">
+    <a href="crear-historia.html" class="cta-button" style="margin-bottom: 0;">+ Crear Nueva Historia</a>
+    <a href="crear-entrada.html" class="cta-button" style="margin-bottom: 0; margin-left: 10px; background-color: #777;">+ Escribir en Bitácora</a>
+</div>
                     <div id="gestion-stories-list" class="management-list">
                         <!-- La lista de historias para gestionar se cargará aquí -->
                     </div>
