@@ -393,6 +393,16 @@ content (text): Contenido principal del capítulo.
 chapter_number (integer): Número de orden del capítulo.
 status (text, default: 'borrador'): Estado del capítulo. Puede ser 'borrador' o 'publicado'.
 
+Tabla: bitacora
+Propósito: Almacena el contenido editorial de formato corto y largo creado por los usuarios, como apuntes, artículos o críticas.
+Estructura de Columnas:
+id (bigint, Primary Key, Identity): Identificador numérico único y autoincremental de la entrada.
+created_at (timestamptz): Marca de tiempo de creación.
+author_id (uuid): Clave externa que referencia a `profiles.id`, indicando el creador de la entrada.
+type (text, default: 'apunte'): Define el formato. Puede ser 'apunte' (corto) o 'articulo' (largo).
+title (text, nullable): Título de la entrada. Requerido si el `type` es 'articulo'.
+content (text, nullable): El cuerpo principal del texto.
+
 2. Autenticación y Automatización (Triggers)
 
 Se ha implementado un trigger a nivel de base de datos para asegurar que cada nuevo usuario tenga un perfil desde el momento de su registro.
@@ -432,7 +442,7 @@ Acceso: Público. Aloja las portadas de las historias. Se han implementado tres 
 
 4. Políticas de Seguridad (Row Level Security - RLS)
 
-RLS está activado en todas las tablas (`profiles`, `stories`, `chapters`) para garantizar un control de acceso granular y seguro.
+RLS está activado en todas las tablas (`profiles`, `stories`, `chapters`, `bitacora`) para garantizar un control de acceso granular y seguro.
 
 Para la tabla `profiles`:
 - **SELECT:** Pública. Cualquiera puede leer los perfiles.
@@ -445,7 +455,13 @@ Para la tabla `stories`:
 
 Para la tabla `chapters`:
 - **SELECT:** Cualquiera puede leer un capítulo si su `status` es 'publicado', O si el que lo lee es el autor de la historia (para permitirle ver sus borradores).
-- **INSERT / UPDATE / DELETE:** Solo permitido si el `auth.uid()` del usuario coincide con el `author_id` de la historia a la que pertenece el capítulo (se logra mediante una subconsulta a la tabla `stories`).
+- **INSERT / UPDATE / DELETE:** Solo permitido si el `auth.uid()` del usuario coincide con el `author_id` de la historia a la que pertenece el capítulo.
+
+**Para la tabla `bitacora` (NUEVO):**
+- **SELECT:** Pública. Cualquiera puede leer todas las entradas de la bitácora.
+- **INSERT:** Un usuario autenticado solo puede crear entradas para sí mismo (`auth.uid() = author_id`).
+- **UPDATE:** Un usuario solo puede modificar sus propias entradas (`auth.uid() = author_id`).
+- **DELETE:** Un usuario solo puede borrar sus propias entradas (`auth.uid() = author_id`).
 
 
 - **Repositorio de GitHub:** [Pega aquí la URL de tu repositorio de GitHub]

@@ -333,19 +333,26 @@ const inicializarPaginaDePerfil = async () => {
 
     if (isOwnProfile) {
         // --- VISTA PRIVADA (ES MI PERFIL) ---
-        document.getElementById('edit-profile-btn').style.display = 'inline-block';
+        
+        // Hacemos visibles los elementos privados
         document.getElementById('edit-profile-btn').classList.remove('hidden');
         document.getElementById('profile-email').classList.remove('hidden');
         document.querySelector('[data-tab="tab-gestion"]').classList.remove('hidden');
         document.querySelector('[data-tab="tab-biblioteca"]').classList.remove('hidden');
+
+        // Forzamos que la pestaña de Gestión sea la activa, revirtiendo el default del HTML.
+        document.querySelector('[data-tab="tab-obras"]').classList.remove('active');
+        document.getElementById('tab-obras').classList.remove('active');
+        document.querySelector('[data-tab="tab-gestion"]').classList.add('active');
+        document.getElementById('tab-gestion').classList.add('active');
+
         document.getElementById('profile-email').textContent = session.user.email;
-        // La pestaña 'Gestión' ya es la activa por defecto en el HTML, así que no hacemos nada.
 
         // Cargar historias para la pestaña de Gestión
         try {
             const { data: stories, error } = await clienteSupabase
                 .from('stories')
-                .select('id, title')
+                .select('id', 'title')
                 .eq('author_id', currentUserId);
             if (error) throw error;
             
