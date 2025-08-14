@@ -49,27 +49,35 @@
         <div class="profile-page-container">
             <!-- CABECERA DEL PERFIL -->
             <div class="profile-header">
-                <img src="https://placehold.co/150x150/80E9D9/1a1a1a?text=Avatar" alt="Avatar de usuario" class="profile-avatar">
-                <div class="profile-info">
-                    <h1 id="profile-username">Cargando...</h1>
-                    <p id="profile-email">Cargando...</p>
-                    <p id="profile-bio" style="font-size: 16px; margin-top: 10px;"></p>
-                    <div id="profile-roles-container" style="margin-top: 15px;"></div>
-                    <a href="editar-perfil.html" id="edit-profile-btn" class="cta-button" style="margin-top: 10px; padding: 8px 20px;">Editar Perfil</a>
-                </div>
-            </div>
+    <img src="https://placehold.co/150x150/80E9D9/1a1a1a?text=Avatar" alt="Avatar de usuario" class="profile-avatar">
+    <div class="profile-info">
+        <h1 id="profile-username">Cargando...</h1>
+
+        <!-- Oculto por defecto hasta que JS confirme que eres el dueño -->
+        <p id="profile-email" class="hidden">Cargando...</p>
+
+        <p id="profile-bio" style="font-size: 16px; margin-top: 10px;"></p>
+        <div id="profile-roles-container" style="margin-top: 15px;">
+            <!-- Las etiquetas de los roles se cargarán aquí -->
+        </div>
+
+        <!-- Oculto por defecto hasta que JS confirme que eres el dueño -->
+        <a href="editar-perfil.html" id="edit-profile-btn" class="cta-button hidden" style="margin-top: 10px; padding: 8px 20px;">Editar Perfil</a>
+    </div>
+</div>
 
             <!-- SISTEMA DE PESTAÑAS -->
             <div class="profile-tabs">
-                <button class="tab-link active" data-tab="tab-gestion">Gestión</button>
-                <button class="tab-link" data-tab="tab-obras">Obras Públicas</button>
-                <button class="tab-link" data-tab="tab-biblioteca">Mi Biblioteca</button>
+                <button class="tab-link active hidden" data-tab="tab-gestion">Gestión</button>
+                <button class="tab-link" data-tab="tab-obras">Obras</button>
+                <button class="tab-link" data-tab="tab-bitacora">Bitácora</button>
+                <button class="tab-link hidden" data-tab="tab-biblioteca">Mi Biblioteca</button>
                 <button class="tab-link" data-tab="tab-actividad">Actividad</button>
             </div>
 
             <!-- CONTENIDO DE LAS PESTAÑAS -->
             <div class="profile-content">
-                <div id="tab-gestion" class="tab-content active">
+                <div id="tab-gestion" class="tab-content">
                     <h2>Panel de Gestión de Obras</h2>
                     <p>Aquí puedes administrar tus historias, editar detalles y añadir nuevos capítulos.</p>
                     <div class="gestion-actions-container" style="margin-bottom: 30px; border-bottom: 1px solid #ccc; padding-bottom: 20px;">
@@ -81,11 +89,16 @@
                     </div>
                 </div>
 
-                <div id="tab-obras" class="tab-content">
+                <div id="tab-obras" class="tab-content active">
                     <!-- El contenido de las obras públicas se cargará aquí -->
                     <p>Próximamente: Las historias publicadas de este usuario.</p>
                 </div>
-
+                <div id="tab-bitacora" class="tab-content">
+        <h2>Bitácora del Creador</h2>
+        <div id="bitacora-feed-container">
+            <!-- Las entradas de la bitácora se cargarán aquí -->
+        </div>
+    </div>
                 <div id="tab-biblioteca" class="tab-content">
                     <!-- El contenido de la biblioteca se cargará aquí -->
                     <p>Próximamente: Tu biblioteca personal con seguimiento de lectura.</p>

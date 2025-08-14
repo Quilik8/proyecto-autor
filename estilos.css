@@ -638,6 +638,59 @@ input[type="file"] { display: none; }
     color: var(--color-text-primary);
 }
 
+/* --- 4.6 Estilos para la Bitácora --- */
+.bitacora-entry {
+    background-color: rgba(0,0,0,0.03);
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #eee;
+}
+
+.bitacora-entry.entry-articulo {
+    border-left: 4px solid var(--color-accent);
+}
+
+.bitacora-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.bitacora-title {
+    font-family: var(--font-serif);
+    font-size: 24px;
+    margin: 0;
+}
+
+.entry-meta {
+    font-size: 12px;
+    color: #777;
+    text-transform: uppercase;
+}
+
+.bitacora-content p {
+    margin: 0;
+    white-space: pre-wrap; /* Respeta los saltos de línea y espacios */
+}
+
+.bitacora-actions a {
+    font-size: 14px;
+    color: #e74c3c;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* Modo Oscuro */
+.dark-mode .bitacora-entry {
+    background-color: rgba(255,255,255,0.05);
+    border-color: #333;
+}
+.dark-mode .entry-meta {
+    color: var(--color-text-secondary-dark);
+}
+
 /* =================================================================
    PARTE 5: MODO OSCURO Y RESPONSIVIDAD
    ================================================================= */

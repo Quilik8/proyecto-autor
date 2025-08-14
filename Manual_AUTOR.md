@@ -185,20 +185,22 @@ La Bitácora permite la creación de dos formatos de contenido distintos:
    - Navega a `explorar.html`, hace clic en una historia y llega a `historia.html`.
    - Hace clic en un capítulo y finalmente llega a `capitulo.html` para leer.
 
-**2. Flujo de Gestión de Contenido (Autor - Panel de Control):**
-   - El autor inicia sesión y navega a su `perfil.html`.
-   - La página de perfil ahora actúa como un panel de control, mostrando una lista de todas las historias que ha creado.
-   - Al hacer clic en una de sus historias, no es redirigido a la vista pública, sino a una nueva página de gestión: `gestionar-historia.html?id=[ID_DE_LA_HISTORIA]`.
-   - En esta página, el autor tiene un centro de mando completo para su obra:
-     - Ve los detalles actuales (título, sinopsis) y tiene un botón para editarlos.
-     - Ve la lista de todos sus capítulos, con opciones para editarlos o verlos.
-     - Utiliza un formulario dedicado para escribir y publicar nuevos capítulos directamente desde este panel.
+**2. Flujo de Perfil de Usuario (Vista Híbrida):**
+   - El sistema de perfiles ahora opera bajo un modelo híbrido utilizando un único archivo (`perfil.html`).
+   - **Vista Pública:** Cualquier usuario puede navegar a `perfil.html?id=[ID_DE_USUARIO]`. El script detectará que no es el dueño del perfil y cargará únicamente la información pública (nombre, bio, roles, obras publicadas, bitácora). Las pestañas y botones de gestión ("Gestión", "Editar Perfil", "Mi Biblioteca", botones de borrado) se ocultan por defecto y nunca se muestran.
+   - **Vista Privada (Panel de Control):** Cuando un usuario inicia sesión y navega a "Mi Perfil" (o a `perfil.html` sin un ID en la URL), el script detecta que es el dueño. En este caso, muestra todos los elementos de gestión y carga los datos privados necesarios, como la lista de historias para el panel de gestión. Este enfoque evita el "parpadeo" de la interfaz y es seguro, ya que los datos privados nunca se solicitan para la vista pública.
 
-**3. Flujo de Colaboración (Futuro - para el Gremio):**
-   - Un autor busca un "Editor" en la sección del Gremio.
-   - Contacta a un editor a través de la mensajería interna.
-   - Le envía una propuesta de colaboración (ej. pago fijo o % de regalías).
-   - El editor acepta. Ahora ambos ven la obra en sus paneles de control.
+**3. Flujo de Creación de Contenido (Bitácora):**
+   - Desde su panel de gestión, el creador puede acceder a `crear-entrada.html`.
+   - En esta página, elige entre dos formatos de contenido: "Apunte" (corto, sin título) o "Artículo" (largo, con título).
+   - La interfaz se adapta a su elección, y la entrada se guarda en la nueva tabla `bitácora` de la base de datos.
+
+**4. Flujo de Colaboración (Visión Futura - El Gremio):**
+   - **Descubrimiento:** Un "Autor" necesita una portada para su nueva historia. Navega a la sección "El Gremio" de la plataforma y utiliza los filtros para buscar perfiles con el rol de "Diseñador". Puede filtrar por especialidad, reputación o coste.
+   - **Contacto y Negociación:** El Autor revisa varios portafolios y encuentra un Diseñador que le gusta. A través de la mensajería interna de A.U.T.O.R., le envía una propuesta de trabajo. En esta propuesta, puede ofrecer un pago fijo o un porcentaje de las regalías futuras de la obra (ej. "Te ofrezco el 5% de todas las ganancias de 'Los Ecos de Nebulon' a cambio de la portada").
+   - **Acuerdo y Colaboración:** El Diseñador acepta la oferta. Se genera un "contrato simplificado" en la plataforma que ambos confirman. A partir de este momento, el Diseñador obtiene permisos de acceso limitados a la página de `gestionar-historia.html` de esa obra, permitiéndole subir y gestionar la imagen de la portada, pero sin poder editar capítulos o la sinopsis.
+   - **Entrega y Pago Automatizado:** Una vez que el Autor aprueba la portada final, marca el contrato como "completado". Si el acuerdo era un pago fijo, se transfiere el dinero. Si era por regalías, el sistema de A.U.T.O.R. se encargará automáticamente de depositar el 5% de todos los ingresos futuros de esa obra en la cuenta del Diseñador, de forma transparente y perpetua.
+   - **Reseña y Reputación:** Al finalizar el contrato, ambas partes pueden dejarse una reseña mutua. Una buena reseña de un autor verificado aumentará la reputación del Diseñador, ayudándole a conseguir más trabajos en el futuro.
 
    ### Decisiones Arquitectónicas Clave
 
@@ -268,7 +270,7 @@ La creación de una aplicación nativa se contempla como una fase avanzada del p
 - [x] Misión 15: Implementar Selector de Tema (Modo Claro/Oscuro).
     - [x] Añadir un interruptor en la UI (interfaz de usuario).
     - [x] Usar variables CSS para definir las paletas de colores de ambos temas.
-    - [ ] Guardar la preferencia del usuario en `localStorage` para que su elección sea recordada.
+    - [x] Guardar la preferencia del usuario en `localStorage` para que su elección sea recordada.
 
 **FASE 4: Backend y Base de Datos**
 - [X] Misión 16: Elegir y configurar la tecnología Backend (Supabase).
@@ -277,7 +279,7 @@ La creación de una aplicación nativa se contempla como una fase avanzada del p
 - [X] Misión 19: Implementar el inicio de sesión real y la gestión de sesión con Supabase.
 - [x] Misión 20: Crear la página de Perfil de Usuario y mostrar datos.
 - [x] Misión 21: Diseñar y crear las tablas de la base de datos (perfiles, historias, capitulos).
-- [ ] Misión 22: Construir el Panel de Gestión de Contenido del Autor.
+- [x] Misión 22: Construir el Panel de Gestión de Contenido del Autor.
     - [x] **Sub-misión 22.1 (Evolucionar el Perfil):** Modificar la página `perfil.html` para que obtenga y muestre una lista de las historias creadas por el usuario que ha iniciado sesión. Cada historia en la lista será un enlace a su panel de gestión.
     - [x] **Sub-misión 22.2 (Crear la Estructura):** Crear el nuevo archivo `gestionar-historia.html` con la estructura HTML para: mostrar detalles de la historia, listar capítulos existentes y un formulario para añadir nuevos capítulos.
     - [x] **Sub-misión 22.3 (Dar Vida al Panel):** Implementar la lógica en `script.js` (`cargarPanelDeGestion`) para rellenar la página `gestionar-historia.html` con los datos correctos de la historia y sus capítulos desde Supabase.
@@ -286,27 +288,32 @@ La creación de una aplicación nativa se contempla como una fase avanzada del p
     - [X] **Sub-misión 22.6:** Implementar el borrado de capítulos.
 - [X] Misión 23: Implementar Políticas de Seguridad a Nivel de Fila (RLS) para todas las tablas y operaciones, asegurando que los usuarios solo puedan modificar su propio contenido.
 
-**FASE 4.5: Misión de Pulido Final (En Proceso)**
-- [ ] Misión 24: Completar la funcionalidad del Perfil de Usuario.
+**FASE 4.5: Misión de Pulido Final y Comunidad (En Proceso)**
+- [X] Misión 24: Completar la funcionalidad del Perfil de Usuario.
     - [X] **Sub-misión 24.1:** Permitir la edición de `username` y `bio`.
     - [X] **Sub-misión 24.2:** Permitir la subida de un `avatar` de perfil a Supabase Storage.
-    - [x] **Sub-misión 24.3:** Implementar el borrado de una historia completa (y sus capítulos asociados).
-- [ ] Misión 25: Refinar la Experiencia de Usuario (UX).
+    - [X] **Sub-misión 24.3:** Implementar el borrado de una historia completa (y sus capítulos asociados).
+- [X] Misión 25: Refinar la Experiencia de Usuario (UX).
     - [X] **Sub-misión 25.1:** Corregir el diseño de la barra de búsqueda en dispositivos móviles.
-    - [x] **Sub-misión 25.2:** Añadir "Estadísticas a la Vista" en el panel de gestión (conteo de capítulos, palabras, etc.).
-    - [x] **Misión 26:** Gestión de Portadas de Historias.
+    - [X] **Sub-misión 25.2:** Añadir "Estadísticas a la Vista" en el panel de gestión.
+    - [X] **Misión 26:** Gestión de Portadas de Historias.
+- [X] **Misión 27:** Implementar perfiles de usuario con roles seleccionables (sistema híbrido con roles predefinidos y personalizados).(**Autor, Lector, Editor, Diseñador, Traductor, Crítico, Beta-Reader, etc**).
+- [ ] **Misión 28: Implementar Perfiles Públicos.**
+    - [X] **Sub-misión 28.1:** Modificar los enlaces de autor en las páginas de historias para que apunten a `perfil.html?id=[ID_DEL_AUTOR]`.
+    - [X] **Sub-misión 28.2:** Reconstruir la lógica de `perfil.html` para operar en modo híbrido (vista pública vs. privada).
+    - [X] **Sub-misión 28.3:** Cargar y mostrar las obras publicadas de un autor en su perfil público.
+    - [X] **Sub-misión 28.4:** Solucionar el "parpadeo" de la interfaz al cargar perfiles públicos.
+- [ ] **Misión Intermedia: La Bitácora del Creador (MVP)**
+    - [X] **Sub-misión A (Backend):** Crear y asegurar la tabla `bitacora` en Supabase.
+    - [X] **Sub-misión B (Creación de Contenido):** Crear la página `crear-entrada.html` con su lógica de formulario dinámico.
+    - [X] **Sub-misión C (Visualización):** Añadir la pestaña "Bitácora" al perfil y mostrar las entradas con opción de borrado para el dueño.
+    - [ ] **Visión Futura para esta Misión:** Implementar la página de lectura dedicada para los artículos, añadir un sistema de "Seguimiento" de creadores y explorar la monetización por entrada.
 
 **FASE 5: El Gremio - El Mercado de Talentos**
-- [x] Misión 27: Implementar perfiles de usuario con roles seleccionables (**Autor, Lector, Editor, Diseñador, Traductor, Crítico, Beta-Reader, etc**).
-- [ ] **Misión Intermedia: La Bitácora del Creador (MVP)**
-    - [ ] **Sub-misión A (Backend):** Crear la nueva tabla `bitacora` en Supabase. Deberá incluir columnas como `author_id`, `type` ('apunte' o 'articulo'), `title` (opcional), `content`, etc.
-    - [ ] **Sub-misión B (Creación de Contenido):** Crear una nueva página de edición (`crear-entrada.html`) que pregunte al usuario qué tipo de entrada desea crear. La interfaz cambiará dinámicamente para mostrar un editor simple para "Apuntes" o uno con título para "Artículos".
-    - [ ] **Sub-misión C (Visualización):** Añadir una pestaña "Bitácora" al perfil público. Al hacer clic, esta pestaña cargará y mostrará un feed con todas las entradas del usuario, diferenciando visualmente entre apuntes y artículos.
-    - [ ] **Visión Futura para esta Misión:** Implementar la página de lectura dedicada para los artículos, añadir un sistema de "Seguimiento" de creadores y explorar la monetización por entrada.
-- [ ] Misión 28: Construir un sistema de portafolios y de reseñas entre usuarios (ej. un autor reseña al editor).
-- [ ] Misión 29: Implementar un sistema de búsqueda y filtros para encontrar colaboradores.
-- [ ] Misión 30: Construir la mensajería interna.
-- [ ] Misión 31: Implementar sistema de "contratos" simplificados y reparto de ganancias.
+- [ ] **Misión 29:** Construir un sistema de portafolios y de reseñas entre usuarios (ej. un autor reseña al editor).
+- [ ] **Misión 30:** Implementar un sistema de búsqueda y filtros para encontrar colaboradores.
+- [ ] **Misión 31:** Construir la mensajería interna.
+- [ ] **Misión 32:** Implementar sistema de "contratos" simplificados y reparto de ganancias.
 
 **FASE 6: El Ecosistema de Progreso y Comunidad**
 - [ ] **Misión 32 (Hub Comunitario):**
