@@ -352,7 +352,7 @@ const inicializarPaginaDePerfil = async () => {
         try {
             const { data: stories, error } = await clienteSupabase
                 .from('stories')
-                .select('id', 'title')
+                .select('id, title')
                 .eq('author_id', currentUserId);
             if (error) throw error;
             
