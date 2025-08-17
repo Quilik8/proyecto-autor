@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Perfil - A.U.T.O.R.</title>
+    <title>Perfil de Usuario - A.U.T.O.R.</title>
     <link rel="stylesheet" href="estilos.css">
     <script>
+      // Script para prevenir el parpadeo del tema oscuro (FOUC)
       (function() {
         try {
           var theme = localStorage.getItem('theme');
@@ -15,9 +16,6 @@
         } catch (e) { /* ignoramos errores si localStorage está desactivado */ }
       })();
     </script>
-
-    <title>A.U.T.O.R. - Inicio</title>
-    <link rel="stylesheet" href="estilos.css">
 </head>
 <body class="body-loading" data-page="perfil">
 
@@ -25,73 +23,137 @@
 
     <main>
         <div class="profile-page-container">
-            <!-- CABECERA DEL PERFIL -->
+            <!-- CABECERA DEL PERFIL PÚBLICO -->
             <div class="profile-header">
-    <img src="https://placehold.co/150x150/80E9D9/1a1a1a?text=Avatar" alt="Avatar de usuario" class="profile-avatar">
-    <div class="profile-info">
-        <h1 id="profile-username">Cargando...</h1>
+                <img src="https://placehold.co/150x150/80E9D9/1a1a1a?text=Avatar" alt="Avatar de usuario" class="profile-avatar">
+                <div class="profile-info">
+                    <h1 id="profile-username">Cargando...</h1>
+                    <p id="profile-email" class="hidden">Cargando...</p>
+                    <p id="profile-bio" style="font-size: 16px; margin-top: 10px;"></p>
+                    <div id="profile-roles-container" style="margin-top: 15px;">
+                        <!-- Las etiquetas de los roles se cargarán aquí -->
+                    </div>
+                    <a href="editar-perfil.html" id="edit-profile-btn" class="cta-button hidden" style="margin-top: 10px; padding: 8px 20px;">Editar Perfil</a>
+                    <button id="propose-collab-btn" class="cta-button secondary hidden" style="margin-top: 10px; padding: 8px 20px;">Proponer Colaboración</button>
+                </div>
+            </div>
 
-        <!-- Oculto por defecto hasta que JS confirme que eres el dueño -->
-        <p id="profile-email" class="hidden">Cargando...</p>
-
-        <p id="profile-bio" style="font-size: 16px; margin-top: 10px;"></p>
-        <div id="profile-roles-container" style="margin-top: 15px;">
-            <!-- Las etiquetas de los roles se cargarán aquí -->
-        </div>
-
-        <!-- Oculto por defecto hasta que JS confirme que eres el dueño -->
-        <a href="editar-perfil.html" id="edit-profile-btn" class="cta-button hidden" style="margin-top: 10px; padding: 8px 20px;">Editar Perfil</a>
-    </div>
-</div>
-
-            <!-- SISTEMA DE PESTAÑAS -->
+            <!-- SISTEMA DE PESTAÑAS PÚBLICAS -->
             <div class="profile-tabs">
-                <button class="tab-link active hidden" data-tab="tab-gestion">Gestión</button>
-                <button class="tab-link" data-tab="tab-obras">Obras</button>
+                <button class="tab-link active" data-tab="tab-obras">Obras</button>
                 <button class="tab-link" data-tab="tab-bitacora">Bitácora</button>
-                <button class="tab-link hidden" data-tab="tab-biblioteca">Mi Biblioteca</button>
+                <button class="tab-link" data-tab="tab-portafolio">Portafolio</button>
+                <button class="tab-link" data-tab="tab-reseñas">Reseñas</button>
                 <button class="tab-link" data-tab="tab-actividad">Actividad</button>
             </div>
 
-            <!-- CONTENIDO DE LAS PESTAÑAS -->
+            <!-- CONTENIDO DE LAS PESTAÑAS PÚBLICAS -->
             <div class="profile-content">
-                <div id="tab-gestion" class="tab-content">
-                    <h2>Panel de Gestión de Obras</h2>
-                    <p>Aquí puedes administrar tus historias, editar detalles y añadir nuevos capítulos.</p>
-                    <div class="gestion-actions-container" style="margin-bottom: 30px; border-bottom: 1px solid #ccc; padding-bottom: 20px;">
-    <a href="crear-historia.html" class="cta-button" style="margin-bottom: 0;">+ Crear Nueva Historia</a>
-    <a href="crear-entrada.html" class="cta-button" style="margin-bottom: 0; margin-left: 10px; background-color: #777;">+ Escribir en Bitácora</a>
-</div>
-                    <div id="gestion-stories-list" class="management-list">
-                        <!-- La lista de historias para gestionar se cargará aquí -->
+
+                <div id="tab-obras" class="tab-content active">
+                    <!-- El contenido de las obras públicas se cargará aquí con JavaScript -->
+                </div>
+
+                <div id="tab-bitacora" class="tab-content">
+                    <h2>Bitácora del Creador</h2>
+                    <div id="bitacora-feed-container">
+                        <!-- Las entradas de la bitácora se cargarán aquí -->
                     </div>
                 </div>
 
-                <div id="tab-obras" class="tab-content active">
-                    <!-- El contenido de las obras públicas se cargará aquí -->
-                    <p>Próximamente: Las historias publicadas de este usuario.</p>
+                <div id="tab-portafolio" class="tab-content">
+                    <div class="portfolio-actions hidden" id="portfolio-actions-container">
+                        <button id="add-portfolio-item-btn" class="cta-button">Añadir al Portafolio</button>
+                    </div>
+                    <form id="portfolio-form" class="portfolio-form hidden">
+                        <h3 id="portfolio-form-title">Añadir al Portafolio</h3>
+                        <input type="hidden" id="portfolio-item-id">
+                        <div class="form-group">
+                            <label for="portfolio-title">Título del Trabajo</label>
+                            <input type="text" id="portfolio-title" placeholder="Ej: Diseño de Portada para 'El Último Dragón'" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="portfolio-description">Descripción</label>
+                            <textarea id="portfolio-description" rows="4" placeholder="Describe tu contribución, el proyecto, etc." required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="portfolio-link">Enlace al Trabajo (Opcional)</label>
+                            <input type="url" id="portfolio-link" placeholder="https://...">
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="cta-button">Guardar Trabajo</button>
+                            <button type="button" id="cancel-portfolio-form-btn" class="cta-button secondary">Cancelar</button>
+                        </div>
+                        <p id="portfolio-form-error" class="error-message"></p>
+                    </form>
+                    <div id="portfolio-items-container">
+                        <!-- Los ítems se cargarán aquí con JavaScript -->
+                        <p>Cargando portafolio...</p>
+                    </div>
                 </div>
-                <div id="tab-bitacora" class="tab-content">
-        <h2>Bitácora del Creador</h2>
-        <div id="bitacora-feed-container">
-            <!-- Las entradas de la bitácora se cargarán aquí -->
-        </div>
-    </div>
-                <div id="tab-biblioteca" class="tab-content">
-                    <!-- El contenido de la biblioteca se cargará aquí -->
-                    <p>Próximamente: Tu biblioteca personal con seguimiento de lectura.</p>
+
+                <div id="tab-reseñas" class="tab-content">
+                    <form id="review-form" class="review-form hidden">
+                        <h3>Dejar una Reseña</h3>
+                        <div class="form-group">
+                            <label>Valoración</label>
+                            <div class="star-rating">
+                                <input type="radio" id="star5" name="rating" value="5" /><label for="star5" title="5 estrellas">★</label>
+                                <input type="radio" id="star4" name="rating" value="4" /><label for="star4" title="4 estrellas">★</label>
+                                <input type="radio" id="star3" name="rating" value="3" /><label for="star3" title="3 estrellas">★</label>
+                                <input type="radio" id="star2" name="rating" value="2" /><label for="star2" title="2 estrellas">★</label>
+                                <input type="radio" id="star1" name="rating" value="1" /><label for="star1" title="1 estrella">★</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="review-comment">Comentario</label>
+                            <textarea id="review-comment" rows="4" placeholder="Describe tu experiencia colaborando con este usuario..." required></textarea>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="cta-button">Publicar Reseña</button>
+                        </div>
+                        <p id="review-form-error" class="error-message"></p>
+                    </form>
+                    <div id="reviews-list-container">
+                        <p>Cargando reseñas...</p>
+                    </div>
                 </div>
 
                 <div id="tab-actividad" class="tab-content">
-                    <!-- El contenido de la actividad se cargará aquí -->
+                    <h2>Actividad Reciente</h2>
                     <p>Próximamente: La actividad reciente de este usuario.</p>
                 </div>
+                
             </div>
         </div>
+
     </main>
 
     <footer></footer>
-    
+            <!-- Modal para proponer colaboración -->
+<div id="collab-modal" class="modal-overlay hidden">
+    <div class="modal-content">
+        <button class="modal-close-btn">&times;</button>
+        <h3>Proponer Colaboración</h3>
+        <p>Selecciona una de tus obras y define el rol para el que propones colaborar.</p>
+        <form id="collab-proposal-form">
+            <div class="form-group">
+                <label for="collab-story-select">Obra para la Colaboración</label>
+                <select id="collab-story-select" required>
+                    <option value="">Cargando tus obras...</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="collab-role-input">Rol del Colaborador</label>
+                <input type="text" id="collab-role-input" placeholder="Ej: Editor, Diseñador de Portada, Ilustrador" required>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="cta-button">Enviar Propuesta</button>
+            </div>
+            <p id="collab-form-error" class="error-message"></p>
+        </form>
+    </div>
+</div>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script type="module" src="scripts/main.js"></script>
 </body>

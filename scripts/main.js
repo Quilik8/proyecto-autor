@@ -18,6 +18,7 @@ import { inicializarPaginaDePerfil } from './pages/profile.js';
 import { inicializarPaginaEditarPerfil } from './pages/profileEdit.js';
 import { inicializarPaginaCrearEntrada } from './pages/entryCreate.js';
 import { inicializarCrearHistoria, inicializarGestionHistoria, inicializarEditarCapitulo} from './pages/contentManagement.js';
+import { inicializarDashboard } from './pages/dashboard.js'; 
 
 const ejecutarScriptsGlobales = async () => {
     configurarMenuHamburguesa();
@@ -119,6 +120,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             break;
         case 'perfil':
             await inicializarPaginaDePerfil();
+            break;
+        case 'dashboard': // <-- NUEVO CASE
+            await inicializarDashboard();
             break;
         case 'editar-perfil':
             await inicializarPaginaEditarPerfil();

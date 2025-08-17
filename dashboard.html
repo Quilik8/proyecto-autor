@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Control - A.U.T.O.R.</title>
+    <link rel="stylesheet" href="estilos.css">
+    <script>
+      // Script para prevenir el parpadeo del tema oscuro (FOUC)
+      (function() {
+        try {
+          var theme = localStorage.getItem('theme');
+          if (theme === 'dark') {
+            document.documentElement.classList.add('dark-mode');
+          }
+        } catch (e) { /* ignoramos errores si localStorage está desactivado */ }
+      })();
+    </script>
+</head>
+<body class="body-loading" data-page="dashboard">
+
+    <header></header>
+
+    <main>
+        <div class="profile-page-container">
+            
+            <h1 style="margin-bottom: 20px;">Panel de Control</h1>
+
+            <!-- SISTEMA DE PESTAÑAS DEL DASHBOARD -->
+            <div class="profile-tabs">
+                <button class="tab-link active" data-tab="tab-gestion">Gestión de Obras</button>
+                <button class="tab-link" data-tab="tab-biblioteca">Mi Biblioteca</button>
+                <button class="tab-link" data-tab="tab-colaboraciones">Colaboraciones</button>
+                <!-- Aquí podremos añadir "Estadísticas", "Monetización", etc. en el futuro -->
+            </div>
+
+            <!-- CONTENIDO DE LAS PESTAÑAS DEL DASHBOARD -->
+            <div class="profile-content">
+                <div id="tab-gestion" class="tab-content active">
+                    <h2>Panel de Gestión de Obras</h2>
+                    <p>Aquí puedes administrar tus historias, editar detalles y añadir nuevos capítulos.</p>
+                    <div class="gestion-actions-container" style="margin-bottom: 30px; border-bottom: 1px solid var(--border-color); padding-bottom: 20px;">
+                        <a href="crear-historia.html" class="cta-button" style="margin-bottom: 0;">+ Crear Nueva Historia</a>
+                        <a href="crear-entrada.html" class="cta-button" style="margin-bottom: 0; margin-left: 10px; background-color: #777;">+ Escribir en Bitácora</a>
+                    </div>
+                    <div id="gestion-stories-list" class="management-list">
+                        <!-- La lista de historias para gestionar se cargará aquí con JavaScript -->
+                        <p>Cargando tus historias...</p>
+                    </div>
+                </div>
+
+                <div id="tab-biblioteca" class="tab-content">
+                    <h2>Mi Biblioteca</h2>
+                    <p>Próximamente: Tu biblioteca personal con seguimiento de lectura de las obras que sigues.</p>
+                </div>
+                <div id="tab-colaboraciones" class="tab-content">
+                    <h2>Gestión de Colaboraciones</h2>
+                    
+                    <h3 style="margin-top: 30px;">Propuestas Recibidas</h3>
+                    <p>Propuestas de otros autores para que colabores en sus obras.</p>
+                    <div id="received-collabs-container" class="management-list">
+                        <p>Cargando propuestas...</p>
+                    </div>
+
+                    <h3 style="margin-top: 40px;">Colaboraciones Enviadas</h3>
+                    <p>Propuestas que has enviado a otros talentos para tus obras.</p>
+                    <div id="sent-collabs-container" class="management-list">
+                        <p>Cargando colaboraciones...</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- Modal para dejar una reseña -->
+<div id="review-modal" class="modal-overlay hidden">
+    <div class="modal-content">
+        <button class="modal-close-btn">&times;</button>
+        <h3>Dejar una Reseña</h3>
+        <p>Tu valoración y comentario serán públicos en el perfil del usuario.</p>
+        <form id="dashboard-review-form">
+            <input type="hidden" id="review-collab-id">
+            <input type="hidden" id="review-reviewee-id">
+            <div class="form-group">
+                <label>Valoración</label>
+                <div class="star-rating">
+                    <input type="radio" id="d-star5" name="rating" value="5" required/><label for="d-star5" title="5 estrellas">★</label>
+                    <input type="radio" id="d-star4" name="rating" value="4" /><label for="d-star4" title="4 estrellas">★</label>
+                    <input type="radio" id="d-star3" name="rating" value="3" /><label for="d-star3" title="3 estrellas">★</label>
+                    <input type="radio" id="d-star2" name="rating" value="2" /><label for="d-star2" title="2 estrellas">★</label>
+                    <input type="radio" id="d-star1" name="rating" value="1" /><label for="d-star1" title="1 estrella">★</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="dashboard-review-comment">Comentario</label>
+                <textarea id="dashboard-review-comment" rows="4" placeholder="Describe tu experiencia colaborando..." required></textarea>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="cta-button">Publicar Reseña</button>
+            </div>
+            <p id="dashboard-review-error" class="error-message"></p>
+        </form>
+    </div>
+</div>
+    </main>
+
+    <footer></footer>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="module" src="scripts/main.js"></script>
+</body>
+</html>
