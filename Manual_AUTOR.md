@@ -502,19 +502,17 @@ Para la tabla `chapters`:
 - **Sitio de Pruebas en Netlify:** [Pega aquí la URL que te dio Netlify si decidiste publicar]
 
 - **Estructura de Archivos:**
-  proyecto-autor/
-  ├── index.html
-  ├── registro.html
-  ├── login.html
-  ├── explorar.html
-  ├── historia.html
-  ├── capitulo.html
-  ├── confirmacion.html
-  ├── perfil.html
-  ├── gestionar-historia.html 
-  ├── estilos.css
-  ├── script.js
-  └── Manual_AUTOR.md (Este mismo archivo)
+
+El frontend se compone de archivos HTML estándar, una hoja de estilos CSS y una arquitectura de JavaScript modular.
+
+*   `/*.html`: Cada archivo representa una página o vista de la aplicación (e.g., `index.html`, `perfil.html`).
+*   `/css/estilos.css`: Hoja de estilos principal que define toda la apariencia visual, incluyendo el modo oscuro.
+*   `/scripts/`: Carpeta principal que contiene todo el código JavaScript.
+    *   `main.js`: Punto de entrada de la aplicación. Carga componentes y delega la lógica a los módulos de página correspondientes.
+    *   `supabaseClient.js`: Configuración y exportación del cliente de Supabase.
+    *   `ui.js`: Lógica para componentes de UI globales (menú, tema, búsqueda).
+    *   `helpers.js`: Funciones de ayuda reutilizables.
+    *   `/pages/*.js`: Módulos que contienen la lógica específica para cada página (e.g., `profile.js`, `storyDetail.js`).
 
 - **Guía de Marca (Identidad Visual v2.0):**
   - **Paleta de Colores:**
@@ -544,3 +542,7 @@ Se completa la primera fase de refinamiento de código y mejora de la experienci
 *   **Feedback en Formularios:** Los formularios de Login y Registro ahora deshabilitan el botón de envío y muestran el texto "Cargando..." al procesar una solicitud, mejorando la retroalimentación al usuario y evitando envíos duplicados.
 
 ---
+
+### Versión 6.0 (Arquitectura Modular) - Agosto 2025
+
+Se completa una refactorización mayor del código JavaScript, migrando de un único archivo monolítico a una arquitectura de módulos ES (`import`/`export`). Esta reestructuración es un cambio fundamental que mejora la mantenibilidad y escalabilidad del proyecto, organizando el código por responsabilidad en una nueva estructura de archivos bajo el directorio `/scripts`.
