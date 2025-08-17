@@ -12,6 +12,16 @@ const SUPABASE_URL = "https://dyjuvsqghhjtgzbspglz.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5anV2c3FnaGhqdGd6YnNwZ2x6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMzMzQwNjksImV4cCI6MjA2ODkxMDA2OX0.FmhuMYeYf4wuJtuwz6XX_ZI3_AORepwp3_bTXRM5c2Y";
 const clienteSupabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+const toggleFormButtonState = (button, isLoading, originalText) => {
+    if (isLoading) {
+        button.disabled = true;
+        button.textContent = 'Cargando...';
+    } else {
+        button.disabled = false;
+        button.textContent = originalText;
+    }
+};
+
 const ejecutarScriptsGlobales = async () => {
     configurarMenuHamburguesa();
     configurarInterruptorDeTema();
@@ -114,25 +124,36 @@ const inicializarPaginasDeFormulario = () => {
     if (registroForm) {
         registroForm.addEventListener("submit", async (event) => {
             event.preventDefault();
+            const submitButton = registroForm.querySelector('button[type="submit"]');
+            const originalButtonText = submitButton.textContent;
+            toggleFormButtonState(submitButton, true); // Deshabilitamos el botón
+
             const username = document.querySelector("#username").value;
             const email = document.querySelector("#email").value;
             const password = document.querySelector("#password").value;
             const generalError = document.querySelector("#general-error");
             generalError.textContent = "";
+
             try {
                 const { error } = await clienteSupabase.auth.signUp({ email, password, options: { data: { username } } });
                 if (error) throw error;
+                // Si el registro es exitoso, no necesitamos rehabilitar el botón porque navegamos a otra página.
                 window.location.href = 'confirmacion.html';
             } catch (error) {
                 generalError.textContent = "Error en el registro: " + error.message;
+                toggleFormButtonState(submitButton, false, originalButtonText); // Rehabilitamos si hay error
             }
         });
     }
 
     const loginForm = document.querySelector("#login-form");
-    if (loginForm) {
+     if (loginForm) {
         loginForm.addEventListener("submit", async (event) => {
             event.preventDefault();
+            const submitButton = loginForm.querySelector('button[type="submit"]');
+            const originalButtonText = submitButton.textContent;
+            toggleFormButtonState(submitButton, true); // Deshabilitamos el botón
+
             const email = document.querySelector("#login-email").value;
             const password = document.querySelector("#login-password").value;
             const generalError = document.querySelector("#login-general-error");
@@ -140,9 +161,11 @@ const inicializarPaginasDeFormulario = () => {
             try {
                 const { error } = await clienteSupabase.auth.signInWithPassword({ email, password });
                 if (error) throw error;
+                // Si el login es exitoso, navegamos a otra página.
                 window.location.href = 'index.html';
             } catch (error) {
                 generalError.textContent = "Correo o contraseña incorrectos.";
+                toggleFormButtonState(submitButton, false, originalButtonText); // Rehabilitamos si hay error
             }
         });
     }
@@ -251,12 +274,55 @@ const inicializarPaginaDeLectura = async () => {
         chapterContainer.innerHTML = '<h1>Error: ID de capítulo no encontrado.</h1>';
         return;
     }
+
     try {
-        const { data: chapter, error } = await clienteSupabase.from('chapters').select('*').eq('id', chapterId).single();
+        // 1. Obtenemos los datos del capítulo actual
+        const { data: chapter, error } = await clienteSupabase
+            .from('chapters')
+            .select('*')
+            .eq('id', chapterId)
+            .single();
+
         if (error || !chapter) throw error || new Error('Capítulo no encontrado');
         
+        // 2. Rellenamos el contenido principal
         document.getElementById('chapter-title-h1').textContent = chapter.title;
         document.getElementById('chapter-content-article').innerHTML = `<p>${chapter.content.replace(/\n/g, '</p><p>')}</p>`;
+
+        // 3. Obtenemos la lista completa de capítulos de la misma historia para la navegación
+        const { data: allChapters, error: listError } = await clienteSupabase
+            .from('chapters')
+            .select('id, chapter_number')
+            .eq('story_id', chapter.story_id)
+            .eq('status', 'publicado') // Solo navegamos entre capítulos publicados
+            .order('chapter_number', { ascending: true });
+
+        if (listError) throw listError;
+
+        // 4. Encontramos la posición del capítulo actual en la lista
+        const currentIndex = allChapters.findIndex(c => c.id === chapter.id);
+        
+        // 5. Determinamos el capítulo anterior y siguiente
+        const prevChapter = currentIndex > 0 ? allChapters[currentIndex - 1] : null;
+        const nextChapter = currentIndex < allChapters.length - 1 ? allChapters[currentIndex + 1] : null;
+
+        // 6. Actualizamos los enlaces de navegación
+        if (prevChapter) {
+            const prevLink = `capitulo.html?id=${prevChapter.id}`;
+            document.getElementById('nav-anterior-top').href = prevLink;
+            document.getElementById('nav-anterior-bottom').href = prevLink;
+            document.getElementById('nav-anterior-top').style.visibility = 'visible';
+            document.getElementById('nav-anterior-bottom').style.visibility = 'visible';
+        }
+
+        if (nextChapter) {
+            const nextLink = `capitulo.html?id=${nextChapter.id}`;
+            document.getElementById('nav-siguiente-top').href = nextLink;
+            document.getElementById('nav-siguiente-bottom').href = nextLink;
+            document.getElementById('nav-siguiente-top').style.visibility = 'visible';
+            document.getElementById('nav-siguiente-bottom').style.visibility = 'visible';
+        }
+
     } catch (error) {
         chapterContainer.innerHTML = `<h1>Error al cargar el capítulo.</h1><p>${error.message}</p>`;
     }
@@ -791,13 +857,165 @@ const inicializarEditarCapitulo = async () => {
     const editorLayout = document.querySelector('.editor-layout');
     if (!editorLayout) return;
 
-    // ... (El resto de la lógica para editar capítulo, que ya es bastante independiente)
+    // --- Referencias a Elementos del DOM ---
+    const params = new URLSearchParams(window.location.search);
+    const storyId = params.get('story_id');
+    const chapterId = params.get('chapter_id'); 
+
+    const heading = document.getElementById('editor-heading');
+    const chapterListDiv = document.getElementById('editor-chapter-list');
+    const backToManagementLink = document.getElementById('back-to-management-link');
+    const addNewChapterBtn = document.getElementById('add-new-chapter-editor-btn');
+    
+    const editorForm = document.getElementById('chapter-editor-form');
+    const titleInput = document.getElementById('chapter-title-input');
+    const contentInput = document.getElementById('chapter-content-input');
+    const saveDraftBtn = document.getElementById('save-draft-btn');
+    const deleteChapterBtn = document.getElementById('delete-chapter-btn');
+    const editorError = document.getElementById('editor-error');
+
+    if (!storyId) {
+        editorLayout.innerHTML = '<h1>Error: ID de historia no encontrado. No se puede cargar el editor.</h1>';
+        return;
+    }
+    backToManagementLink.href = `gestionar-historia.html?id=${storyId}`;
+    addNewChapterBtn.href = `editar-capitulo.html?story_id=${storyId}`;
+
+    if (!chapterId) {
+        deleteChapterBtn.style.display = 'none';
+    }
+
+    try {
+        const { data: chapters, error: chaptersError } = await clienteSupabase
+            .from('chapters')
+            .select('*')
+            .eq('story_id', storyId)
+            .order('chapter_number', { ascending: true });
+
+        if (chaptersError) throw chaptersError;
+
+        chapterListDiv.innerHTML = '';
+        if (chapters && chapters.length > 0) {
+            chapters.forEach(chap => {
+                // Aquí usamos chapterId como string, lo cual está bien para la comparación de clases
+                const isActive = chap.id == chapterId; // Usamos '==' que es menos estricto, o podríamos parsear
+                const activeClass = isActive ? 'active-chapter' : '';
+                const chapterLink = `<a href="editar-capitulo.html?story_id=${storyId}&chapter_id=${chap.id}" class="${activeClass}">${chap.chapter_number}. ${chap.title}</a>`;
+                chapterListDiv.insertAdjacentHTML('beforeend', chapterLink);
+            });
+        } else {
+            chapterListDiv.innerHTML = '<p style="padding: 10px;">Aún no hay capítulos.</p>';
+        }
+
+        if (chapterId) {
+            // ===== LA CORRECCIÓN ESTÁ AQUÍ =====
+            const chapterToEdit = chapters.find(c => c.id === parseInt(chapterId));
+            
+            if (chapterToEdit) {
+                heading.textContent = `Editando: ${chapterToEdit.title}`;
+                titleInput.value = chapterToEdit.title;
+                contentInput.value = chapterToEdit.content;
+            } else {
+                 heading.textContent = 'Error: Capítulo no encontrado.';
+            }
+        } else {
+            heading.textContent = 'Creando Nuevo Capítulo';
+        }
+
+        const guardarCapitulo = async (status) => {
+            editorError.textContent = '';
+            const title = titleInput.value.trim();
+            const content = contentInput.value.trim();
+            if (!title || !content) {
+                editorError.textContent = 'El título y el contenido no pueden estar vacíos.';
+                return;
+            }
+
+            try {
+                if (chapterId) {
+                    const { error } = await clienteSupabase.from('chapters').update({ title, content, status }).eq('id', chapterId);
+                    if (error) throw error;
+                    alert('¡Capítulo actualizado con éxito!');
+                } else {
+                    const newChapterNumber = (chapters ? chapters.length : 0) + 1;
+                    const { error } = await clienteSupabase.from('chapters').insert({
+                        story_id: storyId,
+                        title,
+                        content,
+                        status,
+                        chapter_number: newChapterNumber
+                    });
+                    if (error) throw error;
+                    alert('¡Capítulo creado con éxito!');
+                }
+                window.location.href = `gestionar-historia.html?id=${storyId}`;
+            } catch (error) {
+                editorError.textContent = 'Error al guardar el capítulo: ' + error.message;
+            }
+        };
+        
+        editorForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            guardarCapitulo('publicado');
+        });
+
+        saveDraftBtn.addEventListener('click', () => {
+            guardarCapitulo('borrador');
+        });
+
+        deleteChapterBtn.addEventListener('click', async () => {
+            if (confirm('¿Estás seguro de que quieres borrar este capítulo? Esta acción no se puede deshacer.')) {
+                try {
+                    const { error } = await clienteSupabase.from('chapters').delete().eq('id', chapterId);
+                    if (error) throw error;
+                    alert('Capítulo borrado con éxito.');
+                    window.location.href = `gestionar-historia.html?id=${storyId}`;
+                } catch (error) {
+                    editorError.textContent = 'Error al borrar el capítulo: ' + error.message;
+                }
+            }
+        });
+
+    } catch (error) {
+        editorLayout.innerHTML = `<h1>Error al cargar los datos del editor.</h1><p>${error.message}</p>`;
+    }
 };
 
 // =================================================================
 // SECCIÓN 6: PUNTO DE ENTRADA DE LA APLICACIÓN (VERSIÓN LIMPIA)
 // =================================================================
 document.addEventListener('DOMContentLoaded', async () => {
+    
+     const loadComponents = async () => {
+        const headerElement = document.querySelector('header');
+        const footerElement = document.querySelector('footer');
+
+        // Si existen los elementos, cargamos el contenido
+        if (headerElement) {
+            try {
+                const response = await fetch('header.html');
+                if (!response.ok) throw new Error('No se pudo cargar el header.');
+                headerElement.innerHTML = await response.text();
+            } catch (error) {
+                console.error('Error cargando el header:', error);
+                headerElement.innerHTML = '<p>Error al cargar el menú de navegación.</p>';
+            }
+        }
+
+        if (footerElement) {
+             try {
+                const response = await fetch('footer.html');
+                if (!response.ok) throw new Error('No se pudo cargar el footer.');
+                footerElement.innerHTML = await response.text();
+            } catch (error) {
+                console.error('Error cargando el footer:', error);
+                footerElement.innerHTML = '<p>Error al cargar el pie de página.</p>';
+            }
+        }
+    };
+    
+    await loadComponents();
+    
     // 1. Los scripts globales siempre se ejecutan
     await ejecutarScriptsGlobales();
 

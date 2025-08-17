@@ -323,6 +323,33 @@ La creación de una aplicación nativa se contempla como una fase avanzada del p
     - [ ] Diseñar y crear la base de datos para los Puntos de Experiencia (XP) y la Moneda Virtual.
     - [ ] **Árbol del Lector:** Implementar la lógica de ganancia de XP/Moneda (leer, comentar, etc.).
     - [ ] **Árbol del Creador (Autores/Gremio):** Implementar la lógica de ganancia de XP (publicar, recibir donaciones, completar trabajos).
+- [ ] **Misión: Crear Página de Valor "Para Creadores".**
+    - [ ] **Sub-misión A (Diseño de Contenido):** Redactar los textos que explican los beneficios y las oportunidades de monetización para cada rol clave: Autores, Críticos, Editores, Diseñadores, Traductores, etc.
+    - [ ] **Sub-misión B (Diseño de Interfaz):** Maquetar el diseño de una nueva página (o una sección principal en el `index`) que presente esta información de forma clara y atractiva.
+    - [ ] **Sub-misión C (Implementación):** Construir la página estática y añadir enlaces a ella desde el menú de navegación principal y el pie de página.
+- [ ] **Misión: Pulido de la Experiencia de Lectura.**
+    - [ ] **Sub-misión A (Página de Capítulo):** Rediseñar la interfaz de lectura para que sea más limpia. Implementar la lógica funcional para los botones "Capítulo Anterior" y "Siguiente Capítulo".
+    - [ ] **Sub-misión B (Controles de Accesibilidad):** Añadir botones en la página de capítulo para agrandar o disminuir el tamaño de la letra.
+    - [ ] **Sub-misión C (Punto de Lectura):** Implementar un sistema que guarde automáticamente el progreso de lectura de un usuario en una obra y lo lleve de vuelta a ese punto al regresar.
+- [ ] **Misión: Potenciar el Editor de Capítulos.**
+    - [ ] **Sub-misión A (Editor de Texto Enriquecido):** Reemplazar el `<textarea>` por una librería que permita formato (negrita, cursiva, centrado) e inserción de imágenes en los capítulos, con un límite por capítulo.
+    - [ ] **Sub-misión B (Asistentes de Escritura):** Añadir un contador de palabras en tiempo real. Implementar validaciones para un mínimo y máximo de palabras en capítulos (especialmente si son de pago).
+- [ ] **Misión: Rediseñar la Página de Inicio (Index).**
+    - [ ] **Sub-misión A (Sistema de Seguimiento):** Implementar la funcionalidad para que los usuarios puedan "Seguir" a sus creadores favoritos.
+    - [ ] **Sub-misión B (Feed Personalizado):** Para usuarios registrados, la página de inicio se convertirá en un feed de actividad que mezcla capítulos y entradas de la bitácora de los creadores seguidos. Incluir un interruptor para alternar con un feed de "Descubrimiento".
+    - [ ] **Sub-misión C (Barra Personal):** Crear un componente de acceso rápido a listas como "Continuar Leyendo" y "Pendientes".
+
+- [ ] **Misión: Potenciar la Bitácora y la Interacción Social.**
+    - [ ] **Sub-misión A (Función "Compartir"):** Permitir a los usuarios citar una entrada de la bitácora de otro creador en su propia bitácora, añadiendo su propio comentario.
+    - [ ] **Sub-misión B (Especialización para Críticas):** Permitir categorizar "Artículos" como "Críticas", añadiendo campos opcionales como una calificación por estrellas.
+
+- [ ] **Misión: Hacer de "Explorar" una Herramienta Poderosa.**
+    - [ ] **Sub-misión A (Sistema de Etiquetas):** Permitir a los autores añadir múltiples etiquetas de género y de "tono/sentimiento" (ej. "Alegre", "Oscuro") a sus obras.
+    - [ ] **Sub-misión B (Interfaz de Filtrado Avanzado):** Construir la página de "Explorar" con filtros que permitan combinar estas etiquetas para refinar las búsquedas.
+- [ ] **Misión: Gestión Avanzada de Obras.**
+    - [ ] **Sub-misión A (Estado de "Borrador" para Historias):** Añadir un `status` a las historias para que puedan existir como borradores privados antes de ser publicadas.
+    - [ ] **Sub-misión B (Sagas y Volúmenes):** Reestructurar la base de datos para permitir la creación de "Sagas" que contengan múltiples "Libros" o "Volúmenes", cada uno con sus propios capítulos.
+    - [ ] **Sub-misión C (Carga por Lotes):** Crear una herramienta para subir un documento completo y que el sistema lo divida automáticamente en capítulos
 - [ ] **Misión 34 (Economía Virtual):**
     - [ ] Construir la "tienda" para gastar monedas.
     - [ ] Implementar recompensas estéticas (marcos, insignias) y funcionales (comentarios destacados).
@@ -334,12 +361,19 @@ La creación de una aplicación nativa se contempla como una fase avanzada del p
 - [ ] Misión C (Compra Directa): Construir la lógica para que un usuario pueda pagar para desbloquear una obra completa o un capítulo específico (el Paywall Flexible).
 - [ ] Misión D (Suscripciones): Crear el sistema de suscripción mensual, gestionar los pagos recurrentes y los beneficios para suscriptores.
 - [ ] Misión E (Publicidad): Esta suele ser una de las últimas fases. Integrar una red publicitaria (como Google AdSense) para mostrar anuncios a los usuarios no suscritos. Los ingresos se registran y se asocian a las obras leídas para el reparto de regalías.
+- [ ] **Misión: Monetización de la Bitácora.**
+    - [ ] **Sub-misión A (Sistema de "Aplausos"):** Implementar un sistema de micro-donaciones (propinas) para las entradas de la bitácora.
+    - [ ] **Sub-misión B (Contenido Exclusivo):** Permitir a los creadores marcar "Artículos" como contenido de pago o exclusivo para suscriptores.
+
+
 
 **FASE 8: Internacionalización (Soporte Bilingüe)**
 - [ ] Misión A (Traducción de la Interfaz - UI):
     - [ ] Crear archivos de idioma (`es.json`, `en.json`) para todo el texto estático.
     - [ ] Implementar un script que cambie el idioma de la UI dinámicamente.
     - [ ] Añadir un selector de idioma en el `header` o `footer`.
+    - [ ] Traducir la interfaz de la plataforma.
+    - [ ] Permitir que el contenido (historias, bitácora) sea marcado con un idioma y filtrado por este.
 - [ ] Misión B (Soporte de Contenido Multilingüe):
     - [ ] Modificar la tabla `historias` en la base de datos para incluir un campo "idioma".
     - [ ] Actualizar la página "Explorar" para permitir filtrar historias por idioma.
