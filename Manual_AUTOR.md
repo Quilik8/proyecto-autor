@@ -526,3 +526,21 @@ Para la tabla `chapters`:
     - **Títulos y Logo:** 'Playfair Display', serif
     - **Cuerpo de Texto y UI:** 'Roboto', sans-serif
     - **Texto de Lectura Larga:** 'Georgia', serif
+
+    ---
+
+## Historial de Cambios (Changelog)
+
+### Versión 5.1 (Refinamiento Inicial) - Agosto 2025
+
+Se completa la primera fase de refinamiento de código y mejora de la experiencia de usuario antes de proceder con nuevas funcionalidades mayores.
+
+**Mejoras Estructurales:**
+*   **Centralización de Componentes:** Se ha refactorizado el código del `Header` y `Footer`. Ahora se gestionan desde archivos `header.html` y `footer.html` y se inyectan dinámicamente en todas las páginas mediante JavaScript. Esto reduce drásticamente la duplicación de código y facilita el mantenimiento.
+
+**Mejoras Funcionales y de UX:**
+*   **Editor de Capítulos Reparado:** Se ha implementado por completo la lógica para crear, leer, actualizar y borrar (CRUD) capítulos en la página `editar-capitulo.html`. Se solucionó un bug crítico que impedía la carga de los datos del capítulo.
+*   **Navegación de Capítulos Funcional:** Se ha añadido la lógica a la página de lectura (`capitulo.html`) para que los botones "Capítulo Anterior" y "Siguiente Capítulo" funcionen, ocultándose dinámicamente si no hay un capítulo al que navegar.
+*   **Feedback en Formularios:** Los formularios de Login y Registro ahora deshabilitan el botón de envío y muestran el texto "Cargando..." al procesar una solicitud, mejorando la retroalimentación al usuario y evitando envíos duplicados.
+
+---
