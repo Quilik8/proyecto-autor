@@ -43,10 +43,10 @@ El código del lado del cliente está organizado en una estructura de archivos c
 | | |-- contentManagement.js
 | | |-- dashboard.js
 | | |-- entryCreate.js
+| | |-- explorarPage.js  <-- NUEVO
 | | |-- profile.js
 | | |-- profileEdit.js
 | | |-- storyDetail.js
-| | |-- storyGrid.js
 | |-- helpers.js
 | |-- main.js
 | |-- supabaseClient.js
@@ -72,7 +72,10 @@ El código del lado del cliente está organizado en una estructura de archivos c
     3.  Leer el `data-page` de la página actual.
     4.  Importar y ejecutar el módulo de JavaScript correspondiente desde la carpeta `/pages`.
 
-*   **`/scripts/pages/*.js`**: Módulos especializados. Cada archivo contiene la lógica de JavaScript específica para una página o un conjunto de funcionalidades relacionadas (ej. `profile.js` maneja la página de perfil, `contentManagement.js` maneja la creación y edición de obras).
+*   **`/scripts/pages/*.js`**: Módulos especializados. Cada archivo contiene la lógica de JavaScript específica para una página o un conjunto de funcionalidades. Por ejemplo:
+    *   `profile.js` maneja la página de perfil público.
+    *   `contentManagement.js` maneja la creación y edición de obras.
+    *   `explorarPage.js` es un controlador más complejo que gestiona la lógica de pestañas de la página de Explorar, cargando dinámicamente tanto las historias como los perfiles del Gremio.
 
 *   **`/scripts/ui.js`**: Contiene la lógica para los componentes de la interfaz de usuario que son globales y se encuentran en todas las páginas, como el menú hamburguesa, el selector de tema y la barra de búsqueda.
 
@@ -205,3 +208,10 @@ Se utilizan dos fuentes principales de Google Fonts para crear una jerarquía vi
     *   **Uso:** Para párrafos, etiquetas, botones y todos los demás elementos de la interfaz. Asegura una excelente legibilidad en pantalla.
 *   **Texto de Lectura Larga:** `Georgia` (Serif)
     *   **Uso:** Específicamente para el contenido de los capítulos (`#chapter-content-article`), para una experiencia de lectura más cómoda y tradicional.
+
+    ## 5. Recursos del Proyecto
+
+Enlaces de referencia rápida para el acceso y la revisión del proyecto.
+
+*   **Repositorio de Código Fuente:** [Pega aquí la URL de tu repositorio de GitHub]
+*   **Sitio de Pruebas (Deploy):** [Pega aquí la URL de tu sitio en Netlify, Vercel, etc.]

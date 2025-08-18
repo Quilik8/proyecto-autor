@@ -11,7 +11,6 @@
 import { clienteSupabase } from './supabaseClient.js';
 import { configurarMenuHamburguesa, configurarInterruptorDeTema, configurarBarraDeBusqueda } from './ui.js';
 import { inicializarPaginasDeFormulario } from './pages/authForms.js';
-import { inicializarPaginasDeHistorias } from './pages/storyGrid.js';
 import { inicializarPaginaDetalleHistoria } from './pages/storyDetail.js';
 import { inicializarPaginaDeLectura } from './pages/chapterReader.js';
 import { inicializarPaginaDePerfil } from './pages/profile.js';
@@ -19,6 +18,7 @@ import { inicializarPaginaEditarPerfil } from './pages/profileEdit.js';
 import { inicializarPaginaCrearEntrada } from './pages/entryCreate.js';
 import { inicializarCrearHistoria, inicializarGestionHistoria, inicializarEditarCapitulo} from './pages/contentManagement.js';
 import { inicializarDashboard } from './pages/dashboard.js'; 
+import { inicializarPaginaExplorar, fetchAndRenderStories } from './pages/explorarPage.js';
 
 const ejecutarScriptsGlobales = async () => {
     configurarMenuHamburguesa();
@@ -105,8 +105,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     // 3. Ejecutamos solo el código específico de la página
     switch (currentPage) {
         case 'index':
+             // La página de inicio usa la función importada para cargar las historias
+            await fetchAndRenderStories(); 
+            break;
         case 'explorar':
-            await inicializarPaginasDeHistorias();
+            await inicializarPaginaExplorar();
             break;
         case 'registro':
         case 'login':
@@ -121,7 +124,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         case 'perfil':
             await inicializarPaginaDePerfil();
             break;
-        case 'dashboard': // <-- NUEVO CASE
+        case 'dashboard': 
             await inicializarDashboard();
             break;
         case 'editar-perfil':

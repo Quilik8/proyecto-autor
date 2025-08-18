@@ -12,29 +12,65 @@
           if (theme === 'dark') {
             document.documentElement.classList.add('dark-mode');
           }
-        } catch (e) { /* ignoramos errores si localStorage está desactivado */ }
+        } catch (e) { /* ignoramos errores */ }
       })();
     </script>
-
-    <title>A.U.T.O.R. - Inicio</title>
-    <link rel="stylesheet" href="estilos.css">
 </head>
 <body class="body-loading" data-page="explorar">
 
 <header></header>
 
 <main>
-    <section class="search-section">
-        <h1 class="section-title">Explora Todas las Historias</h1>
-        
-    </section>
+    <!-- Contenedor Principal de la Página de Exploración -->
+    <div class="explore-page-container" style="max-width: 1200px; margin: 40px auto;">
 
-    <section class="stories-list">
+        <!-- Pestañas de Navegación -->
+        <div class="profile-tabs" style="justify-content: center; margin-bottom: 40px;">
+            <button class="tab-link active" data-tab="historias-content">Historias</button>
+            <button class="tab-link" data-tab="gremio-content">El Gremio</button>
+        </div>
+
+        <!-- Contenido de la Pestaña HISTORIAS (Activo por defecto) -->
+        <div id="historias-content" class="tab-content active">
+            <h1 class="section-title">Explora Todas las Historias</h1>
             <div class="featured-stories-grid">
-
+                <p>Cargando historias...</p>
             </div>
         </div>
-    </section>
+
+        <!-- Contenido de la Pestaña EL GREMIO (Oculto por defecto) -->
+        <div id="gremio-content" class="tab-content">
+            <h1 class="section-title">El Gremio de Talentos</h1>
+            <p style="text-align: center; max-width: 600px; margin: -10px auto 40px;">Encuentra al colaborador perfecto para tu próxima obra.</p>
+            
+            <!-- Formulario de Filtros del Gremio -->
+            <form id="gremio-filters-form" class="gremio-filters-form">
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px; align-items: flex-end;">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label for="gremio-search-input">Buscar por Nombre de Usuario</label>
+                        <input type="text" id="gremio-search-input" placeholder="Ej: Neo, Trinity...">
+                    </div>
+                    <button type="submit" class="cta-button" style="margin: 0;">Buscar</button>
+                </div>
+                <div class="form-group" style="margin-top: 25px; margin-bottom: 0;">
+                    <label>Filtrar por Roles</label>
+                    <div id="gremio-roles-container" class="roles-checkbox-container" style="grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));">
+                        <p>Cargando roles...</p>
+                    </div>
+                    <div class="form-group" style="margin-top: 15px; margin-bottom: 0;">
+                        <label for="gremio-custom-role-input">Buscar Otros Roles (separados por comas)</label>
+                        <input type="text" id="gremio-custom-role-input" placeholder="Ej: Poeta, Guionista, Artista Conceptual...">
+                    </div>
+                </div>
+            </form>
+
+            <!-- Rejilla de Resultados del Gremio -->
+            <div id="gremio-results-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
+                <p>Cargando miembros del gremio...</p>
+            </div>
+        </div>
+
+    </div>
 </main>
 
 <footer></footer>

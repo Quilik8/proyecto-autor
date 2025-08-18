@@ -49,8 +49,8 @@ Este documento contiene el plan de desarrollo maestro para el proyecto, dividido
 - [X] Misión Intermedia: La Bitácora del Creador (MVP).
 
 **FASE 5: El Gremio - El Mercado de Talentos (En Proceso)**
-- [x] **Misión 29:** Construir un sistema de portafolios y de reseñas entre usuarios.
-- [ ] **Misión 30:** Implementar un sistema de búsqueda y filtros para encontrar colaboradores.
+- [X] **Misión 29:** Construir un sistema de portafolios y de reseñas entre usuarios.
+- [X] **Misión 30:** Implementar un sistema de búsqueda y filtros para encontrar colaboradores.
 - [ ] **Misión 31:** Construir la mensajería interna.
 - [ ] **Misión 32:** Implementar sistema de "contratos" simplificados y reparto de ganancias.
 
@@ -76,6 +76,19 @@ Este documento contiene el plan de desarrollo maestro para el proyecto, dividido
 - [ ] Misión A: Traducción de la Interfaz (UI).
 - [ ] Misión B: Soporte de Contenido Multilingüe.
 - [ ] Misión C: Traducción Colaborativa (Integración con El Gremio).
+
+## 2. Contexto Histórico y Lecciones Aprendidas
+
+Esta sección documenta decisiones estratégicas y desafíos encontrados durante las primeras fases del desarrollo, proporcionando un contexto clave para entender la evolución listada en el historial de cambios.
+
+*   **Revisión de la Experiencia de Usuario Inicial (UX v2.0):**
+    *   **Página de Inicio Centrada en el Contenido:** Se decidió eliminar la sección "hero" (el gran titular de bienvenida). La página de inicio ahora muestra directamente una selección de historias destacadas para sumergir al usuario en el catálogo desde el primer momento.
+    *   **Barra de Búsqueda Global:** La funcionalidad de búsqueda se integró directamente en el encabezado (`header`), permitiendo al usuario iniciar una búsqueda desde cualquier punto de la web, mejorando la usabilidad.
+
+*   **"Conocimiento Tribal" y Desafíos Técnicos:**
+    *   **Problemas de CSS y Caché:** Se experimentaron dificultades recurrentes con la caché del navegador que impedían ver los cambios de estilo. La solución estándar es siempre realizar una **Recarga Forzada (`Ctrl+F5` o `Cmd+Shift+R`)** antes de asumir un error en el código.
+    *   **Evolución del Diseño:** El proyecto migró de un tema oscuro inicial a una identidad de marca de tema claro, más elegante y profesional.
+    *   **Reconstrucción del CSS (v5.0):** Tras encontrar conflictos de responsividad y diseño inconsistente, se reconstruyó por completo el archivo `estilos.css`. La nueva versión se estructuró en partes lógicas (Fundamentos, Estructura, Componentes, etc.), eliminando código redundante y solucionando problemas de layout.
 
 ## 2. Historial de Cambios (Changelog)
 
@@ -109,3 +122,17 @@ Registro de las principales fases de desarrollo y mejoras arquitectónicas compl
 - **Portafolios:** Los usuarios ahora pueden añadir, editar y borrar ítems de trabajo en una nueva pestaña "Portafolio" en su perfil público.
 - **Ciclo de Colaboración:** Se implementó el flujo completo de colaboración: un autor puede proponer una colaboración a otro usuario, el colaborador puede aceptar/rechazar la propuesta, y el autor puede marcarla como completada.
 - **Reseñas Transaccionales:** Una vez que una colaboración se marca como "completada", ambas partes pueden dejarse una reseña mutua. Estas reseñas se muestran públicamente en la nueva pestaña "Reseñas" del perfil, vinculadas a un trabajo real y verificado.
+
+### Versión 7.3 (Misión 30 Completada: El Gremio Dinámico) - Agosto 2025
+- Se ha finalizado la Misión 30, creando el motor de búsqueda para "El Gremio".
+- Se implementó la búsqueda de perfiles por nombre de usuario y por roles (predefinidos y personalizados).
+- Se refactorizó la página `explorar.html` para convertirla en una aplicación de pestañas dinámicas, unificando la exploración de Historias y del Gremio en un solo lugar.
+- Se consolidó la lógica de JavaScript, eliminando los archivos `gremio.html` y `gremio.js` y creando un nuevo controlador `explorarPage.js`.
+
+## 3. Estrategia de Aplicación Móvil
+
+La creación de una aplicación nativa se contempla como una fase avanzada del proyecto. La estrategia se divide en tres etapas claras:
+
+1.  **Etapa 1 (Actual): Perfeccionamiento de la Web Responsiva.** El objetivo principal es asegurar que la experiencia de usuario en navegadores móviles sea impecable, cubriendo todas las funcionalidades clave de la plataforma.
+2.  **Etapa 2 (Post-Lanzamiento): Implementación de PWA (Progressive Web App).** Mejorar el sitio web actual para que sea "instalable" en la pantalla de inicio de los móviles, pueda funcionar offline y enviar notificaciones, ofreciendo una experiencia muy similar a una app nativa con un costo de desarrollo mucho menor.
+3.  **Etapa 3 (Fase de Crecimiento): Desarrollo de la Aplicación Nativa.** Una vez que A.U.T.O.R. demuestre tener una base de usuarios activa y/o genere ingresos, se evaluará la contratación de un equipo o freelancer especializado para el desarrollo de las aplicaciones nativas para iOS y Android.
