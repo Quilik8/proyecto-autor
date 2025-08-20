@@ -1,0 +1,60 @@
+/* --- 3.3 Tarjetas de Historias --- */
+.section-title {
+    font-family: var(--font-serif);
+    font-size: 36px;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.featured-stories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+.story-card {
+    background-color: var(--color-accent);
+    border-radius: 15px;
+    overflow: hidden;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%; 
+}
+.story-card:hover { 
+    transform: translateY(-10px); 
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1); 
+}
+.story-card img {
+    width: 60%;
+    height: auto;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+.card-title { 
+    font-family: var(--font-serif); 
+    font-size: 22px; 
+    color: var(--color-text-primary); 
+    margin-bottom: 5px; 
+}
+.card-author { 
+    font-family: var(--font-sans-serif); 
+    font-size: 14px; 
+    color: var(--color-text-secondary); 
+    margin-bottom: 15px; 
+}
+.card-description { 
+    font-family: var(--font-sans-serif); 
+    font-size: 15px; 
+    color: var(--color-text-secondary); 
+}
+.story-card-link { 
+    text-decoration: none; 
+    color: inherit; 
+}

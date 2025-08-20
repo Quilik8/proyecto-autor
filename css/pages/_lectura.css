@@ -1,0 +1,81 @@
+/* =================================================================
+   PARTE 4: PÁGINAS DE CONTENIDO (LECTURA, PERFIL, GESTIÓN)
+   ================================================================= */
+
+/* --- 4.1 Páginas de Detalle de Historia y Lectura --- */
+
+/* ===== NUEVOS ESTILOS PARA EL LAYOUT DE DETALLE DE HISTORIA ===== */
+
+.story-details-layout {
+    max-width: 1000px; /* Un poco más ancho para que quepa todo bien */
+    margin: 40px auto;
+    display: flex;
+    gap: 40px; /* Espacio entre la portada y la información */
+    align-items: flex-start; /* Alinea los items al principio */
+}
+
+.cover-column {
+    flex-basis: 300px; /* Ancho base de la columna de la portada */
+    flex-shrink: 0; /* Evita que la columna se encoja */
+}
+
+#story-cover-image {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.info-column {
+    flex-grow: 1; /* La columna de info ocupa el espacio sobrante */
+}
+
+/* Hacemos que la info de la columna derecha ocupe todo el espacio vertical */
+.info-column h1, 
+.info-column h2, 
+.info-column .story-meta, 
+.info-column .story-synopsis, 
+.info-column .cta-button {
+    margin-bottom: 20px; /* Espaciado consistente */
+}
+
+/* --- Responsividad para el nuevo layout --- */
+@media (max-width: 768px) {
+    .story-details-layout {
+        flex-direction: column; /* Apila las columnas verticalmente */
+        align-items: center; /* Centra la portada en móvil */
+        text-align: center; /* Centra el texto */
+    }
+    .cover-column {
+        width: 60%; /* La portada ocupa el 60% del ancho del contenedor */
+        max-width: 250px;
+    }
+    .info-column h1 {
+        font-size: 36px;
+    }
+}
+
+.story-header-container, 
+.chapter-list-container,
+.reading-container {
+    max-width: 800px;
+    margin: 40px auto;
+}
+
+.story-header-container h1 { font-family: var(--font-serif); font-size: 48px; margin-bottom: 5px; }
+.story-header-container h2 { font-family: var(--font-sans-serif); font-size: 20px; font-weight: normal; color: var(--color-text-secondary); margin-bottom: 15px; }
+.story-meta { font-size: 16px; color: #555; margin-bottom: 25px; }
+.story-synopsis { font-size: 18px; line-height: 1.7; margin-bottom: 30px; }
+
+.chapter-list-container h3 { font-family: var(--font-serif); font-size: 28px; border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 20px; }
+.chapter-list-container ul { list-style: none; }
+.chapter-list-container li a { display: block; padding: 12px 5px; text-decoration: none; color: var(--color-text-primary); font-size: 18px; font-weight: 700; border-bottom: 1px solid #eee; transition: color 0.3s ease; }
+.chapter-list-container li a:hover { color: var(--color-accent); }
+
+.chapter-title { font-family: var(--font-serif); font-size: 40px; text-align: center; margin-bottom: 30px; }
+.chapter-navigation { display: flex; justify-content: space-between; margin-bottom: 40px; padding-bottom: 15px; border-bottom: 1px solid #ddd; }
+.chapter-navigation a { text-decoration: none; color: var(--color-accent); font-weight: 700; font-size: 16px; transition: color 0.3s ease; }
+.chapter-navigation a:hover { color: var(--color-text-primary); }
+.reading-content { font-family: 'Georgia', serif; font-size: 20px; line-height: 1.8; color: var(--color-text-secondary); }
+.reading-content p { margin-bottom: 2em; }
+.reading-content + .chapter-navigation { margin-top: 40px; margin-bottom: 0; padding-top: 15px; padding-bottom: 0; border-top: 1px solid #ddd; border-bottom: none; }

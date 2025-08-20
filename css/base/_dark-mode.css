@@ -1,0 +1,127 @@
+/* =================================================================
+   PARTE 5: MODO OSCURO Y RESPONSIVIDAD
+   ================================================================= */
+
+/* --- 5.1 Estilos para el Modo Oscuro --- */
+.dark-mode nav .cta-button,
+.dark-mode nav .boton-registro,
+.dark-mode .avatar-upload-container .cta-button {
+    color: var(--color-text-primary) !important;
+}
+
+.dark-mode body {
+    background-color: var(--color-background-dark);
+    color: var(--color-text-primary-dark);
+}
+
+.dark-mode .card-description {
+    color: var(--color-text-primary-dark);
+    opacity: 0.7; /* Lo hacemos ligeramente transparente para diferenciarlo del título */
+}
+
+.dark-mode .story-card,
+.dark-mode .form-container,
+.dark-mode .search-bar,
+.dark-mode .profile-header,
+.dark-mode .profile-content,
+.dark-mode .chapter-list-panel {
+    background-color: var(--color-background-surface-dark);
+    border-color: #444;
+}
+
+.dark-mode .card-title,
+.dark-mode .form-group label,
+.dark-mode .chapter-list-container li a,
+.dark-mode #editor-chapter-list a {
+    color: var(--color-text-primary-dark);
+}
+
+.dark-mode .card-author,
+.dark-mode .story-header-container h2,
+.dark-mode .story-meta,
+.dark-mode .reading-content,
+.dark-mode .profile-info p {
+    color: var(--color-text-secondary-dark);
+}
+
+.dark-mode nav ul li a {
+    color: var(--color-text-primary-dark);
+}
+
+.dark-mode nav ul li a:hover,
+.dark-mode .chapter-list-container li a:hover,
+.dark-mode #editor-chapter-list a:hover {
+    color: var(--color-accent);
+    background-color: #2c2c2c;
+}
+.dark-mode #editor-chapter-list a.active-chapter {
+    color: var(--color-text-primary);
+    background-color: var(--color-accent);
+}
+
+.dark-mode .status-tag.draft {
+    background-color: #888;
+    color: #121212;
+}
+
+.dark-mode .avatar-upload-container .profile-avatar {
+    border-color: #333;
+}
+
+.dark-mode .bar {
+    background-color: var(--color-text-primary-dark);
+}
+.dark-mode #theme-toggle {
+    color: var(--color-text-primary-dark);
+}
+
+.dark-mode #story-stats-container { border-top-color: #444; }
+.dark-mode .stat-label { color: var(--color-text-secondary-dark); }
+
+/* =================================================================
+   PARTE 8: ESTILOS DE PANELES (SOLUCIÓN UNIFICADA FINAL)
+   ================================================================= */
+
+/* --- 8.1: Estilos de los Paneles Principales (MODO CLARO Y OSCURO) --- */
+
+/* MODO CLARO: Todos los paneles principales tienen el fondo de acento verdoso */
+.profile-header,
+.profile-content,
+.gremio-filters-form,
+.profile-card {
+    background-color: rgba(128, 233, 217, 0.4);
+}
+
+/* MODO OSCURO: Todos los paneles principales tienen el fondo gris oscuro opaco */
+.dark-mode .profile-header,
+.dark-mode .profile-content,
+.dark-mode .gremio-filters-form,
+.dark-mode .profile-card {
+    background-color: var(--color-background-surface-dark);
+    border: none;
+}
+
+
+/* --- 8.2: Estilos de los Elementos INTERNOS del Formulario del Gremio --- */
+
+/* MODO CLARO: Inputs y checkboxes con fondo blanco para destacar */
+#gremio-filters-form .form-group input[type="text"] {
+    background-color: var(--color-background-white);
+}
+#gremio-filters-form .roles-checkbox-container {
+    background-color: rgba(255, 255, 255, 0.6);
+    border-color: transparent;
+}
+
+/* MODO OSCURO: Restauramos el estilo correcto con fondo negro y borde gris */
+.dark-mode #gremio-filters-form .form-group input[type="text"],
+.dark-mode #gremio-filters-form .roles-checkbox-container {
+    background-color: var(--color-background-dark);
+    border: 1px solid #444;
+}
+
+
+/* --- 8.3: Estilos restantes --- */
+.dark-mode .profile-card-bio {
+    color: var(--color-text-secondary-dark);
+}

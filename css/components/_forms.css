@@ -1,0 +1,154 @@
+/* --- 3.2 Formularios --- */
+.form-container {
+    max-width: 480px;
+    margin: 60px auto; 
+    padding: 50px;
+    background-color: var(--color-background-white);
+    border-radius: 20px; 
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+}
+.form-container h2 { 
+    font-family: var(--font-serif); 
+    font-size: 36px; 
+    line-height: 1.2; 
+    margin-bottom: 10px; 
+}
+.form-container p { 
+    font-family: var(--font-sans-serif); 
+    color: #555; 
+    margin-bottom: 40px; 
+}
+.form-group { 
+    margin-bottom: 25px; 
+    text-align: left; 
+}
+.form-group label { 
+    display: block; 
+    margin-bottom: 8px; 
+    font-weight: 700; 
+    color: var(--color-text-secondary); 
+    font-size: 14px; 
+}
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+    background-color: rgba(128, 233, 217, 0.2);
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    color: var(--color-text-primary);
+    outline: none;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+.form-group textarea {
+    font-family: var(--font-sans-serif);
+    resize: vertical;
+}
+.form-group input:focus,
+.form-group textarea:focus { 
+    border-color: var(--color-accent); 
+    background-color: var(--color-background-white);
+}
+.form-container .cta-button { 
+    width: 100%; 
+}
+.error-message { 
+    color: #e74c3c; 
+    font-size: 14px; 
+    margin-top: 5px; 
+    min-height: 16px; 
+    text-align: left; 
+}
+
+/* Estilos para contenedores de checkboxes y radios */
+.roles-checkbox-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 10px;
+    background-color: rgba(0,0,0,0.02);
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid #eee;
+}
+
+.role-checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Checkbox personalizado */
+.role-checkbox-item input[type="checkbox"] { display: none; }
+.role-checkbox-item label {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    font-weight: normal;
+    font-size: 15px;
+}
+.role-checkbox-item label::before {
+    content: '';
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+.role-checkbox-item input[type="checkbox"]:checked + label::before {
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
+    content: '✔';
+    color: var(--color-text-primary);
+    text-align: center;
+    line-height: 16px;
+    font-size: 14px;
+}
+
+/* Radio personalizado (para la página de crear-entrada) */
+.role-checkbox-item input[type="radio"] { display: none; }
+.role-checkbox-item input[type="radio"] + label {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    font-weight: normal;
+    font-size: 15px;
+    width: 100%;
+    justify-content: center;
+    padding: 10px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+.role-checkbox-item input[type="radio"]:checked + label {
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
+    color: var(--color-text-primary);
+    font-weight: bold;
+}
+
+/* Sistema de estrellas para el formulario */
+.star-rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    font-size: 2rem;
+}
+
+.star-rating input {
+    display: none;
+}
+
+.star-rating label {
+    color: #ccc;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.star-rating input:checked ~ label,
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+    color: #f39c12;
+}

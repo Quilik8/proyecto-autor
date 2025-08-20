@@ -1,0 +1,13 @@
+/* Estilo individual de cada etiqueta de rol */
+.role-tag {
+    background-color: var(--color-accent-light);
+    color: var(--color-text-primary);
+    padding: 5px 12px;
+    border-radius: 50px; /* Las hace píldoras redondeadas */
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* Etiquetas de Estado (ej. Borrador) */
+.status-tag { font-size: 12px; font-weight: bold; padding: 3px 8px; border-radius: 50px; margin-left: 10px; vertical-align: middle; }
+.status-tag.draft { background-color: #555; color: #fff; }

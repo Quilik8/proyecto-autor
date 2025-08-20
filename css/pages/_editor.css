@@ -1,0 +1,61 @@
+/* --- 4.3 Paneles de Gestión y Edición --- */
+.management-page-container { max-width: 1200px; margin: 40px auto; }
+.management-layout, .editor-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+.editor-layout { grid-template-columns: 280px 1fr; }
+
+.chapter-list-panel { background-color: var(--color-background-white); padding: 20px; border-radius: 15px; height: fit-content; }
+.management-panel h3, .chapter-list-panel h3 { font-family: var(--font-serif); font-size: 24px; margin-bottom: 20px; border-bottom: 2px solid #ccc; padding-bottom: 10px; }
+
+.chapter-management-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0;  border-bottom: 1px solid #ccc; }
+.chapter-management-item p { margin: 0; font-weight: 700; }
+.chapter-actions { display: flex; align-items: center; flex-shrink: 0; }
+.chapter-actions a { text-decoration: none; margin-left: 10px; font-size: 14px; font-weight: bold; }
+
+/* Estilos específicos del editor */
+#add-new-chapter-editor-btn, #back-to-management-link { display: block; text-align: center; margin-bottom: 20px; text-decoration: none; }
+#editor-chapter-list a { display: block; text-decoration: none; color: var(--color-text-primary); padding: 12px 15px; border-radius: 8px; margin-bottom: 5px; font-weight: 700; transition: background-color 0.2s ease; }
+#editor-chapter-list a:hover { background-color: #e9e9f2; }
+#editor-chapter-list a.active-chapter { background-color: var(--color-accent); color: var(--color-text-primary); }
+.editor-panel .form-container { max-width: none; margin: 0; padding: 0; box-shadow: none; background-color: transparent; text-align: left; }
+#chapter-content-input { resize: vertical; min-height: 400px; }
+
+/* --- 4.5 Estilos para las Estadísticas del Panel de Gestión --- */
+#story-stats-container {
+    max-width: 1200px; /* Mismo ancho que el contenedor principal */
+    margin: 40px auto; /* Centra el bloque y le da espacio vertical */
+    padding-top: 30px;
+    border-top: 2px solid #ccc; /* Usamos el color de borde visible que definimos */
+}
+
+#story-stats-container h4 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-family: var(--font-serif);
+    font-size: 20px;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-number {
+    display: block;
+    font-size: 32px;
+    font-weight: 700;
+    font-family: var(--font-serif);
+    color: var(--color-accent);
+}
+
+.stat-label {
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+}
+

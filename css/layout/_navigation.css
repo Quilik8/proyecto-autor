@@ -1,0 +1,74 @@
+/* --- 3.1 Navegación y Barra de Búsqueda --- */
+header .search-bar {
+    display: flex;
+    flex-grow: 1; /* Ocupa el espacio sobrante */
+    flex-basis: 300px; /* Tamaño base antes de crecer/encogerse */
+    min-width: 250px;
+    max-width: 700px;
+    background-color: var(--color-background-white);
+    border-radius: 50px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    border: 1px solid #eee;
+}
+
+.search-bar input {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 15px 25px;
+    font-size: 16px;
+    background: transparent;
+    min-width: 0;
+}
+.search-bar button {
+    border: none;
+    background-color: var(--color-accent);
+    color: var(--color-text-primary);
+    padding: 0 30px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+header nav {
+    flex-shrink: 0; /* La navegación no se encoge */
+}
+nav ul { 
+    display: flex; 
+    list-style: none; 
+    align-items: center; 
+}
+nav ul li { 
+    margin-left: 30px; 
+}
+nav ul li a { 
+    text-decoration: none; 
+    color: var(--color-text-secondary); 
+    font-size: 16px; 
+    font-weight: 700; 
+    transition: color 0.3s ease; 
+}
+nav ul li a:hover { 
+    color: var(--color-accent); 
+}
+.boton-registro { 
+    background-color: var(--color-accent); 
+    color: var(--color-text-primary); 
+    padding: 10px 20px; 
+    border-radius: 50px; 
+}
+nav.nav-loading {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.logo-link {
+    text-decoration: none; /* Quita el subrayado */
+    color: inherit; /* Hereda el color del texto normal */
+}
+
+/* Espaciado entre los enlaces de perfil y dashboard en la navegación */
+#nav-profile a:first-child {
+    margin-right: 15px;
+}

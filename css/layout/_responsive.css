@@ -1,0 +1,91 @@
+/* --- 5.2 Lógica de Responsividad para Pantallas Pequeñas --- */
+
+/* La hamburguesa está oculta en escritorio */
+.hamburger {
+    display: none;
+    cursor: pointer;
+    z-index: 101; /* Para que esté por encima de todo */
+}
+.bar {
+    display: block;
+    width: 25px;
+    height: 3px;
+    margin: 5px auto;
+    background-color: var(--color-text-secondary);
+    transition: all 0.3s ease-in-out;
+}
+
+
+@media (max-width: 992px) {
+
+    /* --- Arreglos Finales de Perfil en Móvil --- */
+.profile-page-container {
+    padding: 0; /* Anula cualquier padding que pueda interferir */
+}
+
+.profile-tabs {
+    flex-wrap: wrap; /* ¡La clave! Permite que las pestañas salten a la siguiente línea */
+    justify-content: center; /* Centra las pestañas para un mejor aspecto */
+}
+
+    /* --- Ajustes generales para móvil --- */
+    main { padding: 0 20px; }
+    header {
+    padding: 20px 60px 20px 20px; /* Arriba, Derecha, Abajo, Izquierda */
+    position: relative; /* Buena práctica para contener elementos posicionados */
+}
+
+    /* --- Header y Navegación --- */
+    header nav {
+        display: none; /* Ocultamos el menú de escritorio */
+        width: 100%;
+        order: 1; /* El menú irá al final en el DOM, pero lo mostramos primero */
+    }
+    .hamburger {
+    display: block; /* Mostramos la hamburguesa */
+    position: fixed; /* La fijamos a la ventana del navegador */
+    top: 28px;       /* Ajusta este valor para alinearla verticalmente */
+    right: 20px;     /* La alineamos con el padding derecho del header */
+    z-index: 101;    /* Nos aseguramos de que esté por encima del menú */
+}
+    header .search-bar {
+        order: 2; /* La barra de búsqueda siempre va después del menú y el logo */
+    }
+    
+    /* Comportamiento del menú hamburguesa activo */
+    .hamburger.active .bar:nth-child(2) { opacity: 0; }
+    .hamburger.active .bar:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+    .hamburger.active .bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+    
+    nav.active {
+        display: block;
+        text-align: center;
+        margin-top: 20px;
+    }
+    nav.active ul {
+        flex-direction: column;
+        gap: 20px;
+    }
+    nav.active ul li {
+        margin-left: 0;
+    }
+    
+    /* --- Layouts de Rejilla a Una Columna --- */
+    .management-layout,
+    .editor-layout {
+        grid-template-columns: 1fr; /* ¡LA CLAVE! Apila las columnas */
+    }
+
+    /* --- Ajustes Específicos de Página --- */
+    .profile-header {
+        flex-direction: column;
+        text-align: center;
+    }
+    .profile-avatar {
+        margin-right: 0;
+        margin-bottom: 20px;
+    }
+    .management-list-item h4 {
+        min-width: 0; /* Permite que el texto se ajuste */
+    }
+}

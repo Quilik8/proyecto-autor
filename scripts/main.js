@@ -37,11 +37,11 @@ const gestionarEstadoDeSesion = async () => {
     const navElement = document.querySelector('nav');
     const navLogin = document.querySelector("#nav-login");
     const navRegistro = document.querySelector("#nav-registro");
-    const navProfile = document.querySelector("#nav-profile");
+    const navUserItems = document.querySelectorAll(".nav-user-item");
     const navLogout = document.querySelector("#nav-logout");
     const { data: { session } } = await clienteSupabase.auth.getSession();
     if (session) {
-        navProfile?.classList.remove('hidden');
+        navUserItems.forEach(item => item.classList.remove('hidden'));
         navLogout?.classList.remove('hidden');
     } else {
         navLogin?.classList.remove('hidden');

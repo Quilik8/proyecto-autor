@@ -1,0 +1,73 @@
+/* =================================================================
+   PARTE 2: ESTRUCTURA PRINCIPAL Y COMPONENTES
+   ================================================================= */
+
+/* --- 2.1 Layout Principal (Header, Main, Footer) --- */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap; /* Permite que los elementos bajen de línea si no caben */
+    gap: 20px;       /* Espacio entre los elementos del header */
+    padding: 20px 40px;
+    width: 100%;
+}
+
+main { 
+    flex-grow: 1; /* El contenido principal ocupa el espacio sobrante */
+    padding: 0 40px; 
+    width: 100%;
+}
+
+footer { 
+    text-align: center; 
+    padding: 40px 20px; 
+    margin-top: auto; /* Empuja el footer hacia abajo */
+    font-size: 14px; 
+    color: #555; 
+    flex-shrink: 0; /* Evita que el footer se encoja */
+}
+
+/* --- 2.2 Componentes Reutilizables --- */
+
+/* Logo */
+.logo {
+    font-family: var(--font-serif);
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--color-accent);
+    flex-shrink: 0; /* El logo no se deforma */
+}
+
+/* Botón de Cambio de Tema (Sol) */
+#theme-toggle {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--color-text-secondary);
+    padding: 0;
+}
+/* La clase .hidden sigue siendo útil */
+.hidden {
+    display: none !important;
+}
+
+/* =================================================================
+   PARTE 6: ESTILOS DEL LOGO
+   ================================================================= */
+
+/* --- Estilos base para la imagen del logo --- */
+.logo-img {
+    /* Ajusta la altura según veas que queda mejor en tu header */
+    height: 70px; 
+    width: auto; /* Mantiene la proporción correcta */
+    display: block; /* Evita espacios extra debajo de la imagen */
+    transition: content 0.3s ease; /* Para una futura transición suave */
+}
+
+/* --- La magia: Cambiar el logo en modo oscuro --- */
+.dark-mode .logo-img {
+    /* La propiedad 'content' nos permite cambiar la fuente de una imagen! */
+    content: url('../../img/logo-light-color.png');
+}

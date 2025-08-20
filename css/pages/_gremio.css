@@ -1,0 +1,26 @@
+/* =================================================================
+   PARTE 7: PÁGINA DEL GREMIO (ESTILOS ESTRUCTURALES)
+   ================================================================= */
+
+.gremio-filters-form {
+    padding: 30px;
+    border-radius: 15px;
+    margin-bottom: 40px;
+}
+
+.profile-card {
+    border-radius: 15px;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile-card:hover { transform: translateY(-5px); }
+.profile-card-header { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+.profile-card-header img { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; }
+.profile-card-header h3 { font-family: var(--font-serif); font-size: 22px; margin: 0; }
+.profile-card-bio { color: var(--color-text-secondary); font-size: 15px; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 3; line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; min-height: 68px; }
+.profile-card-roles { margin-top: 15px; display: flex; flex-wrap: wrap; gap: 8px; }
+.profile-card-footer { margin-top: auto; padding-top: 20px; }
+.profile-card-footer .cta-button { width: 100%; text-align: center; padding: 10px; margin-top: 0; }

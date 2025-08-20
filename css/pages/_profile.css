@@ -1,0 +1,226 @@
+/* --- 4.2 Página de Perfil de Usuario --- */
+.profile-page-container { max-width: 1000px; width: 100%; margin: 40px auto; }
+.profile-header { display: flex; align-items: center; background-color: rgba(128, 233, 217, 0.4); padding: 30px; border-radius: 15px; margin-bottom: 20px; }
+.profile-avatar { width: 150px; height: 150px; border-radius: 50%; margin-right: 30px; object-fit: cover; }
+.profile-info h1 { font-family: var(--font-serif); font-size: 36px; margin: 0; }
+.profile-info p { font-size: 18px; color: var(--color-text-secondary); margin: 5px 0 0 0; }
+.profile-tabs { display: flex; border-bottom: 2px solid #d1d1d1; }
+.tab-link { padding: 15px 25px; cursor: pointer; background: none; border: none; font-size: 18px; font-weight: 700; color: var(--color-text-secondary); border-bottom: 3px solid transparent; transition: all 0.3s ease; }
+.tab-link.active, .tab-link:hover { color: var(--color-accent); border-bottom-color: var(--color-accent); }
+.profile-content { padding: 30px; background-color: rgba(128, 233, 217, 0.4); border-radius: 0 0 15px 15px; }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+.management-list-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #ccc; }
+.management-list-item h4 { margin: 0; font-size: 20px; }
+
+/* Contenedor para las etiquetas de rol */
+#profile-roles-container {
+    display: flex;
+    flex-wrap: wrap; /* Para que las etiquetas pasen a la siguiente línea si no caben */
+    gap: 8px;      /* Espacio entre etiquetas */
+}
+
+/* --- Adaptación para el modo oscuro --- */
+.dark-mode .role-tag {
+    background-color: #333; /* Un gris oscuro que contrasta bien */
+    color: var(--color-text-primary-dark);
+}
+
+/* --- 4.4 Otros componentes específicos --- */
+
+/* Subida de Avatares y Portadas */
+.avatar-upload-container { text-align: center; margin-bottom: 20px; }
+.avatar-upload-container .profile-avatar { margin-bottom: 10px; border: 4px solid var(--color-accent-light); }
+.avatar-upload-container .cta-button { margin-top: 10px; }
+input[type="file"] { display: none; }
+
+/* Ajustes para el modo oscuro */
+.dark-mode #story-stats-container { border-top-color: #444; }
+.dark-mode .stat-label {
+    color: var(--color-text-secondary-dark);
+}
+
+/* --- Estilos para selectores de radio personalizados --- */
+.role-checkbox-item input[type="radio"] {
+    display: none;
+}
+
+.role-checkbox-item input[type="radio"] + label {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    font-weight: normal;
+    font-size: 15px;
+    width: 100%;
+    justify-content: center;
+    padding: 10px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.role-checkbox-item input[type="radio"]:checked + label {
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
+    color: var(--color-text-primary);
+    font-weight: bold;
+}
+
+/* Modo Oscuro para los radios */
+.dark-mode .role-checkbox-item input[type="radio"] + label {
+    border-color: #444;
+}
+.dark-mode .role-checkbox-item input[type="radio"]:checked + label {
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
+    color: var(--color-text-primary);
+}
+
+/* --- 4.6 Estilos para la Bitácora --- */
+.bitacora-entry {
+    background-color: rgba(0,0,0,0.03);
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #eee;
+}
+
+.bitacora-entry.entry-articulo {
+    border-left: 4px solid var(--color-accent);
+}
+
+.bitacora-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.bitacora-title {
+    font-family: var(--font-serif);
+    font-size: 24px;
+    margin: 0;
+}
+
+.entry-meta {
+    font-size: 12px;
+    color: #777;
+    text-transform: uppercase;
+}
+
+.bitacora-content p {
+    margin: 0;
+    white-space: pre-wrap; /* Respeta los saltos de línea y espacios */
+}
+
+.bitacora-actions a {
+    font-size: 14px;
+    color: #e74c3c;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* Modo Oscuro */
+.dark-mode .bitacora-entry {
+    background-color: rgba(255,255,255,0.05);
+    border-color: #333;
+}
+.dark-mode .entry-meta {
+    color: var(--color-text-secondary-dark);
+}
+
+/* Estilos para la nueva sección de Portafolio */
+.portfolio-actions {
+    text-align: right;
+    margin-bottom: 20px;
+}
+
+.portfolio-form {
+    background-color: var(--bg-color-light);
+    padding: 25px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    margin-bottom: 30px;
+}
+
+.portfolio-form h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.portfolio-item {
+    background-color: var(--bg-color-light);
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    margin-bottom: 15px;
+    position: relative; /* Para los botones de acción */
+}
+
+.portfolio-item h4 {
+    margin: 0 0 10px 0;
+    color: var(--primary-color);
+}
+
+.portfolio-item p {
+    margin: 0 0 15px 0;
+}
+
+.portfolio-item a {
+    font-weight: bold;
+}
+
+.portfolio-item-actions {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    display: flex;
+    gap: 10px;
+}
+
+.portfolio-item-actions button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 5px;
+}
+
+/* Estilos para la sección de Reseñas */
+.review-form {
+    background-color: var(--bg-color-light);
+    padding: 25px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    margin-bottom: 30px;
+}
+
+.review-item {
+    display: flex;
+    gap: 15px;
+    background-color: var(--bg-color-light);
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    margin-bottom: 15px;
+}
+
+.review-item .reviewer-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.review-content h4 {
+    margin: 0 0 5px 0;
+}
+
+.review-content p {
+    margin: 0;
+}
+
+.review-stars {
+    color: #f39c12; /* Color de las estrellas */
+    margin-bottom: 10px;
+}

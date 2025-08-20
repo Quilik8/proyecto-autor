@@ -1,0 +1,19 @@
+/* Botón de Llamada a la Acción (CTA) */
+.cta-button {
+    display: inline-block;
+    background-color: var(--color-accent);
+    color: var(--color-text-primary);
+    padding: 12px 35px;
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 50px;
+    margin-top: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+.cta-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 20px rgba(38, 221, 198, 0.4);
+}
