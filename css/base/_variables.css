@@ -1,0 +1,18 @@
+/* --- 1.2 Variables Globales (Raíz) --- */
+:root {
+    /* Paleta Modo Claro */
+    --color-accent: #26DDC6;
+    --color-accent-light: #80E9D9;
+    --color-text-primary: #1a1a1a;
+    --color-text-secondary: #333;
+    --color-background: #f7f7ff;
+    --color-background-white: #ffffff;
+    --font-serif: 'Playfair Display', serif;
+    --font-sans-serif: 'Roboto', sans-serif;
+
+    /* Paleta Modo Oscuro */
+    --color-background-dark: #121212;
+    --color-background-surface-dark: #1e1e1e;
+    --color-text-primary-dark: #e0e0e0;
+    --color-text-secondary-dark: #a0a0a0;
+}

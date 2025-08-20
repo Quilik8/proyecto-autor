@@ -9,24 +9,7 @@
 /* --- 1.1 Importación de Fuentes --- */
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@400;700&display=swap');
 
-/* --- 1.2 Variables Globales (Raíz) --- */
-:root {
-    /* Paleta Modo Claro */
-    --color-accent: #26DDC6;
-    --color-accent-light: #80E9D9;
-    --color-text-primary: #1a1a1a;
-    --color-text-secondary: #333;
-    --color-background: #f7f7ff;
-    --color-background-white: #ffffff;
-    --font-serif: 'Playfair Display', serif;
-    --font-sans-serif: 'Roboto', sans-serif;
-
-    /* Paleta Modo Oscuro */
-    --color-background-dark: #121212;
-    --color-background-surface-dark: #1e1e1e;
-    --color-text-primary-dark: #e0e0e0;
-    --color-text-secondary-dark: #a0a0a0;
-}
+@import 'base/_variables.css';
 
 /* --- 1.3 Reseteo Básico y Estilos del Body --- */
 * {
@@ -1118,7 +1101,7 @@ input[type="file"] { display: none; }
 .profile-card-header { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
 .profile-card-header img { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; }
 .profile-card-header h3 { font-family: var(--font-serif); font-size: 22px; margin: 0; }
-.profile-card-bio { color: var(--color-text-secondary); font-size: 15px; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; min-height: 68px; }
+.profile-card-bio { color: var(--color-text-secondary); font-size: 15px; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 3; line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; min-height: 68px; }
 .profile-card-roles { margin-top: 15px; display: flex; flex-wrap: wrap; gap: 8px; }
 .profile-card-footer { margin-top: auto; padding-top: 20px; }
 .profile-card-footer .cta-button { width: 100%; text-align: center; padding: 10px; margin-top: 0; }

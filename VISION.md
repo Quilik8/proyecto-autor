@@ -82,27 +82,43 @@ La sostenibilidad de los creadores es el pilar central de A.U.T.O.R. Para ello, 
 
 La experiencia en A.U.T.O.R. está diseñada para ser inmersiva, gratificante y centrada en la comunidad. Más allá de ser un simple repositorio de textos, la plataforma integrará mecánicas de juego, herramientas de contenido dinámico y flujos de usuario intuitivos para fomentar la participación y la retención.
 
-### 4.1. Gamificación: El Ecosistema de Progreso
+### 4.1. Gamificación: Las Sendas de Maestría
 
-El objetivo es crear un ciclo de participación gratificante. Los usuarios realizan acciones significativas en la plataforma, ganando **XP (Puntos de Experiencia)** para su "Árbol de Progreso" y **Monedas** (la divisa virtual de la plataforma) que pueden gastar.
+El objetivo es crear un ciclo de participación gratificante y especializado. En lugar de un sistema de progreso global, A.U.T.O.R. implementará un sistema de **"Sendas de Maestría"**. Cada rol principal dentro del ecosistema tendrá su propio camino de progreso, con su propio sistema de **XP especializado**, completamente independiente de los demás.
 
-#### Acciones que Generan Recompensas (XP y Monedas)
+El único elemento unificador será la **Moneda Virtual**, que actuará como el motor económico de la plataforma.
 
-*   **Lectura Activa:**
-    *   Completar un capítulo.
-    *   Completar una historia completa (bonificación grande).
-    *   Rachas de lectura (leer al menos un capítulo diario/semanal).
-*   **Participación Comunitaria:**
-    *   Dejar un comentario en un capítulo.
-    *   Recibir "me gusta" en un comentario propio.
-    *   Escribir una reseña/crítica detallada de una obra.
-*   **Apoyo a Creadores:**
-    *   Ser uno de los primeros lectores de un nuevo capítulo.
-    *   Donar a un autor (otorga una bonificación de XP/Monedas).
-*   **Tareas y Eventos:**
-    *   Completar "misiones" semanales (ej. "Lee 3 capítulos de ciencia ficción").
-    *   Participar en eventos de lectura o concursos.
-    *   Ver anuncios opcionales.
+#### La Moneda Virtual Universal
+
+*   **¿Qué es?:** Una única moneda para toda la plataforma (ej. "Créditos A.U.T.O.R.").
+*   **¿Cómo se gana?:** Se puede obtener al subir de nivel en cualquier Senda de Maestría, completando "misiones" semanales de la comunidad, o a través de las vías de monetización.
+*   **¿Para qué sirve?:** Es un recurso transaccional. Los usuarios pueden usarla para:
+    *   Dar propinas directas a los creadores.
+    *   Comprar acceso a obras de pago.
+    *   Desbloquear funcionalidades premium de la Biblioteca.
+    *   Promocionar su perfil o sus obras en el Gremio.
+
+#### Las Sendas de Maestría (XP Especializado)
+
+Un usuario puede progresar en múltiples sendas a la vez, y sus acciones solo otorgan XP para la senda relevante. En el panel de control, cada usuario tendrá una sección visual para cada una de sus sendas, mostrando su nivel y su árbol de progreso.
+
+**Ejemplos de Sendas de Maestría:**
+
+*   **Senda del Autor:**
+    *   **Ganas XP de Autor por:** Publicar capítulos, recibir comentarios positivos, que tu obra sea añadida a bibliotecas, alcanzar hitos de lecturas.
+    *   **Desbloqueas:** Herramientas de análisis de lectores más avanzadas, insignias de "Autor Consistente" o "Finalista", la capacidad de crear encuestas para tus lectores.
+
+*   **Senda del Lector:**
+    *   **Ganas XP de Lector por:** Terminar libros, dejar reseñas de calidad (votadas por otros), seguir a autores, crear listas de lectura populares.
+    *   **Desbloqueas:** Marcos de avatar, temas de personalización para la interfaz de lectura, insignias de "Pionero" (por leer obras nuevas) o "Mecenas" (por apoyar a creadores).
+
+*   **Senda del Diseñador:**
+    *   **Ganas XP de Diseñador por:** Completar colaboraciones de diseño (ej. portadas), recibir reseñas de 5 estrellas de autores, subir trabajos de alta calidad a tu portafolio.
+    *   **Desbloqueas:** Una insignia de "Diseñador Verificado", mayor visibilidad en el buscador del Gremio, herramientas para crear mockups de portadas directamente en la plataforma.
+
+*   **Senda del Editor:**
+    *   **Ganas XP de Editor por:** Completar colaboraciones de edición, recibir buenas reseñas, que los capítulos que editaste tengan una alta tasa de finalización de lectura por parte de los lectores.
+    *   **Desbloqueas:** Insignia de "Editor de Confianza", herramientas de sugerencia de texto avanzadas, prioridad en las búsquedas de colaboración del Gremio.
 
 #### Recompensas y Beneficios Desbloqueables
 

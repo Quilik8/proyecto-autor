@@ -51,12 +51,16 @@ Este documento contiene el plan de desarrollo maestro para el proyecto, dividido
 **FASE 5: El Gremio - El Mercado de Talentos (En Proceso)**
 - [X] **Misión 29:** Construir un sistema de portafolios y de reseñas entre usuarios.
 - [X] **Misión 30:** Implementar un sistema de búsqueda y filtros para encontrar colaboradores.
+- [ ] **Misión 30.5 (Técnica):** Reestructurar el CSS a una Arquitectura Modular.
 - [ ] **Misión 31:** Construir la mensajería interna.
 - [ ] **Misión 32:** Implementar sistema de "contratos" simplificados y reparto de ganancias.
 
 **FASE 6: El Ecosistema de Progreso y Comunidad**
 - [ ] **Misión 32 (Hub Comunitario):** Implementar un sistema de foros integrado.
-- [ ] **Misión 33 (Sistema de Progreso Global):** Diseñar e implementar la base de datos y la lógica para XP y Moneda Virtual.
+- [ ] **Misión 33 (Sistema de Progreso): Las Sendas de Maestría.**
+    - **Concepto:** Implementar un sistema de progreso especializado por rol. Cada rol (Autor, Lector, Diseñador, Editor, etc.) tendrá su propia Senda de Maestría con un sistema de XP independiente. La Moneda Virtual será el único recurso universal compartido.
+    - **Backend:** Diseñar la base de datos para soportar múltiples tipos de XP por usuario (ej. una tabla `user_progress` con columnas para `xp_autor`, `xp_lector`, etc., o una estructura JSONB). Implementar la lógica para otorgar el XP correcto según la acción realizada.
+    - **Frontend:** Construir la interfaz de usuario visual para las "Sendas de Maestría" en el panel de control del usuario, con una sección separada para cada Senda de Progreso que el usuario haya iniciado.
 - [ ] **Misión 34 (Economía Virtual):** Construir la "tienda" y la Biblioteca Premium.
 
 **FASE 7: Curación de Contenido**
