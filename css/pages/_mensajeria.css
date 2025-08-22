@@ -1,0 +1,169 @@
+/* css/pages/_mensajeria.css */
+
+.messaging-layout {
+    display: grid;
+    grid-template-columns: 320px 1fr; /* Columna fija para la bandeja de entrada, el resto para el chat */
+    height: calc(100vh - 180px); /* Ocupa la altura de la ventana menos header y footer */
+    max-width: 1400px;
+    margin: 20px auto;
+    background-color: var(--color-background-white);
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+}
+
+/* --- Columna Izquierda: Bandeja de Entrada --- */
+.inbox-panel {
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid #e0e0e0;
+}
+.inbox-header {
+    padding: 20px;
+    border-bottom: 1px solid #e0e0e0;
+}
+.inbox-header h2 {
+    font-family: var(--font-serif);
+    font-size: 24px;
+    margin: 0;
+}
+.inbox-list {
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+.conversation-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 20px;
+    cursor: pointer;
+    border-bottom: 1px solid #e0e0e0;
+    transition: background-color 0.2s ease;
+}
+.conversation-item:hover {
+    background-color: rgba(128, 233, 217, 0.2);
+}
+.conversation-item.active {
+    background-color: var(--color-accent-light);
+}
+
+.conversation-item img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.conversation-details h4 {
+    margin: 0 0 4px 0;
+    font-size: 16px;
+}
+.conversation-details p {
+    margin: 0;
+    font-size: 14px;
+    color: #555;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 180px;
+}
+
+/* --- Columna Derecha: Ventana de Chat --- */
+.chat-panel {
+    display: flex;
+    flex-direction: column;
+}
+.chat-welcome {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 100%;
+    padding: 30px;
+    color: #777;
+}
+.chat-header {
+    padding: 20px;
+    border-bottom: 1px solid #e0e0e0;
+    font-weight: bold;
+    font-size: 18px;
+}
+.messages-container {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.message-bubble {
+    padding: 12px 18px;
+    border-radius: 20px;
+    max-width: 70%;
+    line-height: 1.5;
+}
+.message-bubble.sent {
+    background-color: var(--color-accent);
+    color: var(--color-text-primary);
+    align-self: flex-end;
+    border-bottom-right-radius: 5px;
+}
+.message-bubble.received {
+    background-color: #e9e9f2;
+    color: var(--color-text-primary);
+    align-self: flex-start;
+    border-bottom-left-radius: 5px;
+}
+
+.message-form {
+    display: flex;
+    padding: 20px;
+    border-top: 1px solid #e0e0e0;
+    gap: 15px;
+}
+.message-form textarea {
+    flex-grow: 1;
+    resize: none;
+    height: 50px; /* Altura inicial */
+    border-radius: 25px;
+    padding: 15px 20px;
+    font-size: 16px;
+}
+.message-form .cta-button {
+    margin: 0;
+    flex-shrink: 0;
+}
+
+
+/* --- Modo Oscuro --- */
+.dark-mode .messaging-layout { background-color: var(--color-background-surface-dark); }
+.dark-mode .inbox-panel, .dark-mode .inbox-header, .dark-mode .conversation-item, .dark-mode .chat-header, .dark-mode .message-form { border-color: #444; }
+.dark-mode .conversation-details p, .dark-mode .chat-welcome { color: var(--color-text-secondary-dark); }
+.dark-mode .conversation-item:hover { background-color: rgba(38, 221, 198, 0.1); }
+.dark-mode .conversation-item.active { background-color: #26DDC6; }
+.dark-mode .conversation-item.active h4, .dark-mode .conversation-item.active p { color: #1a1a1a; }
+.dark-mode .message-bubble.received { background-color: #3a3a3a; color: var(--color-text-primary-dark); }
+
+/* --- Responsividad --- */
+@media (max-width: 992px) {
+    .messaging-layout {
+        grid-template-columns: 1fr; /* Una sola columna */
+        height: auto;
+    }
+    .inbox-panel {
+        /* En móvil, la bandeja de entrada podría tener una altura fija para no ocupar toda la pantalla */
+        max-height: 30vh; 
+        border-right: none;
+    }
+}
+
+/* Estilos para conversaciones no leídas */
+.conversation-item.unread .conversation-details h4 {
+    font-weight: 900; /* Letra más gruesa */
+    color: var(--color-text-primary);
+}
+.dark-mode .conversation-item.unread .conversation-details h4 {
+    color: var(--color-text-primary-dark);
+}

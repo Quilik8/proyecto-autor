@@ -52,7 +52,7 @@ Este documento contiene el plan de desarrollo maestro para el proyecto, dividido
 - [X] **Misión 29:** Construir un sistema de portafolios y de reseñas entre usuarios.
 - [X] **Misión 30:** Implementar un sistema de búsqueda y filtros para encontrar colaboradores.
 - [X] **Misión 30.5 (Técnica):** Reestructurar el CSS a una Arquitectura Modular.
-- [ ] **Misión 31:** Construir la mensajería interna.
+- [X] **Misión 31:** Construir la mensajería interna.
 - [ ] **Misión 32:** Implementar sistema de "contratos" simplificados y reparto de ganancias.
 
 **FASE 6: El Ecosistema de Progreso y Comunidad**

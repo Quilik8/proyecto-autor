@@ -19,6 +19,9 @@ import { inicializarPaginaCrearEntrada } from './pages/entryCreate.js';
 import { inicializarCrearHistoria, inicializarGestionHistoria, inicializarEditarCapitulo} from './pages/contentManagement.js';
 import { inicializarDashboard } from './pages/dashboard.js'; 
 import { inicializarPaginaExplorar, fetchAndRenderStories } from './pages/explorarPage.js';
+import { inicializarPaginaMensajeria } from './pages/messaging.js';
+
+let totalUnreadMessages = 0;
 
 const ejecutarScriptsGlobales = async () => {
     configurarMenuHamburguesa();
@@ -40,15 +43,58 @@ const gestionarEstadoDeSesion = async () => {
     const navUserItems = document.querySelectorAll(".nav-user-item");
     const navLogout = document.querySelector("#nav-logout");
     const { data: { session } } = await clienteSupabase.auth.getSession();
+    
     if (session) {
         navUserItems.forEach(item => item.classList.remove('hidden'));
         navLogout?.classList.remove('hidden');
+        actualizarContadorMensajesNoLeidos();
     } else {
         navLogin?.classList.remove('hidden');
         navRegistro?.classList.remove('hidden');
     }
     navElement?.classList.remove('nav-loading');
 };
+
+const actualizarContadorMensajesNoLeidos = async () => {
+    const badge = document.getElementById('unread-count-badge');
+    if (!badge) return;
+
+    try {
+        const { data, error } = await clienteSupabase.rpc('get_conversations_with_unread_count');
+        if (error) throw error;
+        
+        const newTotal = data.reduce((sum, convo) => sum + convo.unread_count, 0);
+        
+        // Guardamos el recuento en nuestra variable global
+        totalUnreadMessages = newTotal;
+        
+        actualizarBadgeUI(totalUnreadMessages);
+
+    } catch (error) {
+        console.error("Error al obtener contador de mensajes:", error);
+        badge.classList.add('hidden');
+    }
+};
+
+// AÑADE ESTA NUEVA FUNCIÓN PEQUEÑA (ayuda a no repetir código)
+const actualizarBadgeUI = (count) => {
+    const badge = document.getElementById('unread-count-badge');
+    if (!badge) return;
+
+    if (count > 0) {
+        badge.textContent = count > 9 ? '9+' : count;
+        badge.classList.remove('hidden');
+    } else {
+        badge.classList.add('hidden');
+    }
+};
+
+window.addEventListener('updateUnreadCountOptimistic', (event) => {
+    const { countToSubtract } = event.detail;
+    totalUnreadMessages -= countToSubtract;
+    if (totalUnreadMessages < 0) totalUnreadMessages = 0; // Prevenir números negativos
+    actualizarBadgeUI(totalUnreadMessages);
+});
 
 const configurarBotonDeLogout = () => {
     const navLogout = document.querySelector("#nav-logout");
@@ -141,6 +187,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             break;
         case 'editar-capitulo':
             await inicializarEditarCapitulo();
+            break;
+        case 'mensajeria': 
+            await inicializarPaginaMensajeria();
             break;
     }
     

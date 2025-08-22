@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Mensajes - A.U.T.O.R.</title>
+    <link rel="stylesheet" href="css/main.css">
+    <script>
+      (function() {
+        try {
+          var theme = localStorage.getItem('theme');
+          if (theme === 'dark') {
+            document.documentElement.classList.add('dark-mode');
+          }
+        } catch (e) { /* ignoramos errores */ }
+      })();
+    </script>
+</head>
+<body class="body-loading" data-page="mensajeria">
+
+    <header></header>
+
+    <main>
+        <div class="messaging-layout">
+
+            <!-- Columna Izquierda: Bandeja de Entrada -->
+            <aside class="inbox-panel">
+                <div class="inbox-header">
+                    <h2>Bandeja de Entrada</h2>
+                </div>
+                <div id="conversations-list" class="inbox-list">
+                    <!-- Las conversaciones se cargarán aquí con JavaScript -->
+                    <p>Cargando conversaciones...</p>
+                </div>
+            </aside>
+
+            <!-- Columna Derecha: Ventana de Chat -->
+            <section class="chat-panel">
+                <div id="chat-welcome-message" class="chat-welcome">
+                    <h3>Bienvenido a tu mensajería</h3>
+                    <p>Selecciona una conversación de la lista para ver los mensajes o inicia una nueva desde el perfil de un usuario.</p>
+                </div>
+
+                <div id="chat-window" class="hidden">
+                    <div id="chat-header" class="chat-header">
+                        <!-- El nombre del otro usuario se cargará aquí -->
+                    </div>
+                    <div id="messages-container" class="messages-container">
+                        <!-- Los mensajes se cargarán aquí -->
+                    </div>
+                    <form id="message-form" class="message-form">
+                        <textarea id="message-input" placeholder="Escribe tu mensaje aquí..." required></textarea>
+                        <button type="submit" class="cta-button">Enviar</button>
+                    </form>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer></footer>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="module" src="scripts/main.js"></script>
+</body>
+</html>

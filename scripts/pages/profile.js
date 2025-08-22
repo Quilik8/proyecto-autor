@@ -324,7 +324,60 @@ export const inicializarPaginaDePerfil = async () => {
 
     await cargarReseñas();
 
-        // =====================================================================
+    // =====================================================================
+    // --- LÓGICA DE INICIO DE CONVERSACIÓN ---
+    // =====================================================================
+    const sendMessageBtn = document.getElementById('send-message-btn');
+
+    // Mostrar el botón de enviar mensaje solo si estoy logueado Y NO es mi propio perfil
+    if (currentUserId && !isOwnProfile) {
+        sendMessageBtn.classList.remove('hidden');
+    }
+
+    sendMessageBtn.addEventListener('click', async () => {
+    sendMessageBtn.disabled = true;
+    sendMessageBtn.textContent = 'Abriendo...';
+
+    try {
+        // 1. Comprobar si ya existe una conversación entre los dos usuarios.
+        const { data: existingConversation, error: searchError } = await clienteSupabase
+            .from('conversations')
+            .select('id')
+            // LA CORRECCIÓN ESTÁ EN ESTA LÍNEA:
+            .or(`and(participant_one_id.eq.${currentUserId},participant_two_id.eq.${targetProfileId}),and(participant_one_id.eq.${targetProfileId},participant_two_id.eq.${currentUserId})`)
+            .maybeSingle();
+
+        if (searchError) throw searchError;
+
+        // 2. Si la conversación ya existe, redirigir a ella.
+        if (existingConversation) {
+            window.location.href = `mensajes.html?conversation_id=${existingConversation.id}`;
+            return;
+        }
+
+        // 3. Si no existe, crear una nueva conversación.
+        const { data: newConversation, error: insertError } = await clienteSupabase
+            .from('conversations')
+            .insert({
+                participant_one_id: currentUserId,
+                participant_two_id: targetProfileId
+            })
+            .select('id')
+            .single();
+
+        if (insertError) throw insertError;
+
+        // 4. Redirigir a la nueva conversación.
+        window.location.href = `mensajes.html?conversation_id=${newConversation.id}`;
+
+    } catch (error) {
+        alert('Error al iniciar la conversación: ' + error.message);
+        sendMessageBtn.disabled = false;
+        sendMessageBtn.textContent = 'Enviar Mensaje';
+    }
+});
+
+    // =====================================================================
     // --- LÓGICA DE PROPUESTA DE COLABORACIÓN ---
     // =====================================================================
     const proposeCollabBtn = document.getElementById('propose-collab-btn');

@@ -72,3 +72,37 @@ nav.nav-loading {
 #nav-profile a:first-child {
     margin-right: 15px;
 }
+
+/* Estilos para el nuevo icono de mensajes y el contador */
+.nav-icon-link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-secondary);
+}
+.nav-icon-link svg {
+    transition: color 0.3s ease;
+}
+.nav-icon-link:hover svg {
+    color: var(--color-accent);
+}
+.dark-mode .nav-icon-link {
+    color: var(--color-text-primary-dark);
+}
+#unread-count-badge {
+    position: absolute;
+    top: -5px;
+    right: -8px;
+    background-color: #e74c3c; /* Rojo para notificaciones */
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px;
+}
