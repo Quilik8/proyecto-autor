@@ -377,96 +377,100 @@ export const inicializarPaginaDePerfil = async () => {
     }
 });
 
-    // =====================================================================
-    // --- LÓGICA DE PROPUESTA DE COLABORACIÓN ---
-    // =====================================================================
-    const proposeCollabBtn = document.getElementById('propose-collab-btn');
-    const collabModal = document.getElementById('collab-modal');
+// =====================================================================
+// --- LÓGICA DE PROPUESTA DE COLABORACIÓN (v3.0 - CONTRATOS POR ETAPAS) ---
+// =====================================================================
+const proposeCollabBtn = document.getElementById('propose-collab-btn');
+const collabModal = document.getElementById('collab-modal');
+
+// Mostrar el botón de proponer solo si estoy logueado Y NO es mi propio perfil
+if (currentUserId && !isOwnProfile) {
+    proposeCollabBtn.classList.remove('hidden');
+}
+
+proposeCollabBtn.addEventListener('click', async () => {
+    const collabProposalForm = document.getElementById('collab-proposal-form');
     const closeCollabModalBtn = collabModal.querySelector('.modal-close-btn');
     const storySelect = document.getElementById('collab-story-select');
+
+    collabProposalForm.reset(); // Limpia todos los campos
     
-    // Mostrar el botón de proponer solo si estoy logueado Y NO es mi propio perfil
-    if (currentUserId && !isOwnProfile) {
-        proposeCollabBtn.classList.remove('hidden');
+    // Llenamos el selector de obras
+    storySelect.innerHTML = '<option value="">Cargando tus obras...</option>';
+    try {
+        const { data: userStories, error } = await clienteSupabase.from('stories').select('id, title').eq('author_id', currentUserId);
+        if (error) throw error;
+        if (userStories.length === 0) {
+             storySelect.innerHTML = '<option value="">No tienes obras para proponer.</option>';
+        } else {
+            storySelect.innerHTML = '<option value="">-- Selecciona una obra --</option>';
+            userStories.forEach(story => {
+                storySelect.insertAdjacentHTML('beforeend', `<option value="${story.id}">${story.title}</option>`);
+            });
+        }
+    } catch (error) {
+        storySelect.innerHTML = '<option value="">Error al cargar obras.</option>';
     }
 
-    // Lógica para abrir y cerrar el modal
-    proposeCollabBtn.addEventListener('click', async () => {
-        storySelect.innerHTML = '<option value="">Cargando tus obras...</option>';
-        collabModal.classList.remove('hidden');
-        
-        // Cargar las historias del usuario actual en el select
-        try {
-            const { data: userStories, error } = await clienteSupabase
-                .from('stories')
-                .select('id, title')
-                .eq('author_id', currentUserId); // Buscamos las historias del usuario LOGUEADO
+    collabModal.classList.remove('hidden');
+    
+    closeCollabModalBtn.addEventListener('click', () => collabModal.classList.add('hidden'), { once: true });
+    collabModal.addEventListener('click', (event) => { if (event.target === collabModal) collabModal.classList.add('hidden'); }, { once: true });
 
-            if (error) throw error;
-            
-            if (userStories.length === 0) {
-                 storySelect.innerHTML = '<option value="">No tienes obras para proponer.</option>';
-            } else {
-                storySelect.innerHTML = '<option value="">-- Selecciona una obra --</option>';
-                userStories.forEach(story => {
-                    storySelect.insertAdjacentHTML('beforeend', `<option value="${story.id}">${story.title}</option>`);
-                });
-            }
-        } catch (error) {
-            storySelect.innerHTML = '<option value="">Error al cargar obras.</option>';
-        }
-    });
-
-    closeCollabModalBtn.addEventListener('click', () => {
-        collabModal.classList.add('hidden');
-    });
-
-    // Cerrar el modal si se hace clic fuera del contenido
-    collabModal.addEventListener('click', (event) => {
-        if (event.target === collabModal) {
-            collabModal.classList.add('hidden');
-        }
-    });
-        const collabProposalForm = document.getElementById('collab-proposal-form');
-    const collabRoleInput = document.getElementById('collab-role-input');
-    const collabFormError = document.getElementById('collab-form-error');
-
-    collabProposalForm.addEventListener('submit', async (event) => {
+    // Listener para el ENVÍO del formulario
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        collabFormError.textContent = '';
+        const errorDiv = document.getElementById('collab-form-error');
+        errorDiv.textContent = '';
         const submitButton = collabProposalForm.querySelector('button[type="submit"]');
         submitButton.disabled = true;
         submitButton.textContent = 'Enviando...';
 
-        const selectedStoryId = storySelect.value;
-        const collaboratorRole = collabRoleInput.value.trim();
+        try {
+            // Recolectamos los valores de los campos
+            const fixedPayment = parseFloat(document.getElementById('collab-fixed-payment').value) || 0;
+            const initialShare = parseFloat(document.getElementById('collab-initial-share').value) || 0;
+            const shareCap = parseFloat(document.getElementById('collab-share-cap').value) || 0;
+            const postCapShare = parseFloat(document.getElementById('collab-post-cap-share').value) || 0;
 
-        if (!selectedStoryId || !collaboratorRole) {
-            collabFormError.textContent = 'Debes seleccionar una obra y definir un rol.';
-            submitButton.disabled = false;
-            submitButton.textContent = 'Enviar Propuesta';
-            return;
-        }
+            // Validaciones
+            if (!storySelect.value || !document.getElementById('collab-role-input').value.trim()) {
+                throw new Error('Debes seleccionar una obra y definir un rol.');
+            }
+            if (fixedPayment === 0 && initialShare === 0) {
+                throw new Error('La propuesta debe incluir un pago fijo o un porcentaje de reparto.');
+            }
+            if (initialShare > 0 && shareCap === 0 && postCapShare > 0) {
+                throw new Error('No puedes definir un porcentaje posterior si no hay un límite de ganancias.');
+            }
 
-                try {
-            const { error } = await clienteSupabase.from('collaborations').insert({
-                story_id: selectedStoryId,
+            const contractData = {
+                story_id: storySelect.value,
                 author_id: currentUserId,
                 collaborator_id: targetProfileId,
-                collaborator_role: collaboratorRole,
-                status: 'propuesto' // Añadir el estado explícitamente
-            });
+                collaborator_role: document.getElementById('collab-role-input').value.trim(),
+                status: 'propuesto',
+                fixed_payment_amount: fixedPayment,
+                initial_share_percentage: initialShare,
+                share_earnings_cap: shareCap,
+                post_cap_share_percentage: postCapShare
+            };
 
+            const { error } = await clienteSupabase.from('collaborations').insert(contractData);
             if (error) throw error;
 
             collabModal.classList.add('hidden');
             alert('¡Propuesta de colaboración enviada con éxito!');
-
         } catch (error) {
-            collabFormError.textContent = 'Error al enviar la propuesta: ' + error.message;
+            errorDiv.textContent = 'Error: ' + error.message;
         } finally {
             submitButton.disabled = false;
             submitButton.textContent = 'Enviar Propuesta';
         }
-    });
+        
+        collabProposalForm.removeEventListener('submit', handleSubmit);
+    };
+    
+    collabProposalForm.addEventListener('submit', handleSubmit);
+});
 };

@@ -31,6 +31,7 @@
                 <button class="tab-link active" data-tab="tab-gestion">Gestión de Obras</button>
                 <button class="tab-link" data-tab="tab-biblioteca">Mi Biblioteca</button>
                 <button class="tab-link" data-tab="tab-colaboraciones">Colaboraciones</button>
+                <button class="tab-link" data-tab="tab-cartera">Cartera</button>
                 <!-- Aquí podremos añadir "Estadísticas", "Monetización", etc. en el futuro -->
             </div>
 
@@ -68,6 +69,26 @@
                         <p>Cargando colaboraciones...</p>
                     </div>
                 </div>
+                <div id="tab-cartera" class="tab-content">
+    <h2>Mi Cartera Virtual</h2>
+    
+    <div class="wallet-summary">
+        <div class="balance-display">
+            <span>Balance Actual</span>
+            <strong id="wallet-balance-amount">$0.00</strong>
+        </div>
+        <div class="wallet-actions">
+            <!-- Funcionalidad futura -->
+            <button class="cta-button secondary" disabled>Añadir Fondos</button>
+            <button class="cta-button secondary" disabled>Retirar Fondos</button>
+        </div>
+    </div>
+
+    <h3 style="margin-top: 40px;">Historial de Ganancias</h3>
+    <div id="earnings-history-list" class="management-list">
+        <p>Cargando historial...</p>
+    </div>
+</div>
             </div>
 
         </div>

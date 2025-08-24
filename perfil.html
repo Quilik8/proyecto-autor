@@ -135,22 +135,53 @@
     <div class="modal-content">
         <button class="modal-close-btn">&times;</button>
         <h3>Proponer Colaboración</h3>
-        <p>Selecciona una de tus obras y define el rol para el que propones colaborar.</p>
+        <p>Selecciona una de tus obras y define los términos de la colaboración.</p>
+        
         <form id="collab-proposal-form">
             <div class="form-group">
-                <label for="collab-story-select">Obra para la Colaboración</label>
-                <select id="collab-story-select" required>
-                    <option value="">Cargando tus obras...</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="collab-role-input">Rol del Colaborador</label>
-                <input type="text" id="collab-role-input" placeholder="Ej: Editor, Diseñador de Portada, Ilustrador" required>
-            </div>
-            <div class="form-actions">
-                <button type="submit" class="cta-button">Enviar Propuesta</button>
-            </div>
-            <p id="collab-form-error" class="error-message"></p>
+    <label for="collab-story-select">Obra para la Colaboración</label>
+    <select id="collab-story-select" required>
+        <option value="">Cargando tus obras...</option>
+    </select>
+</div>
+<div class="form-group">
+    <label for="collab-role-input">Rol del Colaborador</label>
+    <input type="text" id="collab-role-input" placeholder="Ej: Editor, Diseñador de Portada" required>
+</div>
+
+<hr class="form-divider">
+
+<!-- === SECCIÓN DE PAGO FIJO === -->
+<div class="form-group">
+    <label for="collab-fixed-payment">Pago Fijo (Opcional)</label>
+    <input type="number" id="collab-fixed-payment" placeholder="0.00" min="0" step="0.01">
+    <p class="form-hint">Introduce 0 si no hay pago por adelantado. Este monto será retenido en garantía.</p>
+</div>
+
+<hr class="form-divider">
+
+<!-- === SECCIÓN DE REPARTO POR ETAPAS === -->
+<h4 class="form-section-title">Reparto de Ganancias (Opcional)</h4>
+<div class="form-group">
+    <label for="collab-initial-share">1. Porcentaje de Reparto Inicial (%)</label>
+    <input type="number" id="collab-initial-share" placeholder="0.00" min="0" max="100" step="0.01">
+    <p class="form-hint">El porcentaje que recibirá el colaborador de todos los ingresos de la obra.</p>
+</div>
+<div class="form-group">
+    <label for="collab-share-cap">2. Aplicar este porcentaje hasta que el colaborador gane ($)</label>
+    <input type="number" id="collab-share-cap" placeholder="0.00" min="0" step="0.01">
+    <p class="form-hint">El reparto cambiará después de que el colaborador haya ganado esta cantidad. Introduce 0 para que el reparto inicial sea indefinido.</p>
+</div>
+<div class="form-group">
+    <label for="collab-post-cap-share">3. Porcentaje de Reparto Posterior (%)</label>
+    <input type="number" id="collab-post-cap-share" placeholder="0.00" min="0" max="100" step="0.01">
+    <p class="form-hint">El nuevo porcentaje después de alcanzar el límite. Introduce 0 si el reparto termina.</p>
+</div>
+
+<div class="form-actions">
+    <button type="submit" class="cta-button">Enviar Propuesta</button>
+</div>
+<p id="collab-form-error" class="error-message"></p>
         </form>
     </div>
 </div>

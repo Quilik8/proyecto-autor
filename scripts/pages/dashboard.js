@@ -11,6 +11,7 @@ export const inicializarDashboard = async () => {
         return;
     }
     const currentUserId = session.user.id;
+    cargarDatosCartera(currentUserId);
 
     // Lógica para que las pestañas del dashboard funcionen
     const tabs = dashboardPage.querySelectorAll('.tab-link');
@@ -54,45 +55,97 @@ export const inicializarDashboard = async () => {
     // =====================================================================
     // --- LÓGICA DE COLABORACIONES (VERSIÓN CON SECCIONES SEPARADAS) ---
     // =====================================================================
+    // --- NUEVA FUNCIÓN AUXILIAR PARA FORMATEAR TÉRMINOS DEL CONTRATO ---
+const formatContractTerms = (collab) => {
+    const terms = [];
+    
+    // Parte del Pago Fijo
+    if (collab.fixed_payment_amount > 0) {
+        terms.push(`un <strong>Pago Fijo de $${collab.fixed_payment_amount.toFixed(2)}</strong>`);
+    }
+
+    // Parte del Reparto de Ganancias
+    if (collab.initial_share_percentage > 0) {
+        let shareTerm = `un <strong>${collab.initial_share_percentage}% de Reparto de Ganancias</strong>`;
+        
+        if (collab.share_earnings_cap > 0) {
+            shareTerm += ` hasta ganar un máximo de <strong>$${collab.share_earnings_cap.toFixed(2)}</strong>`;
+            
+            if (collab.post_cap_share_percentage > 0) {
+                shareTerm += `, después de lo cual el reparto se ajusta a un <strong>${collab.post_cap_share_percentage}%</strong>`;
+            } else {
+                shareTerm += `, después de lo cual el reparto termina`;
+            }
+        }
+        terms.push(shareTerm);
+    }
+
+    if (terms.length === 0) {
+        return '<p class="contract-terms">Este contrato no incluye una oferta económica.</p>';
+    }
+
+    // Une las partes con " y " para que se lea de forma natural.
+    return `<p class="contract-terms">Oferta: ${terms.join(' y ')}.</p>`;
+};
+
     const receivedContainer = document.getElementById('received-collabs-container');
     const sentContainer = document.getElementById('sent-collabs-container');
 
         const renderCollaboration = (collab, perspective) => {
-        const storyTitle = collab.stories.title;
-        let actionsHTML = `<span class="status-tag">${collab.status}</span>`;
-        let revieweeId = null; // ID de la persona a la que VAMOS a reseñar
+    const storyTitle = collab.stories.title;
+    let actionsHTML = `<span class="status-tag">${collab.status}</span>`;
+    let revieweeId = null;
 
-        if (perspective === 'received') {
-            const authorName = collab.profiles.username;
-            const authorProfileLink = `perfil.html?id=${collab.author_id}`;
-            revieweeId = collab.author_id; // Si yo recibí la propuesta, reseño al autor
-            
-            if (collab.status === 'propuesto') {
-                actionsHTML = `<div class="collaboration-actions"><button class="cta-button accept-collab-btn" data-collab-id="${collab.id}">Aceptar</button><button class="cta-button secondary reject-collab-btn" data-collab-id="${collab.id}">Rechazar</button></div>`;
-            }
-        
-        } else { // perspective === 'sent'
-            const collabName = collab.collaborator.username;
-            const collabProfileLink = `perfil.html?id=${collab.collaborator_id}`;
-            revieweeId = collab.collaborator_id; // Si yo envié la propuesta, reseño al colaborador
+    const contractTermsHTML = formatContractTerms(collab);
 
-            if (collab.status === 'aceptado') {
-                actionsHTML = `<div class="collaboration-actions"><span class="status-tag" style="background-color: #27ae60;">Aceptado</span><button class="cta-button complete-collab-btn" data-collab-id="${collab.id}">Marcar como Completado</button></div>`;
-            }
+    if (perspective === 'received') { // --- VISTA DEL COLABORADOR ---
+        revieweeId = collab.author_id;
+        if (collab.status === 'propuesto') {
+            actionsHTML = `<div class="collaboration-actions"><button class="cta-button accept-collab-btn" data-collab-id="${collab.id}">Aceptar</button><button class="cta-button secondary reject-collab-btn" data-collab-id="${collab.id}">Rechazar</button></div>`;
         }
-        
-        // Esta regla se aplica a AMBAS perspectivas
-        if (collab.status === 'completado') {
-            actionsHTML = `<div class="collaboration-actions"><span class="status-tag" style="background-color: var(--primary-color);">Completado</span><button class="cta-button review-collab-btn" data-collab-id="${collab.id}" data-reviewee-id="${revieweeId}">Dejar Reseña</button></div>`;
+        if (collab.status === 'aceptado_pendiente_fondos') {
+            actionsHTML = `<span class="status-tag pending-funds">Esperando depósito del autor</span>`;
+        }
+        if (collab.funds_held_in_escrow) {
+             actionsHTML = `<span class="status-tag funds-held">Fondos en Garantía. ¡Listo para trabajar!</span>`;
+        }
+        // El colaborador ve el estado "Completado" mientras espera el pago
+        if (collab.status === 'completado' && collab.fixed_payment_amount > 0) {
+            actionsHTML = `<span class="status-tag" style="background-color: var(--primary-color);">Completado - Esperando Pago</span>`;
         }
 
-        // El HTML que se renderiza no cambia, solo la lógica de los botones
-        if (perspective === 'received') {
-            return `<div class="management-list-item"><div><h4>Propuesta para: <strong>${storyTitle}</strong></h4><p>Rol: <strong>${collab.collaborator_role}</strong></p><p>Autor: <a href="perfil.html?id=${collab.author_id}">${collab.profiles.username}</a></p></div>${actionsHTML}</div>`;
-        } else {
-            return `<div class="management-list-item"><div><h4>Propuesta para: <strong>${collab.collaborator.username}</strong></h4><p>Rol: <strong>${collab.collaborator_role}</strong></p><p>Obra: <strong>${storyTitle}</strong></p></div>${actionsHTML}</div>`;
+    } else { // --- VISTA DEL AUTOR ---
+        revieweeId = collab.collaborator_id;
+        if (collab.status === 'aceptado_pendiente_fondos') {
+             actionsHTML = `<div class="collaboration-actions"><span class="status-tag pending-funds">Aceptado</span><button class="cta-button deposit-funds-btn" data-collab-id="${collab.id}">Depositar Fondos</button></div>`;
         }
-    };
+        if (collab.funds_held_in_escrow) {
+            actionsHTML = `<div class="collaboration-actions"><span class="status-tag funds-held">Fondos en Garantía</span><button class="cta-button complete-collab-btn" data-collab-id="${collab.id}">Marcar como Completado</button></div>`;
+        }
+        // --- CAMBIO CLAVE: Muestra el botón para liberar el pago ---
+        if (collab.status === 'completado' && collab.fixed_payment_amount > 0) {
+            actionsHTML = `<div class="collaboration-actions"><span class="status-tag" style="background-color: var(--primary-color);">Completado</span><button class="cta-button release-payment-btn" data-collab-id="${collab.id}">Liberar Pago de $${collab.fixed_payment_amount.toFixed(2)}</button></div>`;
+        }
+    }
+    
+    // --- CAMBIO CLAVE: Se modifica la condición para el botón de reseña ---
+    // El botón de reseña ahora aparece si está 'pagado' o si está 'completado' SIN pago fijo.
+    const canLeaveReview = collab.status === 'pagado' || (collab.status === 'completado' && collab.fixed_payment_amount === 0);
+    if (canLeaveReview) {
+        const statusText = collab.status === 'pagado' ? 'Pagado' : 'Completado';
+        actionsHTML = `<div class="collaboration-actions">
+                           <span class="status-tag" style="background-color: #27ae60;">${statusText}</span>
+                           <button class="cta-button review-collab-btn" data-collab-id="${collab.id}" data-reviewee-id="${revieweeId}">Dejar Reseña</button>
+                       </div>`;
+    }
+
+    // El HTML renderizado no cambia
+    if (perspective === 'received') {
+        return `<div class="management-list-item"><div><h4>Propuesta para: <strong>${storyTitle}</strong></h4><p>Rol: <strong>${collab.collaborator_role}</strong></p>${contractTermsHTML}<p>Autor: <a href="perfil.html?id=${collab.author_id}">${collab.profiles.username}</a></p></div>${actionsHTML}</div>`;
+    } else {
+        return `<div class="management-list-item"><div><h4>Propuesta para: <strong>${collab.collaborator.username}</strong></h4><p>Obra: <strong>${storyTitle}</strong> | Rol: <strong>${collab.collaborator_role}</strong></p>${contractTermsHTML}</div>${actionsHTML}</div>`;
+    }
+};
 
     const cargarColaboraciones = async () => {
         receivedContainer.innerHTML = '<p>Cargando...</p>';
@@ -131,25 +184,88 @@ export const inicializarDashboard = async () => {
 
     const collaborationsTab = document.getElementById('tab-colaboraciones');
     collaborationsTab.addEventListener('click', async (event) => {
-        const collabId = event.target.dataset.collabId;
-        if (!collabId) return;
+    const collabId = event.target.dataset.collabId;
+    if (!collabId) return;
 
-        let newStatus = null;
-        if (event.target.classList.contains('accept-collab-btn')) newStatus = 'aceptado';
-        else if (event.target.classList.contains('reject-collab-btn')) newStatus = 'rechazado';
-        else if (event.target.classList.contains('complete-collab-btn')) newStatus = 'completado';
-        
-        if (newStatus) {
+    // Acción de Aceptar una propuesta
+    if (event.target.classList.contains('accept-collab-btn')) {
+        try {
+            const { data: collab, error: fetchError } = await clienteSupabase.from('collaborations').select('fixed_payment_amount').eq('id', collabId).single();
+            if (fetchError) throw fetchError;
+            const newStatus = collab.fixed_payment_amount > 0 ? 'aceptado_pendiente_fondos' : 'aceptado';
+            const { error } = await clienteSupabase.from('collaborations').update({ status: newStatus }).eq('id', collabId);
+            if (error) throw error;
+            await cargarColaboraciones();
+        } catch (error) {
+            alert('Error al aceptar la propuesta: ' + error.message);
+        }
+    }
+
+    // Acción de Rechazar una propuesta
+    else if (event.target.classList.contains('reject-collab-btn')) {
+        if (confirm('¿Estás seguro de que quieres rechazar esta propuesta?')) {
             try {
-                const { error } = await clienteSupabase.from('collaborations').update({ status: newStatus }).eq('id', collabId);
+                const { error } = await clienteSupabase.from('collaborations').update({ status: 'rechazado' }).eq('id', collabId);
                 if (error) throw error;
                 await cargarColaboraciones();
             } catch (error) {
-                alert('Error al actualizar la propuesta: ' + error.message);
+                alert('Error al rechazar la propuesta: ' + error.message);
             }
         }
-    });
-        // =====================================================================
+    }
+    
+    // Acción de Marcar como Completado
+    else if (event.target.classList.contains('complete-collab-btn')) {
+        try {
+            // Buscamos si el contrato tiene pago fijo. Si no lo tiene, pasa a 'completado' y listo.
+            // Si SÍ lo tiene, también pasa a 'completado', pero esto habilitará el botón de 'Liberar Pago'.
+            const { error } = await clienteSupabase.from('collaborations').update({ status: 'completado' }).eq('id', collabId);
+            if (error) throw error;
+            await cargarColaboraciones();
+        } catch (error) {
+            alert('Error al actualizar la propuesta: ' + error.message);
+        }
+    }
+
+    // Acción de Depositar fondos en garantía
+    else if (event.target.classList.contains('deposit-funds-btn')) {
+        if (confirm('Esto transferirá los fondos desde tu cartera a una bóveda segura para este contrato. ¿Estás seguro?')) {
+            event.target.disabled = true;
+            event.target.textContent = 'Procesando...';
+            try {
+                const { error } = await clienteSupabase.rpc('hold_contract_funds', { contract_id: collabId });
+                if (error) throw error;
+                alert('¡Fondos depositados en garantía con éxito!');
+                await cargarColaboraciones();
+            } catch (error) {
+                alert('Error al depositar los fondos: ' + error.message);
+                event.target.disabled = false;
+                event.target.textContent = 'Depositar Fondos';
+            }
+        }
+    }
+
+    // --- NUEVA ACCIÓN: Liberar el pago al colaborador ---
+    else if (event.target.classList.contains('release-payment-btn')) {
+        if (confirm('Esto transferirá permanentemente los fondos al colaborador. Esta acción no se puede deshacer. ¿Confirmas el pago?')) {
+            event.target.disabled = true;
+            event.target.textContent = 'Pagando...';
+            try {
+                // Llamamos a la función RPC que creamos en Supabase
+                const { error } = await clienteSupabase.rpc('release_contract_funds', { contract_id: collabId });
+                if (error) throw error;
+                alert('¡Pago liberado con éxito! El colaborador ha recibido los fondos en su cartera.');
+                await cargarColaboraciones();
+            } catch (error) {
+                alert('Error al liberar el pago: ' + error.message);
+                event.target.disabled = false;
+                event.target.textContent = 'Liberar Pago';
+            }
+        }
+    }
+});
+
+    // =====================================================================
     // --- LÓGICA PARA DEJAR RESEÑAS ---
     // =====================================================================
     const reviewModal = document.getElementById('review-modal');
@@ -221,4 +337,62 @@ export const inicializarDashboard = async () => {
             submitButton.textContent = 'Publicar Reseña';
         }
     });
+};
+
+const cargarDatosCartera = async (currentUserId) => {
+    const balanceAmountEl = document.getElementById('wallet-balance-amount');
+    const historyListEl = document.getElementById('earnings-history-list');
+
+    if (!balanceAmountEl || !historyListEl) return;
+
+    try {
+        // 1. Cargar el balance actual de la cartera
+        const { data: profile, error: profileError } = await clienteSupabase
+            .from('profiles')
+            .select('virtual_wallet_balance')
+            .eq('id', currentUserId)
+            .single();
+        
+        if (profileError) throw profileError;
+
+        balanceAmountEl.textContent = `$${profile.virtual_wallet_balance.toFixed(2)}`;
+
+        // 2. Cargar el historial de ganancias
+        const { data: earnings, error: earningsError } = await clienteSupabase
+            .from('earnings')
+            .select(`
+                created_at,
+                amount,
+                stories (title)
+            `)
+            .eq('user_id', currentUserId)
+            .order('created_at', { ascending: false });
+
+        if (earningsError) throw earningsError;
+
+        if (earnings.length === 0) {
+            historyListEl.innerHTML = '<p>Aún no tienes movimientos en tu historial de ganancias.</p>';
+            return;
+        }
+
+        historyListEl.innerHTML = ''; // Limpiamos el mensaje de "Cargando..."
+        earnings.forEach(earning => {
+            const date = new Date(earning.created_at).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' });
+            const earningHTML = `
+                <div class="earning-item">
+                    <div class="earning-item-details">
+                        <strong>Ganancia por reparto de ganancias</strong>
+                        <p>Obra: ${earning.stories.title} &bull; ${date}</p>
+                    </div>
+                    <span class="earning-item-amount">+$${earning.amount.toFixed(2)}</span>
+                </div>
+            `;
+            historyListEl.insertAdjacentHTML('beforeend', earningHTML);
+        });
+
+    } catch (error) {
+        balanceAmountEl.textContent = 'Error';
+        historyListEl.innerHTML = '<p>No se pudo cargar el historial de la cartera.</p>';
+        console.error('Error al cargar datos de la cartera:', error);
+    }
 };
