@@ -35,6 +35,8 @@ Esta fase transforma A.U.T.O.R. de una plataforma de publicación a un vibrante 
 *   **Colaboración Integrada:** Los Autores podrán buscar, contactar y "contratar" a estos profesionales directamente dentro de la plataforma. El sistema gestionará las propuestas, los acuerdos y los permisos de acceso. Por ejemplo, un diseñador contratado podría obtener acceso únicamente para subir la portada de una obra, sin ver los capítulos en borrador.
 *   **Reparto de Ganancias Automatizado:** Una de las características clave. Un autor y un colaborador podrán firmar "contratos inteligentes" que dividan automáticamente los ingresos de una obra. Un ilustrador podría recibir un 5% de todas las ganancias futuras de una novela a cambio de la portada, y la plataforma gestionaría estos pagos de forma transparente y perpetua. Quizas proponer una ganancia porcentual hasta que llegue a un objetivo, como poner un 50% de reparticion hasta que el diseñador o ilustrador gane x cantidad acordada.
 
+ *   *Nota de Implementación (Agosto 2025): Las bases de este sistema (contratos flexibles por etapas y reparto automatizado) han sido implementadas como parte de la Misión 32.*
+
 #### La Visión del Gremio Unificado
 
 El Gremio está concebido como un **ecosistema transversal y compartido** entre todas las futuras plataformas de A.U.T.O.R. Esto significa que:

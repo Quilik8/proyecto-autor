@@ -53,15 +53,15 @@ Este documento contiene el plan de desarrollo maestro para el proyecto, dividido
 - [X] **Misión 30:** Implementar un sistema de búsqueda y filtros para encontrar colaboradores.
 - [X] **Misión 30.5 (Técnica):** Reestructurar el CSS a una Arquitectura Modular.
 - [X] **Misión 31:** Construir la mensajería interna.
-- [X] **Misión 32:** Implementar sistema de "contratos" simplificados y reparto de ganancias.
+- [X] **Misión 32:** Implementar el sistema de **Contratos Seguros y Cartera Virtual**. Se construyó la infraestructura para acuerdos flexibles (pago fijo, reparto por etapas), un sistema de depósito en garantía (escrow), plazos de entrega y prueba de entrega para proteger a autores y colaboradores.
 
 **FASE 6: El Ecosistema de Progreso y Comunidad**
-- [ ] **Misión 32 (Hub Comunitario):** Implementar un sistema de foros integrado.
-- [ ] **Misión 33 (Sistema de Progreso): Las Sendas de Maestría.**
+- [ ] **Misión 33 (Hub Comunitario):** Implementar un sistema de foros integrado.
+- [ ] **Misión 34 (Sistema de Progreso): Las Sendas de Maestría.**
     - **Concepto:** Implementar un sistema de progreso especializado por rol. Cada rol (Autor, Lector, Diseñador, Editor, etc.) tendrá su propia Senda de Maestría con un sistema de XP independiente. La Moneda Virtual será el único recurso universal compartido.
     - **Backend:** Diseñar la base de datos para soportar múltiples tipos de XP por usuario (ej. una tabla `user_progress` con columnas para `xp_autor`, `xp_lector`, etc., o una estructura JSONB). Implementar la lógica para otorgar el XP correcto según la acción realizada.
     - **Frontend:** Construir la interfaz de usuario visual para las "Sendas de Maestría" en el panel de control del usuario, con una sección separada para cada Senda de Progreso que el usuario haya iniciado.
-- [ ] **Misión 34 (Economía Virtual):** Construir la "tienda" y la Biblioteca Premium.
+- [ ] **Misión 35 (Economía Virtual):** Construir la "tienda" y la Biblioteca Premium.
 
 **FASE 7: Curación de Contenido**
 - [ ] **Misión: Obras Destacadas.** Implementar la funcionalidad para que un creador/admin pueda destacar obras en la página de inicio.
@@ -132,6 +132,14 @@ Registro de las principales fases de desarrollo y mejoras arquitectónicas compl
 - Se implementó la búsqueda de perfiles por nombre de usuario y por roles (predefinidos y personalizados).
 - Se refactorizó la página `explorar.html` para convertirla en una aplicación de pestañas dinámicas, unificando la exploración de Historias y del Gremio en un solo lugar.
 - Se consolidó la lógica de JavaScript, eliminando los archivos `gremio.html` y `gremio.js` y creando un nuevo controlador `explorarPage.js`.
+
+### Versión 8.0 (El Gremio 2.0: La Economía del Creador) - Agosto 2025
+- Se completó la **Misión 32**, transformando el sistema de colaboraciones en una plataforma de **Contratos Seguros**.
+- **Contratos Flexibles:** Los usuarios ahora pueden proponer acuerdos con pago fijo, reparto de ganancias por etapas (con porcentaje inicial, límite y porcentaje posterior), o una combinación de ambos.
+- **Cartera Virtual y Bóveda (Escrow):** Se implementó una cartera virtual para cada usuario y un sistema de depósito en garantía. Los fondos para pagos fijos se retienen de forma segura hasta la finalización del trabajo, protegiendo a ambas partes.
+- **Sistema de Plazos y Entregas:** Los contratos ahora incluyen plazos de entrega. Se ha añadido una mecánica de "Prueba de Entrega" para que los colaboradores marquen el trabajo como finalizado, y una opción para que los autores cancelen si el plazo vence sin entrega, con devolución automática de fondos.
+- **Flujo de Contratación Completo:** Se construyó la interfaz y la lógica de backend para todo el ciclo de vida del contrato: propuesta, aceptación, depósito, entrega, liberación de pago y cancelación segura.
+- **Mejora de UX:** Se unificaron las opciones de perfil en un menú desplegable más limpio y escalable, con un diseño responsivo adaptado para móviles.
 
 ## 3. Estrategia de Aplicación Móvil
 

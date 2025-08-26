@@ -419,57 +419,71 @@ proposeCollabBtn.addEventListener('click', async () => {
 
     // Listener para el ENVÍO del formulario
     const handleSubmit = async (event) => {
-        event.preventDefault();
-        const errorDiv = document.getElementById('collab-form-error');
-        errorDiv.textContent = '';
-        const submitButton = collabProposalForm.querySelector('button[type="submit"]');
-        submitButton.disabled = true;
-        submitButton.textContent = 'Enviando...';
+    event.preventDefault();
+    const errorDiv = document.getElementById('collab-form-error');
+    errorDiv.textContent = '';
+    const submitButton = collabProposalForm.querySelector('button[type="submit"]');
+    submitButton.disabled = true;
+    submitButton.textContent = 'Enviando...';
 
-        try {
-            // Recolectamos los valores de los campos
-            const fixedPayment = parseFloat(document.getElementById('collab-fixed-payment').value) || 0;
-            const initialShare = parseFloat(document.getElementById('collab-initial-share').value) || 0;
-            const shareCap = parseFloat(document.getElementById('collab-share-cap').value) || 0;
-            const postCapShare = parseFloat(document.getElementById('collab-post-cap-share').value) || 0;
+    try {
+        // --- LÍNEA NUEVA: Recolectamos los días del plazo ---
+        const deliveryDays = parseInt(document.getElementById('collab-delivery-days').value);
 
-            // Validaciones
-            if (!storySelect.value || !document.getElementById('collab-role-input').value.trim()) {
-                throw new Error('Debes seleccionar una obra y definir un rol.');
-            }
-            if (fixedPayment === 0 && initialShare === 0) {
-                throw new Error('La propuesta debe incluir un pago fijo o un porcentaje de reparto.');
-            }
-            if (initialShare > 0 && shareCap === 0 && postCapShare > 0) {
-                throw new Error('No puedes definir un porcentaje posterior si no hay un límite de ganancias.');
-            }
+        // Recolectamos los otros valores como antes
+        const fixedPayment = parseFloat(document.getElementById('collab-fixed-payment').value) || 0;
+        const initialShare = parseFloat(document.getElementById('collab-initial-share').value) || 0;
+        const shareCap = parseFloat(document.getElementById('collab-share-cap').value) || 0;
+        const postCapShare = parseFloat(document.getElementById('collab-post-cap-share').value) || 0;
 
-            const contractData = {
-                story_id: storySelect.value,
-                author_id: currentUserId,
-                collaborator_id: targetProfileId,
-                collaborator_role: document.getElementById('collab-role-input').value.trim(),
-                status: 'propuesto',
-                fixed_payment_amount: fixedPayment,
-                initial_share_percentage: initialShare,
-                share_earnings_cap: shareCap,
-                post_cap_share_percentage: postCapShare
-            };
-
-            const { error } = await clienteSupabase.from('collaborations').insert(contractData);
-            if (error) throw error;
-
-            collabModal.classList.add('hidden');
-            alert('¡Propuesta de colaboración enviada con éxito!');
-        } catch (error) {
-            errorDiv.textContent = 'Error: ' + error.message;
-        } finally {
-            submitButton.disabled = false;
-            submitButton.textContent = 'Enviar Propuesta';
+        // Validaciones
+        if (!storySelect.value || !document.getElementById('collab-role-input').value.trim()) {
+            throw new Error('Debes seleccionar una obra y definir un rol.');
         }
-        
-        collabProposalForm.removeEventListener('submit', handleSubmit);
-    };
+        // --- VALIDACIÓN NUEVA: Aseguramos que el plazo sea un número válido ---
+        if (!deliveryDays || deliveryDays <= 0) {
+            throw new Error('El plazo de entrega debe ser de al menos 1 día.');
+        }
+        if (fixedPayment === 0 && initialShare === 0) {
+            throw new Error('La propuesta debe incluir un pago fijo o un porcentaje de reparto.');
+        }
+        if (initialShare > 0 && shareCap === 0 && postCapShare > 0) {
+            throw new Error('No puedes definir un porcentaje posterior si no hay un límite de ganancias.');
+        }
+
+        // --- LÓGICA NUEVA: Calculamos la fecha límite ---
+        const deadlineDate = new Date();
+        deadlineDate.setDate(deadlineDate.getDate() + deliveryDays);
+        // La convertimos a formato ISO, que es el que Supabase entiende.
+        const deadlineISO = deadlineDate.toISOString();
+
+        const contractData = {
+            story_id: storySelect.value,
+            author_id: currentUserId,
+            collaborator_id: targetProfileId,
+            collaborator_role: document.getElementById('collab-role-input').value.trim(),
+            status: 'propuesto',
+            fixed_payment_amount: fixedPayment,
+            initial_share_percentage: initialShare,
+            share_earnings_cap: shareCap,
+            post_cap_share_percentage: postCapShare,
+            delivery_deadline: deadlineISO // --- AÑADIMOS LA FECHA LÍMITE AL OBJETO ---
+        };
+
+        const { error } = await clienteSupabase.from('collaborations').insert(contractData);
+        if (error) throw error;
+
+        collabModal.classList.add('hidden');
+        alert('¡Propuesta de colaboración enviada con éxito!');
+    } catch (error) {
+        errorDiv.textContent = 'Error: ' + error.message;
+    } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = 'Enviar Propuesta';
+    }
+    
+    collabProposalForm.removeEventListener('submit', handleSubmit);
+};
     
     collabProposalForm.addEventListener('submit', handleSubmit);
 });

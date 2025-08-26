@@ -106,3 +106,155 @@ nav.nav-loading {
     justify-content: center;
     padding: 2px;
 }
+
+/* ========================================================== */
+/* ESTILOS PARA EL MENÚ DESPLEGABLE DE PERFIL v5.0 (FINAL)  */
+/* ========================================================== */
+
+/* --- LÓGICA COMÚN --- */
+.dropdown {
+    position: relative;
+}
+
+.dropdown-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* --- ESTILOS DE ESCRITORIO (Por defecto) --- */
+.dropdown-chevron {
+    display: none;
+}
+
+.dropdown-menu {
+    display: none; /* Oculto por defecto */
+    position: absolute;
+    top: 130%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--color-background-white);
+    min-width: 220px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    border-radius: 10px;
+    padding: 8px;
+    list-style: none;
+    z-index: 100;
+    border: 1px solid #eee;
+}
+.dark-mode .dropdown-menu {
+    background-color: #2c2c2c;
+    border-color: #444;
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block; /* La magia del hover en escritorio */
+}
+
+.dropdown-menu::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 0 8px 10px 8px;
+    border-style: solid;
+    border-color: transparent transparent var(--color-background-white) transparent;
+}
+.dark-mode .dropdown-menu::before {
+    border-color: transparent transparent #2c2c2c transparent;
+}
+
+.dropdown-menu li a {
+    display: block;
+    padding: 12px 20px;
+    font-weight: bold;
+    white-space: nowrap;
+    border-radius: 6px;
+    text-align: center;
+    transition: background-color 0.2s, color 0.2s;
+}
+.dropdown-menu li a:hover {
+    background-color: rgba(128, 233, 217, 0.2);
+}
+
+#nav-logout-link {
+    color: #e74c3c;
+}
+#nav-logout-link:hover {
+    background-color: rgba(231, 76, 60, 0.1);
+    color: #e74c3c !important;
+}
+
+
+/* --- VISTA MÓVIL (Anulaciones) --- */
+@media (max-width: 992px) {
+    .dropdown-chevron {
+    display: inline-block;
+    font-size: 16px; /* Hacemos el icono un 33% más grande */
+    transition: transform 0.2s ease;
+    padding: 10px; /* AÑADIMOS PADDING: Esto agranda drásticamente el área de clic */
+    margin-right: -10px; /* Compensamos el padding para no añadir espacio extra no deseado */
+    }
+
+    nav.active .dropdown {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    }
+
+    .dropdown.open .dropdown-chevron {
+        transform: rotate(180deg);
+    }
+
+    .dropdown-menu {
+        /* Anulamos los estilos de escritorio */
+        position: static;
+        display: none; /* Sigue oculto por defecto */
+        transform: none;
+        box-shadow: none;
+        border: none;
+        background-color: transparent;
+        padding: 0;
+        margin-top: 20px;
+        width: 100%;
+    }
+    .dropdown-menu::before {
+        display: none;
+    }
+
+    /* El JS controla la visibilidad en móvil con la clase .open */
+    .dropdown.open .dropdown-menu {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+
+    /* DESACTIVAMOS el hover de escritorio en pantallas táctiles */
+    .dropdown:hover .dropdown-menu {
+        display: none;
+    }
+
+    .dropdown-menu li {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+    
+    .dropdown-menu li a {
+        display: inline-block;
+        width: auto;
+        min-width: 200px;
+        padding: 12px 25px;
+        border-radius: 50px;
+        border: 1px solid #555;
+        color: #ccc;
+    }
+    #nav-logout-link {
+        background-color: #e74c3c;
+        border-color: #e74c3c;
+        color: white;
+    }
+}

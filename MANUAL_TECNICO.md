@@ -92,13 +92,14 @@ Toda la infraestructura del backend, incluyendo la base de datos, autenticación
 La base de datos PostgreSQL se organiza en las siguientes tablas principales dentro del `schema public`. RLS (Row Level Security) está activado en todas ellas.
 
 **Tabla: `profiles`**
-- **Propósito:** Almacena los datos públicos y editables de los usuarios, extendiendo la tabla `auth.users`.
+- **Propósito:** Almacena los datos públicos y editables de los usuarios...
 - **Columnas Clave:**
-    - `id` (uuid, PK): Vinculada a `auth.users.id`.
-    - `username` (text): Nombre de usuario público.
-    - `bio` (text): Biografía del usuario.
-    - `avatar_url` (text): Enlace al avatar en Supabase Storage.
-    - `roles` (array de text): Almacena los roles del Gremio (ej. "Autor", "Editor").
+    - `id` (uuid, PK): ...
+    - `username` (text): ...
+    - `bio` (text): ...
+    - `avatar_url` (text): ...
+    - `roles` (array de text): ...
+    - `virtual_wallet_balance` (numeric): Cartera virtual del usuario para almacenar ganancias y pagar contratos.
 
 **Tabla: `stories`**
 - **Propósito:** Almacena la información principal de cada obra.
@@ -145,20 +146,53 @@ La base de datos PostgreSQL se organiza en las siguientes tablas principales den
     - `rating` (int4): Valoración numérica.
 
 **Tabla: `collaborations`**
-- **Propósito:** Registra los acuerdos de trabajo entre usuarios para una obra.
+- **Propósito:** Registra los acuerdos de trabajo (contratos) entre usuarios para una obra.
 - **Columnas Clave:**
     - `id` (uuid, PK): ID único del acuerdo.
-    - `story_id` (bigint, FK): Referencia a `stories.id`.
-    - `author_id` (uuid, FK): Referencia a `profiles.id`.
-    - `collaborator_id` (uuid, FK): Referencia a `profiles.id`.
-    - `status` (text): Estado del acuerdo (ej. 'propuesto', 'aceptado').
+    - `story_id` (bigint, FK): ...
+    - `author_id` (uuid, FK): ...
+    - `collaborator_id` (uuid, FK): ...
+    - `status` (text): Estado del acuerdo (ej. 'propuesto', 'aceptado_pendiente_fondos', 'completado', 'pagado', 'cancelado').
+    - `fixed_payment_amount` (numeric): El pago único inicial.
+    - `initial_share_percentage` (numeric): El porcentaje de reparto inicial.
+    - `share_earnings_cap` (numeric): El límite de ganancias que activa el cambio de porcentaje.
+    - `post_cap_share_percentage` (numeric): El porcentaje de reparto después de alcanzar el límite.
+    - `funds_held_in_escrow` (boolean): `TRUE` si los fondos del pago fijo están en la bóveda.
+    - `delivery_deadline` (timestamp): Fecha límite acordada para la entrega.
+    - `delivered_at` (timestamp): Fecha en que el colaborador marcó el trabajo como entregado.
+
+**Tabla: `transactions`**
+- **Propósito:** Registro maestro de todos los ingresos brutos que genera una historia.
+- **Columnas Clave:**
+    - `id` (uuid, PK): ID de la transacción.
+    - `story_id` (bigint, FK): La obra que generó el ingreso.
+    - `amount` (numeric): El monto total del ingreso.
+    - `source` (text): La fuente del ingreso (ej. 'Venta Directa', 'Donación').
+
+**Tabla: `earnings`**
+- **Propósito:** Historial detallado de cada ganancia asignada a un usuario después de un reparto.
+- **Columnas Clave:**
+    - `id` (uuid, PK): ID del registro de ganancia.
+    - `user_id` (uuid, FK): El usuario que recibe la ganancia.
+    - `transaction_id` (uuid, FK): La transacción original que generó esta ganancia.
+    - `amount` (numeric): El monto que este usuario recibió.
 
 ### 3.2. Automatización (Triggers y Funciones de Base de Datos)
 
-Se ha implementado un trigger para automatizar la creación de perfiles.
-*   **Función:** `public.handle_new_user()`
-*   **Disparador (Trigger):** `on_auth_user_created`
-*   **Acción:** Se ejecuta `AFTER INSERT ON auth.users`. La función inserta automáticamente una nueva fila en `public.profiles` utilizando el `id` y los metadatos del nuevo usuario, asegurando que cada cuenta de autenticación tenga un perfil correspondiente desde el momento del registro.
+Se han implementado triggers y funciones para automatizar procesos clave.
+
+*   **Función de Creación de Perfil:** `public.handle_new_user()`
+    *   **Disparador (Trigger):** `on_auth_user_created`
+    *   **Acción:** Se ejecuta `AFTER INSERT ON auth.users` para crear una fila correspondiente en `public.profiles`.
+
+*   **Función de Reparto de Ganancias:** `public.distribute_earnings()`
+    *   **Disparador (Trigger):** `on_new_transaction_distribute_earnings`
+    *   **Acción:** Se ejecuta `AFTER INSERT ON public.transactions`. La función calcula y distribuye automáticamente los ingresos de una obra entre el autor y los colaboradores, respetando los términos de los contratos por etapas (porcentajes, límites, etc.).
+
+*   **Funciones RPC para la Gestión de Contratos:** Se han creado varias funciones de procedimiento remoto (RPC) para manejar la lógica financiera de forma segura desde el frontend.
+    *   `hold_contract_funds(contract_id)`: Verifica los fondos del autor, los resta de su cartera y los marca como "en garantía" en el contrato.
+    *   `release_contract_funds(contract_id)`: Transfiere los fondos en garantía a la cartera del colaborador y marca el contrato como "pagado".
+    *   `return_escrow_funds(contract_id)`: Función de seguridad que se activa si un autor cancela un contrato por plazo vencido. Devuelve los fondos en garantía a la cartera del autor.
 
 ### 3.3. Almacenamiento de Archivos (Supabase Storage)
 

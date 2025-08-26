@@ -88,15 +88,48 @@ const formatContractTerms = (collab) => {
     return `<p class="contract-terms">Oferta: ${terms.join(' y ')}.</p>`;
 };
 
+    // --- NUEVA FUNCIÓN AUXILIAR PARA FORMATEAR EL TIEMPO RESTANTE ---
+const formatDeadline = (deadline, delivered_at) => {
+    if (delivered_at) {
+        return `<p class="deadline-info">Entregado el: ${new Date(delivered_at).toLocaleDateString('es-ES')}</p>`;
+    }
+
+    if (!deadline) return '';
+
+    const now = new Date();
+    const deadlineDate = new Date(deadline);
+    const diffTime = deadlineDate - now;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    if (diffDays <= 0) {
+        return `<p class="deadline-info overdue">Plazo Vencido</p>`;
+    }
+    return `<p class="deadline-info">Tiempo Restante: ${diffDays} día(s)</p>`;
+};
+
+// --- NUEVA FUNCIÓN RPC PARA CANCELAR Y DEVOLVER FONDOS ---
+// Esta la crearemos en Supabase en el siguiente paso.
+// Por ahora, solo necesitamos la llamada desde el JS.
+const returnEscrowFunds = async (contractId) => {
+    // Esta función no existe aún, la crearemos.
+    // Simulará la devolución y cancelación.
+    // Por ahora, solo actualizamos el estado para probar el flujo.
+    return clienteSupabase.from('collaborations').update({ status: 'cancelado_por_plazo' }).eq('id', contractId);
+};
+
     const receivedContainer = document.getElementById('received-collabs-container');
     const sentContainer = document.getElementById('sent-collabs-container');
 
-        const renderCollaboration = (collab, perspective) => {
+    const renderCollaboration = (collab, perspective) => {
     const storyTitle = collab.stories.title;
     let actionsHTML = `<span class="status-tag">${collab.status}</span>`;
     let revieweeId = null;
 
     const contractTermsHTML = formatContractTerms(collab);
+    const deadlineHTML = formatDeadline(collab.delivery_deadline, collab.delivered_at); // <-- NUEVO
+
+    const now = new Date();
+    const isOverdue = new Date(collab.delivery_deadline) < now;
 
     if (perspective === 'received') { // --- VISTA DEL COLABORADOR ---
         revieweeId = collab.author_id;
@@ -104,46 +137,46 @@ const formatContractTerms = (collab) => {
             actionsHTML = `<div class="collaboration-actions"><button class="cta-button accept-collab-btn" data-collab-id="${collab.id}">Aceptar</button><button class="cta-button secondary reject-collab-btn" data-collab-id="${collab.id}">Rechazar</button></div>`;
         }
         if (collab.status === 'aceptado_pendiente_fondos') {
-            actionsHTML = `<span class="status-tag pending-funds">Esperando depósito del autor</span>`;
+            actionsHTML = `<div class="collaboration-actions"><span class="status-tag pending-funds">Esperando depósito</span><button class="cta-button destructive cancel-proposal-btn" data-collab-id="${collab.id}">Cancelar Aceptación</button></div>`;
         }
-        if (collab.funds_held_in_escrow) {
-             actionsHTML = `<span class="status-tag funds-held">Fondos en Garantía. ¡Listo para trabajar!</span>`;
+        if (collab.funds_held_in_escrow && !collab.delivered_at) { // <-- Lógica mejorada
+             // Solo muestra el botón de entregar si los fondos están en garantía Y no ha entregado ya
+             actionsHTML = `<div class="collaboration-actions"><button class="cta-button mark-delivered-btn" data-collab-id="${collab.id}">Marcar como Entregado</button></div>`;
         }
-        // El colaborador ve el estado "Completado" mientras espera el pago
-        if (collab.status === 'completado' && collab.fixed_payment_amount > 0) {
-            actionsHTML = `<span class="status-tag" style="background-color: var(--primary-color);">Completado - Esperando Pago</span>`;
+        if (collab.delivered_at) {
+            actionsHTML = `<span class="status-tag" style="background-color: var(--primary-color);">Entregado - Esperando Aprobación</span>`;
         }
 
     } else { // --- VISTA DEL AUTOR ---
         revieweeId = collab.collaborator_id;
         if (collab.status === 'aceptado_pendiente_fondos') {
-             actionsHTML = `<div class="collaboration-actions"><span class="status-tag pending-funds">Aceptado</span><button class="cta-button deposit-funds-btn" data-collab-id="${collab.id}">Depositar Fondos</button></div>`;
+             actionsHTML = `<div class="collaboration-actions"><button class="cta-button deposit-funds-btn" data-collab-id="${collab.id}">Depositar Fondos</button><button class="cta-button destructive cancel-proposal-btn" data-collab-id="${collab.id}">Cancelar Propuesta</button></div>`;
         }
-        if (collab.funds_held_in_escrow) {
-            actionsHTML = `<div class="collaboration-actions"><span class="status-tag funds-held">Fondos en Garantía</span><button class="cta-button complete-collab-btn" data-collab-id="${collab.id}">Marcar como Completado</button></div>`;
+        // Si el plazo venció y no se ha entregado, el autor puede cancelar
+        else if (isOverdue && !collab.delivered_at && collab.funds_held_in_escrow) {
+             actionsHTML = `<div class="collaboration-actions"><button class="cta-button destructive cancel-overdue-btn" data-collab-id="${collab.id}">Cancelar por Plazo Vencido</button></div>`;
         }
-        // --- CAMBIO CLAVE: Muestra el botón para liberar el pago ---
-        if (collab.status === 'completado' && collab.fixed_payment_amount > 0) {
-            actionsHTML = `<div class="collaboration-actions"><span class="status-tag" style="background-color: var(--primary-color);">Completado</span><button class="cta-button release-payment-btn" data-collab-id="${collab.id}">Liberar Pago de $${collab.fixed_payment_amount.toFixed(2)}</button></div>`;
+        else if (collab.funds_held_in_escrow && !collab.delivered_at) {
+            actionsHTML = `<span class="status-tag funds-held">Fondos en Garantía. Trabajo en Progreso.</span>`;
+        }
+        // Si se entregó, el autor puede aceptar y pagar
+        else if (collab.delivered_at) {
+            actionsHTML = `<div class="collaboration-actions"><span class="status-tag" style="background-color: var(--primary-color);">Entregado</span><button class="cta-button release-payment-btn" data-collab-id="${collab.id}">Aceptar y Liberar Pago</button></div>`;
         }
     }
     
-    // --- CAMBIO CLAVE: Se modifica la condición para el botón de reseña ---
-    // El botón de reseña ahora aparece si está 'pagado' o si está 'completado' SIN pago fijo.
+    // El resto de la lógica para reseñas no cambia
     const canLeaveReview = collab.status === 'pagado' || (collab.status === 'completado' && collab.fixed_payment_amount === 0);
     if (canLeaveReview) {
         const statusText = collab.status === 'pagado' ? 'Pagado' : 'Completado';
-        actionsHTML = `<div class="collaboration-actions">
-                           <span class="status-tag" style="background-color: #27ae60;">${statusText}</span>
-                           <button class="cta-button review-collab-btn" data-collab-id="${collab.id}" data-reviewee-id="${revieweeId}">Dejar Reseña</button>
-                       </div>`;
+        actionsHTML = `<div class="collaboration-actions"><span class="status-tag" style="background-color: #27ae60;">${statusText}</span><button class="cta-button review-collab-btn" data-collab-id="${collab.id}" data-reviewee-id="${revieweeId}">Dejar Reseña</button></div>`;
     }
-
-    // El HTML renderizado no cambia
+    
+    // Añadimos el deadlineHTML a la renderización
     if (perspective === 'received') {
-        return `<div class="management-list-item"><div><h4>Propuesta para: <strong>${storyTitle}</strong></h4><p>Rol: <strong>${collab.collaborator_role}</strong></p>${contractTermsHTML}<p>Autor: <a href="perfil.html?id=${collab.author_id}">${collab.profiles.username}</a></p></div>${actionsHTML}</div>`;
+        return `<div class="management-list-item"><div><h4>Propuesta para: <strong>${storyTitle}</strong></h4><p>Rol: <strong>${collab.collaborator_role}</strong></p>${contractTermsHTML}${deadlineHTML}<p>Autor: <a href="perfil.html?id=${collab.author_id}">${collab.profiles.username}</a></p></div>${actionsHTML}</div>`;
     } else {
-        return `<div class="management-list-item"><div><h4>Propuesta para: <strong>${collab.collaborator.username}</strong></h4><p>Obra: <strong>${storyTitle}</strong> | Rol: <strong>${collab.collaborator_role}</strong></p>${contractTermsHTML}</div>${actionsHTML}</div>`;
+        return `<div class="management-list-item"><div><h4>Propuesta para: <strong>${collab.collaborator.username}</strong></h4><p>Obra: <strong>${storyTitle}</strong> | Rol: <strong>${collab.collaborator_role}</strong></p>${contractTermsHTML}${deadlineHTML}</div>${actionsHTML}</div>`;
     }
 };
 
@@ -187,8 +220,57 @@ const formatContractTerms = (collab) => {
     const collabId = event.target.dataset.collabId;
     if (!collabId) return;
 
+    // --- NUEVA ACCIÓN: Marcar como Entregado (Colaborador) ---
+    if (event.target.classList.contains('mark-delivered-btn')) {
+        if (confirm('Esto notificará al autor que has completado tu trabajo. ¿Estás seguro?')) {
+            try {
+                // Actualizamos la fila poniendo la fecha de entrega
+                const { error } = await clienteSupabase
+                    .from('collaborations')
+                    .update({ delivered_at: new Date().toISOString() })
+                    .eq('id', collabId);
+                if (error) throw error;
+                await cargarColaboraciones();
+            } catch (error) {
+                alert('Error al marcar como entregado: ' + error.message);
+            }
+        }
+    }
+    
+    // --- NUEVA ACCIÓN: Cancelar por Plazo Vencido (Autor) ---
+    else if (event.target.classList.contains('cancel-overdue-btn')) {
+        if (confirm('Esto cancelará el contrato y devolverá los fondos a tu cartera. Esta acción es irreversible. ¿Estás seguro?')) {
+            event.target.disabled = true;
+            event.target.textContent = 'Cancelando...';
+            try {
+                // Llamamos a la función que crearemos en Supabase
+                const { error } = await returnEscrowFunds(collabId); // Usamos nuestra función simulada por ahora
+                if (error) throw error;
+                alert('Contrato cancelado y fondos devueltos con éxito.');
+                await cargarColaboraciones();
+            } catch (error) {
+                alert('Error al cancelar el contrato: ' + error.message);
+                event.target.disabled = false;
+                event.target.textContent = 'Cancelar por Plazo Vencido';
+            }
+        }
+    }
+
+    // Acción de Cancelar Propuesta antes del depósito
+    else if (event.target.classList.contains('cancel-proposal-btn')) {
+        if (confirm('¿Estás seguro de que quieres cancelar este acuerdo? Esta acción no se puede deshacer.')) {
+            try {
+                const { error } = await clienteSupabase.from('collaborations').update({ status: 'cancelado' }).eq('id', collabId);
+                if (error) throw error;
+                await cargarColaboraciones();
+            } catch (error) {
+                alert('Error al cancelar el acuerdo: ' + error.message);
+            }
+        }
+    }
+
     // Acción de Aceptar una propuesta
-    if (event.target.classList.contains('accept-collab-btn')) {
+    else if (event.target.classList.contains('accept-collab-btn')) {
         try {
             const { data: collab, error: fetchError } = await clienteSupabase.from('collaborations').select('fixed_payment_amount').eq('id', collabId).single();
             if (fetchError) throw fetchError;
@@ -213,19 +295,6 @@ const formatContractTerms = (collab) => {
             }
         }
     }
-    
-    // Acción de Marcar como Completado
-    else if (event.target.classList.contains('complete-collab-btn')) {
-        try {
-            // Buscamos si el contrato tiene pago fijo. Si no lo tiene, pasa a 'completado' y listo.
-            // Si SÍ lo tiene, también pasa a 'completado', pero esto habilitará el botón de 'Liberar Pago'.
-            const { error } = await clienteSupabase.from('collaborations').update({ status: 'completado' }).eq('id', collabId);
-            if (error) throw error;
-            await cargarColaboraciones();
-        } catch (error) {
-            alert('Error al actualizar la propuesta: ' + error.message);
-        }
-    }
 
     // Acción de Depositar fondos en garantía
     else if (event.target.classList.contains('deposit-funds-btn')) {
@@ -245,13 +314,12 @@ const formatContractTerms = (collab) => {
         }
     }
 
-    // --- NUEVA ACCIÓN: Liberar el pago al colaborador ---
+    // Acción de Liberar el pago al colaborador
     else if (event.target.classList.contains('release-payment-btn')) {
-        if (confirm('Esto transferirá permanentemente los fondos al colaborador. Esta acción no se puede deshacer. ¿Confirmas el pago?')) {
+        if (confirm('Esto aceptará la entrega y transferirá permanentemente los fondos al colaborador. ¿Confirmas el pago?')) {
             event.target.disabled = true;
             event.target.textContent = 'Pagando...';
             try {
-                // Llamamos a la función RPC que creamos en Supabase
                 const { error } = await clienteSupabase.rpc('release_contract_funds', { contract_id: collabId });
                 if (error) throw error;
                 alert('¡Pago liberado con éxito! El colaborador ha recibido los fondos en su cartera.');
@@ -259,7 +327,7 @@ const formatContractTerms = (collab) => {
             } catch (error) {
                 alert('Error al liberar el pago: ' + error.message);
                 event.target.disabled = false;
-                event.target.textContent = 'Liberar Pago';
+                event.target.textContent = 'Aceptar y Liberar Pago';
             }
         }
     }

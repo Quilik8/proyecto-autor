@@ -341,3 +341,37 @@ input[type="file"] { display: none; }
     font-weight: bold;
     color: #27ae60; /* Verde para las ganancias */
 }
+
+/* Estilo para botones de cancelación/rechazo */
+.cta-button.destructive {
+    background-color: transparent;
+    color: #e74c3c !important; /* Rojo para acciones peligrosas */
+    border: 1px solid #e74c3c;
+    box-shadow: none;
+}
+.cta-button.destructive:hover {
+    background-color: rgba(231, 76, 60, 0.1);
+    box-shadow: none;
+    transform: none;
+}
+
+/* Estilos para el plazo de entrega en el dashboard */
+.deadline-info {
+    font-size: 13px;
+    font-weight: bold;
+    color: #555;
+    background-color: #f0f0f0;
+    padding: 6px 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+    display: inline-block; /* Para que se ajuste al contenido */
+}
+.dark-mode .deadline-info {
+    color: #ccc;
+    background-color: #3a3a3a;
+}
+.deadline-info.overdue {
+    color: white;
+    background-color: #e74c3c;
+}
+

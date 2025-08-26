@@ -65,6 +65,7 @@
     nav.active ul {
         flex-direction: column;
         gap: 20px;
+        align-items: center;
     }
     nav.active ul li {
         margin-left: 0;

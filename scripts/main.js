@@ -27,10 +27,28 @@ const ejecutarScriptsGlobales = async () => {
     configurarMenuHamburguesa();
     configurarInterruptorDeTema();
     configurarBarraDeBusqueda();
+    configurarDropdownPerfil();
     await gestionarEstadoDeSesion();
     configurarBotonDeLogout();
 };
 
+const configurarDropdownPerfil = () => {
+    const dropdown = document.querySelector('.dropdown');
+    if (!dropdown) return;
+    
+    // Nuestro nuevo objetivo es la flecha
+    const chevron = dropdown.querySelector('.dropdown-chevron');
+    if (!chevron) return;
+
+    chevron.addEventListener('click', (event) => {
+        // Prevenimos que el clic en la flecha active el enlace principal
+        event.preventDefault();
+        event.stopPropagation();
+        
+        // Abrimos o cerramos el submenú
+        dropdown.classList.toggle('open');
+    });
+};
 
 // =================================================================
 // SECCIÓN 2: GESTIÓN DE AUTENTICACIÓN Y SESIÓN
@@ -97,9 +115,11 @@ window.addEventListener('updateUnreadCountOptimistic', (event) => {
 });
 
 const configurarBotonDeLogout = () => {
-    const navLogout = document.querySelector("#nav-logout");
-    if (!navLogout) return;
-    navLogout.addEventListener('click', async (event) => {
+    // Apuntamos al nuevo enlace dentro del dropdown
+    const navLogoutLink = document.querySelector("#nav-logout-link"); 
+    if (!navLogoutLink) return;
+
+    navLogoutLink.addEventListener('click', async (event) => {
         event.preventDefault();
         await clienteSupabase.auth.signOut();
         window.location.href = 'index.html';
